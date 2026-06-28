@@ -144,3 +144,24 @@ cannot represent this attack path in any form.
   configured on the AWS side -- a path is reported if the annotation
   exists and the referenced role exists in the ingested AWS data, even
   if the OIDC federation itself would currently fail.
+
+## Running via Docker (no local Python setup required)
+
+```bash
+docker build -t privesc-scan .
+
+# Requires --network host (Linux/WSL2 Docker) so the container can reach
+# LocalStack and Minikube on 127.0.0.1 exactly as the host sees them.
+# Mount ~/.kube and ~/.minikube read-only since Minikube's kubeconfig
+# references certificate files by absolute host path.
+docker run --rm --network host \
+  -v ~/.kube:/root/.kube:ro \
+  -v ~/.minikube:/home/zoro/.minikube:ro \
+  privesc-scan --endpoint-url http://localhost:4566
+```
+
+Note: `--network host` is Linux-only (works under WSL2). On Docker
+Desktop for Mac, you would need `host.docker.internal` for the AWS side
+and a different strategy for reaching Minikube (e.g. running the
+container inside the Minikube VM's Docker daemon via
+`eval $(minikube docker-env)`), which hasn't been tested here.
