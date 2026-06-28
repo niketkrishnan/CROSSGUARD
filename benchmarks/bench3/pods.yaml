@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bench3-pod-0
+  namespace: default
+spec:
+  serviceAccountName: bench3-sa-0
+  containers:
+    - name: nginx
+      image: nginx
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bench3-pod-1
+  namespace: default
+spec:
+  serviceAccountName: bench3-sa-1
+  containers:
+    - name: nginx
+      image: nginx
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bench3-pod-2
+  namespace: default
+spec:
+  serviceAccountName: bench3-sa-2
+  containers:
+    - name: nginx
+      image: nginx
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bench3-pod-3
+  namespace: default
+spec:
+  serviceAccountName: bench3-sa-3
+  containers:
+    - name: nginx
+      image: nginx
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bench3-pod-4
+  namespace: default
+spec:
+  serviceAccountName: bench3-sa-4
+  containers:
+    - name: nginx
+      image: nginx
