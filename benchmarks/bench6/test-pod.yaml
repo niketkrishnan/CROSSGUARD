@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bench6-pod
+  namespace: default
+spec:
+  serviceAccountName: bench6-sa
+  containers:
+    - name: nginx
+      image: nginx
