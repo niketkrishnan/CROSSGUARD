@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: bench7-role
+  namespace: bench7-ns
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: bench7-binding
+  namespace: bench7-ns
+subjects:
+  - kind: ServiceAccount
+    name: bench7-sa
+    namespace: default
+roleRef:
+  kind: Role
+  name: bench7-role
+  apiGroup: rbac.authorization.k8s.io
