@@ -13,6 +13,8 @@ sleep 15
 
 echo "Deleting benchmark-created K8s resources (pods + service accounts)..."
 kubectl delete pod --all -n default --ignore-not-found
+kubectl delete serviceaccount vulnerable-sa bench2-sa bench3-sa-0 bench3-sa-1 bench3-sa-2 bench3-sa-3 bench3-sa-4 bench5-sa bench6-sa bench7-sa scale-sa-0 scale-sa-1 scale-sa-2 scale-sa-3 scale-sa-4 scale-sa-5 scale-sa-6 scale-sa-7 scale-sa-8 scale-sa-9 -n default --ignore-not-found
+kubectl delete namespace bench7-ns --ignore-not-found
 kubectl delete serviceaccount vulnerable-sa bench2-sa bench3-sa-0 bench3-sa-1 bench3-sa-2 bench3-sa-3 bench3-sa-4 bench5-sa bench6-sa bench7-sa -n default --ignore-not-found
 kubectl delete namespace bench7-ns --ignore-not-found
 
