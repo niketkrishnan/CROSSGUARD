@@ -68,3 +68,45 @@ Its fundamental limitation is that it cannot identify the actual
 attacker-reachable entry point when that entry point is a compromised
 Kubernetes identity, because it has no model of Kubernetes RBAC or IRSA
 at all. This is precisely the gap this tool's C1/C2 contributions close.
+
+## Benchmark 6 -- a genuine nuance worth disclosing
+
+PMapper found the 3-hop sts:AssumeRole route
+(b6-role-a -> b6-role-b -> b6-admin-far) correctly -- same result as our
+tool. It did NOT find the 2-hop iam:PassRole route
+(b6-role-a -> b6-admin-near), even though b6-role-a genuinely holds
+iam:PassRole on b6-admin-near.
+
+Root cause: bare iam:PassRole is not independently exploitable in real
+AWS -- it must be paired with a service action that actually consumes a
+passed role (e.g. lambda:CreateFunction, ec2:RunInstances with an
+instance profile). PMapper's privesc detection requires that paired
+action before flagging an escalation; our tool flags ANY iam:PassRole
+grant as an edge, regardless of whether a paired use-action exists.
+
+We verified b6-role-a's policy directly: it holds ONLY iam:PassRole on
+b6-admin-near, with no paired use-action anywhere in its policy set.
+
+This means:
+- Our tool found a real escalation route (the 3-hop one) that
+  coincides with PMapper's finding, PLUS a second route PMapper missed.
+- However, by the stricter standard PMapper applies (PassRole alone is
+  not exploitable without a paired use-action), our tool's 2-hop
+  finding here is arguably a FALSE POSITIVE -- there is no AWS service
+  action available to b6-role-a that would let it actually USE the
+  passed role.
+
+## Honest limitation disclosed
+
+The current iam:PassRole edge-building logic
+(graph/builder.py:_add_passrole_edges) flags PassRole grants
+unconditionally, without checking for a paired use-action. This is a
+conservative design choice (favors recall over precision -- we would
+rather over-report a possible escalation primitive than miss one), but
+it means the tool's false-positive rate on PassRole-only edges is not
+zero. A more precise implementation would cross-reference PassRole
+grants against the principal's other permissions for known
+paired-action patterns (lambda:CreateFunction + iam:PassRole,
+ec2:RunInstances + iam:PassRole, etc.) before creating the edge. This
+is flagged as a concrete item for future work / a paper limitations
+section, rather than silently treated as correct.
