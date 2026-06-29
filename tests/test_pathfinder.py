@@ -157,3 +157,21 @@ def test_describe_path_human_readable():
     assert "vulnerable-sa" in description
     assert "admin-role" in description
     assert "irsa_bridge" in description
+
+def test_path_through_earlier_admin_node_is_excluded():
+    # Two admin roles, each able to PassRole to the other (mirrors
+    # AdministratorAccess implying PassRole on "*"). A path through
+    # admin-A to admin-B should be excluded -- only the direct path to
+    # admin-A (the FIRST admin reached) should be reported.
+    G = nx.DiGraph()
+    G.add_node("sa-1", type="k8s_service_account")
+    G.add_node("admin-a", type="aws_role", is_admin=True)
+    G.add_node("admin-b", type="aws_role", is_admin=True)
+
+    G.add_edge("sa-1", "admin-a", type="irsa_bridge")
+    G.add_edge("admin-a", "admin-b", type="iam:PassRole")  # admin-a can PassRole to admin-b
+
+    paths = find_all_cross_layer_paths(G)
+
+    assert len(paths) == 1
+    assert paths[0]["end"] == "admin-a"

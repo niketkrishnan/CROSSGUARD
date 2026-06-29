@@ -39,12 +39,28 @@ def is_cross_layer(G: nx.DiGraph, path: list[str]) -> bool:
     has_aws = any(str(G.nodes[n].get("type", "")).startswith("aws") for n in path)
     return has_k8s and has_aws
 
+def _passes_through_earlier_admin(G: nx.DiGraph, path: list[str]) -> bool:
+    """True if any node BEFORE the final node in the path is already
+    flagged is_admin. Once an attacker reaches any admin node, they have
+    already won -- continuing on to a DIFFERENT admin node afterward is
+    not an additional escalation worth reporting, it's a side effect of
+    already having full admin (e.g. one AdministratorAccess role can
+    always iam:PassRole to another, since Action:"*" implies PassRole on
+    everything). We only want the path to the FIRST admin node reached."""
+    for node in path[:-1]:  # exclude the final node itself
+        if G.nodes[node].get("is_admin", False):
+            return True
+    return False
+
 
 def find_escalation_paths(G: nx.DiGraph, start_node: str, admin_nodes: list[str]) -> list[dict]:
     """Find the shortest path from start_node to every admin node that's
-    actually reachable. Unreachable admin nodes are silently skipped --
-    that's normal, not an error (most entry points won't reach most
-    admin nodes)."""
+    actually reachable, EXCLUDING paths that pass through a different
+    admin node first (those represent "what else can a full admin do"
+    rather than a genuine escalation route -- see
+    _passes_through_earlier_admin). Unreachable admin nodes are silently
+    skipped -- that's normal, not an error (most entry points won't
+    reach most admin nodes)."""
     paths = []
     for admin in admin_nodes:
         if admin == start_node:
@@ -56,6 +72,9 @@ def find_escalation_paths(G: nx.DiGraph, start_node: str, admin_nodes: list[str]
         except nx.NodeNotFound:
             continue
 
+        if _passes_through_earlier_admin(G, path):
+            continue
+
         paths.append({
             "start": start_node,
             "end": admin,
@@ -64,6 +83,7 @@ def find_escalation_paths(G: nx.DiGraph, start_node: str, admin_nodes: list[str]
             "cross_layer": is_cross_layer(G, path),
         })
     return paths
+
 
 
 def find_all_cross_layer_paths(G: nx.DiGraph) -> list[dict]:
