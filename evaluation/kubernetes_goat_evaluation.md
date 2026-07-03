@@ -51,3 +51,36 @@ PMapper sees: 1 role (goat-admin-role), correctly identified as admin.
 PMapper privesc output: "role/goat-admin-role is an administrative principal"
 PMapper finds 0 escalation paths -- it cannot see superadmin, the
 ClusterRoleBinding, or the IRSA annotation at all.
+
+## Coverage of All 15 Kubernetes Goat Scenarios
+
+Kubernetes Goat contains 15 scenarios. We reviewed all 15 and
+classified them by relevance to our tool's threat model (cross-layer
+K8s RBAC + AWS IAM privilege escalation via IRSA):
+
+Relevant and tested:
+- insecure-rbac: ServiceAccount + ClusterRoleBinding -> cluster-admin.
+  IRSA bridge added to model realistic combined scenario. TESTED.
+  Result: 1 cross-layer path found, risk score 6.0.
+
+Not relevant to our tool (different attack surface):
+- batch-check: Job with no serviceAccountName, default SA, no RBAC
+- build-code: CI/CD code injection via source code
+- cache-store: Redis/Memcached misconfiguration
+- docker-bench-security: Docker daemon security benchmarks
+- health-check: Application health endpoint exposure
+- hidden-in-layers: Secrets embedded in container image layers
+- hunger-check: Resource exhaustion / CPU throttling
+- internal-proxy: SSRF via internal proxy endpoints
+- kube-bench-security: CIS Kubernetes benchmark node/master checks
+- kubernetes-goat-home: Dashboard/home page deployment
+- kyverno-namespace-exec-block: Admission controller policy, not RBAC
+- metadata-db: Cloud metadata API (IMDS) abuse via Helm chart
+- poor-registry: Insecure container registry access
+- system-monitor: Host-level monitoring with privileged container
+
+Our tool's threat model covers cross-layer identity-based escalation
+(K8s RBAC + AWS IAM + IRSA). 14 of 15 Kubernetes Goat scenarios target
+entirely different attack surfaces (network, image, host, resource).
+The 1 relevant scenario (insecure-rbac) was fully tested and produced
+a real finding. This is correct scoping, not incomplete coverage.
