@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-secrets
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-secrets
+  namespace: external-secrets
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/external-secrets-operator
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-secrets-scoped
+  namespace: external-secrets
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/external-secrets-operator-scoped
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: external-secrets-controller
+rules:
+  - apiGroups: ["external-secrets.io"]
+    resources: ["secretstores","clustersecretstores","externalsecrets"]
+    verbs: ["get","list","watch"]
+  - apiGroups: [""]
+    resources: ["secrets","configmaps"]
+    verbs: ["get","list","watch","create","update","patch","delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: external-secrets-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: external-secrets-controller
+subjects:
+  - kind: ServiceAccount
+    name: external-secrets
+    namespace: external-secrets
