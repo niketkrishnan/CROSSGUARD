@@ -1,0 +1,59 @@
+# Real-world test: AWS Load Balancer Controller Kubernetes configuration
+# RBAC structure taken directly from:
+# github.com/kubernetes-sigs/aws-load-balancer-controller
+# config/rbac/role_binding.yaml + helm/templates/serviceaccount.yaml
+
+# Namespace for the controller (matches real deployment)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aws-lb-controller
+---
+# ServiceAccount 1: MISCONFIGURED -- IRSA points at over-privileged role
+# This models the real-world mistake of using an admin role for convenience
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aws-load-balancer-controller
+  namespace: aws-lb-controller
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/aws-load-balancer-controller
+---
+# ServiceAccount 2: CORRECTLY CONFIGURED -- IRSA points at scoped role
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aws-load-balancer-controller-safe
+  namespace: aws-lb-controller
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/aws-load-balancer-controller-safe
+---
+# ClusterRole: matches the real controller's RBAC permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: aws-load-balancer-controller-role
+rules:
+  - apiGroups: [""]
+    resources: ["services", "endpoints", "pods", "nodes", "namespaces", "secrets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["extensions", "networking.k8s.io"]
+    resources: ["ingresses", "ingressclasses"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+---
+# ClusterRoleBinding for the misconfigured SA
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: aws-load-balancer-controller-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: aws-load-balancer-controller-role
+subjects:
+  - kind: ServiceAccount
+    name: aws-load-balancer-controller
+    namespace: aws-lb-controller
