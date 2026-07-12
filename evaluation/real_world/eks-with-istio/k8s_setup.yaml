@@ -1,0 +1,28 @@
+# Real-world test: eks-with-istio ServiceAccount configuration
+# Template source: github.com/msfidelis/eks-with-istio
+# helm/sample/templates/service-account.yaml
+# ARN values substituted to match LocalStack test environment
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-sample
+---
+# Misconfigured: app SA accidentally annotated with Karpenter role
+# which has AdministratorAccess
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/eks-istio-karpenter
+  name: sample-app
+  namespace: istio-sample
+---
+# Correctly configured: app SA with scoped S3 permissions only
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/eks-istio-app-scoped
+  name: sample-app-scoped
+  namespace: istio-sample
