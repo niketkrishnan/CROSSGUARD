@@ -1,5 +1,5 @@
 {
-  "total": 10,
+  "total": 35,
   "results": [
     {
       "repo": "aws-ia/terraform-aws-eks-blueprints",
@@ -70,6 +70,143 @@
       "yaml_files": 1,
       "sas_applied": 1,
       "paths_found": 1
+    },
+    {
+      "repo": "stacksimplify/terraform-on-aws-eks",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "maddevsio/aws-eks-base",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "aws-observability/terraform-aws-observability-accelerator",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "Young-ook/terraform-aws-eks",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "opszero/terraform-aws-kubespot",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "clowdhaus/eks-reference-architecture",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "provectus/sak-kubeflow",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "jenkins-x/terraform-aws-eks-jx",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "aws-ia/terraform-aws-eks-blueprints-teams",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "AmanPathak-DevOps/EKS-ArgoCD-AWS-LB-Controller-Terraform",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "lablabs/terraform-aws-eks-external-dns",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "Harshetjain666/terraform-aws-eks-fargate-cluster",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "lablabs/terraform-aws-eks-cluster-autoscaler",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "DrFaust92/terraform-kubernetes-ebs-csi-driver",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "Josh-Tracy/Terraform-Helm-EKS-Jenkins",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "mipsel64/my-cluster",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "devopscorner/terraform-infra",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "hyand-dev-team/terraform-eks-env-workshop",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 1
+    },
+    {
+      "repo": "aws-samples/eks-blueprints-actions-workflow",
+      "status": "scanned",
+      "yaml_files": 3,
+      "sas_applied": 3,
+      "paths_found": 3
+    },
+    {
+      "repo": "aws-samples/multi-cluster-allocation-demo-for-agones-on-eks",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "cloudposse/terraform-aws-helm-release",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "automat-it/terraform-aws-eks-auxiliary",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "moonswitch-workshops/terraform-eks-flux",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "yukccy/terraform-argocd-on-eks",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
+    },
+    {
+      "repo": "aws-ia/terraform-aws-eks-blueprints-addons",
+      "status": "no_k8s_yaml",
+      "paths_found": 0
     }
   ]
 }
