@@ -1,0 +1,69 @@
+{
+  "repos_processed": 10,
+  "results": [
+    {
+      "repo": "aws-ia/terraform-aws-eks-blueprints",
+      "status": "no_valid_sa",
+      "paths_found": 0,
+      "sa_count": 0
+    },
+    {
+      "repo": "msfidelis/eks-with-istio",
+      "status": "no_valid_sa",
+      "paths_found": 0,
+      "sa_count": 0
+    },
+    {
+      "repo": "squareops/terraform-aws-eks-bootstrap",
+      "status": "scanned",
+      "yaml_files_with_irsa": 2,
+      "sa_count": 2,
+      "paths_found": 0
+    },
+    {
+      "repo": "aws-samples/eks-cluster-upgrades-workshop",
+      "status": "scanned",
+      "yaml_files_with_irsa": 2,
+      "sa_count": 2,
+      "paths_found": 0
+    },
+    {
+      "repo": "clouddrove/terraform-aws-eks-addons",
+      "status": "scanned",
+      "yaml_files_with_irsa": 3,
+      "sa_count": 3,
+      "paths_found": 0
+    },
+    {
+      "repo": "lablabs/terraform-aws-eks-external-dns",
+      "status": "no_k8s_yaml",
+      "paths_found": 0,
+      "sa_count": 0
+    },
+    {
+      "repo": "lablabs/terraform-aws-eks-cluster-autoscaler",
+      "status": "no_k8s_yaml",
+      "paths_found": 0,
+      "sa_count": 0
+    },
+    {
+      "repo": "DrFaust92/terraform-kubernetes-ebs-csi-driver",
+      "status": "no_k8s_yaml",
+      "paths_found": 0,
+      "sa_count": 0
+    },
+    {
+      "repo": "devopscorner/laravel-eks-deployment",
+      "status": "scanned",
+      "yaml_files_with_irsa": 2,
+      "sa_count": 2,
+      "paths_found": 0
+    },
+    {
+      "repo": "AmanPathak-DevOps/EKS-ArgoCD-AWS-LB-Controller-Terraform",
+      "status": "no_k8s_yaml",
+      "paths_found": 0,
+      "sa_count": 0
+    }
+  ]
+}

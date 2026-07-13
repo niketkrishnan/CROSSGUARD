@@ -1,0 +1,75 @@
+{
+  "total": 10,
+  "results": [
+    {
+      "repo": "aws-ia/terraform-aws-eks-blueprints",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "msfidelis/eks-with-istio",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "squareops/terraform-aws-eks-bootstrap",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "aws-samples/eks-cluster-upgrades-workshop",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "clouddrove/terraform-aws-eks-addons",
+      "status": "scanned",
+      "yaml_files": 3,
+      "sas_applied": 3,
+      "paths_found": 2
+    },
+    {
+      "repo": "devopscorner/laravel-eks-deployment",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "sourcefuse/terraform-aws-arc-eks-saas",
+      "status": "scanned",
+      "yaml_files": 4,
+      "sas_applied": 4,
+      "paths_found": 1
+    },
+    {
+      "repo": "bootlabstech/terraform-aws-fully-loaded-eks-cluster",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "devopsmakers/terraform-aws-eks",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "adavarski/AWS-EKS-Terraform",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    }
+  ]
+}
