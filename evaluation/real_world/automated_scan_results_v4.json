@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "repo": "erankitcs/BookStoreAppOnEKS",
+      "yaml_files": 7,
+      "configs_tested": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "awslabs/data-on-eks",
+      "yaml_files": 3,
+      "configs_tested": 1,
+      "paths_found": 1
+    }
+  ],
+  "total_configs": 2
+}

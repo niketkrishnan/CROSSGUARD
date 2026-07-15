@@ -1,0 +1,103 @@
+{
+  "total": 14,
+  "results": [
+    {
+      "repo": "rallyware/terraform-argocd-aws-eks-cluster-bootstrap",
+      "status": "scanned",
+      "yaml_files": 13,
+      "sas_applied": 5,
+      "paths_found": 2
+    },
+    {
+      "repo": "erankitcs/BookStoreAppOnEKS",
+      "status": "scanned",
+      "yaml_files": 7,
+      "sas_applied": 5,
+      "paths_found": 2
+    },
+    {
+      "repo": "stacksimplify/devops-real-world-project-implementation-on-aws",
+      "status": "scanned",
+      "yaml_files": 4,
+      "sas_applied": 4,
+      "paths_found": 1
+    },
+    {
+      "repo": "awslabs/data-on-eks",
+      "status": "scanned",
+      "yaml_files": 3,
+      "sas_applied": 3,
+      "paths_found": 3
+    },
+    {
+      "repo": "aws-samples/eks-blueprints-for-terraform-workshop",
+      "status": "scanned",
+      "yaml_files": 3,
+      "sas_applied": 3,
+      "paths_found": 2
+    },
+    {
+      "repo": "squareops/terraform-aws-eks-addons",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "Abhiram-Rakesh/Three-Tier-EKS-Terraform",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "Sarthakx67/retail-store-aws-deployment",
+      "status": "scanned",
+      "yaml_files": 2,
+      "sas_applied": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "aws-samples/amazon-eks-machine-learning-with-terraform-and-kubeflow",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "sloweyyy/cloud-native-ecommerce-platform",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "AaronForce1/terraform-aws-infrastructure-eks",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "devopscorner/nifi",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "clusterfrak-dynamics/terraform-eks-addons",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "liferaft/kubekit",
+      "status": "scanned",
+      "yaml_files": 1,
+      "sas_applied": 1,
+      "paths_found": 1
+    }
+  ]
+}
