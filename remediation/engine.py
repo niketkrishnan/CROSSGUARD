@@ -202,7 +202,10 @@ def find_minimum_remediation(G: nx.DiGraph, paths: list[dict]) -> list[dict]:
     for src, dst in cut_edges:
         edge_data = G.edges[src, dst]
         edge_type = edge_data.get("type", "unknown")
-        recommendations.append(format_remediation(src, dst, edge_type, G))
+        rec = format_remediation(src, dst, edge_type, G)
+        rec["source"] = src
+        rec["target"] = dst
+        recommendations.append(rec)
 
     # Deduplicate by the human-readable action string (shouldn't be needed
     # now that we compute one global cut, but cheap safety net).

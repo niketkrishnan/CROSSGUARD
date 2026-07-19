@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CrossGuard Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B0E14;
+    --panel: #10141D;
+    --panel-border: #1E2430;
+    --k8s: #4C9EEB;
+    --aws: #FF9F43;
+    --danger: #FF4D4D;
+    --danger-dim: #5A2323;
+    --safe-edge: #3A4152;
+    --text: #E6E9EF;
+    --text-muted: #8A93A6;
+    --text-faint: #545D6E;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+  }
+  code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+  header {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--panel-border);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header h1 { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  header h1 span { color: var(--danger); }
+  header .tagline { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .status-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--panel-border);
+    color: var(--text-muted);
+  }
+
+  main { padding: 28px 32px 60px; max-width: 1400px; margin: 0 auto; }
+  .layout { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 8px; padding: 20px; }
+  .panel + .panel { margin-top: 20px; }
+  .panel h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted); margin: 0 0 16px; font-weight: 600;
+  }
+
+  label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; margin-top: 14px; }
+  label:first-of-type { margin-top: 0; }
+  input, textarea {
+    width: 100%;
+    background: #0A0D13;
+    border: 1px solid var(--panel-border);
+    border-radius: 5px;
+    color: var(--text);
+    padding: 9px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    resize: vertical;
+  }
+  textarea { min-height: 110px; line-height: 1.5; }
+  input:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--k8s); outline-offset: 1px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+  }
+  button:hover { filter: brightness(1.12); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+  .btn-primary { background: var(--k8s); color: #04121F; width: 100%; margin-top: 18px; }
+  .btn-danger { background: var(--danger); color: #240707; }
+  .btn-ghost { background: transparent; border: 1px solid var(--panel-border); color: var(--text); }
+
+  .api-key-row { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+  .api-key-row input { flex: 1; }
+
+  #scan-error {
+    display: none; margin-top: 12px; padding: 10px 12px;
+    background: var(--danger-dim); border: 1px solid var(--danger);
+    border-radius: 5px; font-size: 12px; color: #FFD5D5;
+  }
+
+  .stage { min-height: 480px; }
+  .empty-state, .loading-state {
+    height: 480px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; gap: 12px;
+  }
+  .empty-state { color: var(--text-faint); }
+  .empty-state .icon { font-size: 28px; opacity: 0.5; }
+  .empty-state p { margin: 0; font-size: 13px; max-width: 320px; }
+  .spinner {
+    width: 28px; height: 28px; border: 3px solid var(--panel-border);
+    border-top-color: var(--k8s); border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-state p { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted); max-width: 320px; }
+
+  .summary-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .stat { background: #0A0D13; border: 1px solid var(--panel-border); border-radius: 6px; padding: 10px 14px; min-width: 90px; }
+  .stat .n { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 700; }
+  .stat.danger .n { color: var(--danger); }
+  .stat .l { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-top: 2px; }
+
+  .graph-wrap {
+    position: relative;
+    background:
+      radial-gradient(ellipse at 25% 50%, rgba(76,158,235,0.06), transparent 60%),
+      radial-gradient(ellipse at 75% 50%, rgba(255,159,67,0.06), transparent 60%);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .bridge-label {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    color: var(--text-faint); background: var(--panel); padding: 2px 8px; border-radius: 3px; z-index: 2;
+  }
+  .layer-label { position: absolute; top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; z-index: 2; }
+  .layer-label.k8s { left: 16px; color: var(--k8s); }
+  .layer-label.aws { right: 16px; color: var(--aws); }
+  .node-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; fill: var(--text-muted); pointer-events: none; }
+  .node-label.hot { fill: #FFD5D5; }
+
+  .path-card {
+    background: #0A0D13; border: 1px solid var(--panel-border); border-left: 3px solid var(--danger);
+    border-radius: 6px; padding: 14px 16px; margin-bottom: 12px;
+  }
+  .path-card .route { font-family: 'JetBrains Mono', monospace; font-size: 12px; word-break: break-all; line-height: 1.6; }
+  .path-card .route .arrow { color: var(--text-faint); margin: 0 4px; }
+  .path-card .meta { display: flex; gap: 14px; margin: 10px 0 12px; font-size: 11px; color: var(--text-muted); }
+  .path-card .meta b { color: var(--text); }
+  .fix-box { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 5px; padding: 10px 12px; margin-top: 10px; }
+  .fix-box .fix-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 6px; }
+  .fix-box code { display: block; font-size: 11.5px; color: #B8E0C0; white-space: pre-wrap; word-break: break-all; margin-bottom: 10px; }
+  .fix-actions { display: flex; gap: 8px; align-items: center; }
+  .fix-status { font-size: 11px; color: var(--text-muted); }
+  .fix-status.applied { color: #7CD68A; }
+  .fix-status.failed { color: var(--danger); }
+  .confirm-box { background: var(--danger-dim); border: 1px solid var(--danger); border-radius: 5px; padding: 10px 12px; margin-top: 10px; font-size: 12px; }
+  .confirm-box p { margin: 0 0 10px; color: #FFE3E3; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Cross<span>Guard</span> Live</h1>
+    <div class="tagline">Cross-layer AWS IAM &times; Kubernetes RBAC privilege escalation scanner</div>
+  </div>
+  <div class="status-pill" id="conn-status">not connected</div>
+</header>
+
+<main>
+  <div class="layout">
+
+    <div>
+      <div class="panel">
+        <h2>API connection</h2>
+        <div class="api-key-row">
+          <input id="api-base" placeholder="http://127.0.0.1:8000" value="http://127.0.0.1:8000" />
+        </div>
+        <div class="api-key-row">
+          <input id="api-key" placeholder="X-API-Key" type="password" />
+          <button class="btn-ghost" id="save-key">Save</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <button class="btn-ghost" id="toggle-guide" style="width:100%; text-align:left; display:flex; justify-content:space-between; align-items:center;">
+          <span>First time here? Setup guide</span>
+          <span id="guide-caret">&#9656;</span>
+        </button>
+        <div id="setup-guide" style="display:none; margin-top:16px; font-size:12.5px; color:var(--text-muted); line-height:1.7;">
+          <p style="color:var(--text); margin:0 0 8px;"><b>What CrossGuard Live needs, and why:</b></p>
+          <p>It compares your AWS IAM permissions against your Kubernetes RBAC rules to find places where a Kubernetes ServiceAccount can escalate into full AWS admin access. To do that safely, it needs read access to both &mdash; without ever seeing your long-term credentials.</p>
+
+          <p style="color:var(--text); margin:16px 0 8px;"><b>1. Create an IAM role it can assume</b></p>
+          <p>In the AWS account you want to scan, create a role with this trust policy (replace <code>YOUR_ACCOUNT_ID</code> with this app's AWS account, and choose your own External ID):</p>
+          <textarea readonly style="min-height:130px; font-size:11px; margin-bottom:8px;">{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": { "AWS": "arn:aws:iam::YOUR_ACCOUNT_ID:root" },
+    "Action": "sts:AssumeRole",
+    "Condition": { "StringEquals": { "sts:ExternalId": "choose-a-secret-string" } }
+  }]
+}</textarea>
+          <p>Attach read-only IAM permissions (<code>iam:List*</code>, <code>iam:Get*</code>) at minimum. Copy the role's ARN into the field below.</p>
+
+          <p style="color:var(--text); margin:16px 0 8px;"><b>2. Get your kubeconfig</b></p>
+          <p>This is the file that lets you (and this app) talk to your Kubernetes cluster. If you can already run <code>kubectl get pods</code> successfully, you already have one &mdash; find it by running <code>echo $KUBECONFIG</code> or checking <code>~/.kube/config</code>. Use the <b>Choose file</b> button below to load it directly &mdash; nothing is uploaded anywhere except straight to your own scan.</p>
+
+          <p style="color:var(--text); margin:16px 0 8px;"><b>Where does my data go?</b></p>
+          <p>Nothing is stored. Your role ARN and kubeconfig are used only for the duration of one scan, then discarded. See the project README for the full security model.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>New scan</h2>
+        <label>Scan name</label>
+        <input id="scan-name" placeholder="e.g. prod-eks-cluster" />
+
+        <label>AWS role ARN <span style="color:var(--text-faint);">&mdash; the role this app should assume</span></label>
+        <input id="role-arn" placeholder="arn:aws:iam::123456789012:role/CrossGuardScan" />
+
+        <div class="field-row">
+          <div>
+            <label>Region</label>
+            <input id="region" value="us-east-1" />
+          </div>
+          <div>
+            <label>LocalStack endpoint <span style="color:var(--text-faint);">(local testing only)</span></label>
+            <input id="endpoint-override" placeholder="leave blank for real AWS" />
+          </div>
+        </div>
+
+        <label>External ID <span style="color:var(--text-faint);">(only if your role's trust policy requires one)</span></label>
+        <input id="external-id" placeholder="leave blank if not set" />
+
+        <label>Kubeconfig</label>
+        <div id="kubeconfig-drop" style="border:1px dashed var(--panel-border); border-radius:5px; padding:14px; text-align:center; margin-bottom:8px; cursor:pointer;">
+          <div style="font-size:12px; color:var(--text-muted);">Drop your kubeconfig file here, or</div>
+          <button type="button" class="btn-ghost" id="kubeconfig-pick" style="margin-top:8px;">Choose file</button>
+          <input type="file" id="kubeconfig-file" style="display:none;" />
+          <div id="kubeconfig-filename" style="margin-top:8px; font-size:11.5px; color:var(--k8s);"></div>
+        </div>
+        <details style="margin-bottom:4px;">
+          <summary style="cursor:pointer; font-size:11.5px; color:var(--text-muted);">Or paste it as text instead</summary>
+          <textarea id="kubeconfig" placeholder="paste the contents of your kubeconfig file" style="margin-top:8px;"></textarea>
+        </details>
+
+        <button class="btn-primary" id="run-scan">Run scan</button>
+        <div id="scan-error"></div>
+      </div>
+    </div>
+
+    <div class="panel stage" id="stage">
+      <div class="empty-state">
+        <div class="icon">&#9673;</div>
+        <p>Configure a target and run a scan to see the cross-layer graph and any escalation paths found.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+function getConfig() {
+  return {
+    base: localStorage.getItem('cg_api_base') || $('api-base').value,
+    key: localStorage.getItem('cg_api_key') || '',
+  };
+}
+$('api-base').value = localStorage.getItem('cg_api_base') || $('api-base').value;
+$('api-key').value = localStorage.getItem('cg_api_key') || '';
+
+$('save-key').addEventListener('click', () => {
+  localStorage.setItem('cg_api_base', $('api-base').value.trim());
+  localStorage.setItem('cg_api_key', $('api-key').value.trim());
+  checkConnection();
+});
+
+// --- Setup guide toggle ---
+$('toggle-guide').addEventListener('click', () => {
+  const guide = $('setup-guide');
+  const open = guide.style.display !== 'none';
+  guide.style.display = open ? 'none' : 'block';
+  $('guide-caret').innerHTML = open ? '&#9656;' : '&#9662;';
+});
+
+// --- Kubeconfig file picker + drag-drop ---
+let kubeconfigFromFile = '';
+
+function loadKubeconfigFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    kubeconfigFromFile = e.target.result;
+    $('kubeconfig-filename').textContent = `Loaded: ${file.name}`;
+  };
+  reader.onerror = () => {
+    $('kubeconfig-filename').textContent = 'Could not read that file -- try pasting it as text instead.';
+    $('kubeconfig-filename').style.color = 'var(--danger)';
+  };
+  reader.readAsText(file);
+}
+
+$('kubeconfig-pick').addEventListener('click', () => $('kubeconfig-file').click());
+$('kubeconfig-file').addEventListener('change', (e) => loadKubeconfigFile(e.target.files[0]));
+
+const dropZone = $('kubeconfig-drop');
+['dragenter', 'dragover'].forEach(evt =>
+  dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--k8s)'; })
+);
+['dragleave', 'drop'].forEach(evt =>
+  dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--panel-border)'; })
+);
+dropZone.addEventListener('drop', (e) => loadKubeconfigFile(e.dataTransfer.files[0]));
+
+function getKubeconfigValue() {
+  const pasted = $('kubeconfig').value.trim();
+  return pasted || kubeconfigFromFile;
+}
+
+async function api(path, opts = {}) {
+  const { base, key } = getConfig();
+  const res = await fetch(base.replace(/\/$/, '') + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', 'X-API-Key': key, ...(opts.headers || {}) },
+  });
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { const j = await res.json(); detail = j.detail || detail; } catch (e) {}
+    throw new Error(`${res.status}: ${detail}`);
+  }
+  return res.json();
+}
+
+async function checkConnection() {
+  const pill = $('conn-status');
+  try {
+    const { base } = getConfig();
+    const res = await fetch(base.replace(/\/$/, '') + '/health');
+    if (res.ok) {
+      pill.textContent = 'connected'; pill.style.color = '#7CD68A'; pill.style.borderColor = '#2A5A3A';
+    } else throw new Error();
+  } catch (e) {
+    pill.textContent = 'not connected'; pill.style.color = ''; pill.style.borderColor = '';
+  }
+}
+checkConnection();
+
+let currentKubeconfig = '';
+
+$('run-scan').addEventListener('click', async () => {
+  const errBox = $('scan-error');
+  errBox.style.display = 'none';
+
+  const roleArn = $('role-arn').value.trim();
+  const kubeconfigYaml = getKubeconfigValue();
+  const missing = [];
+  if (!roleArn) missing.push('AWS role ARN');
+  if (!kubeconfigYaml) missing.push('kubeconfig (upload a file or paste it)');
+  const { key } = getConfig();
+  if (!key) missing.push('API key (set it above and click Save)');
+
+  if (missing.length) {
+    errBox.textContent = 'Missing: ' + missing.join(', ') + '.';
+    errBox.style.display = 'block';
+    return;
+  }
+
+  const body = {
+    name: $('scan-name').value.trim() || 'unnamed-scan',
+    aws_target: {
+      role_arn: roleArn,
+      region: $('region').value.trim() || 'us-east-1',
+      external_id: $('external-id').value.trim() || null,
+      endpoint_url_override: $('endpoint-override').value.trim() || null,
+    },
+    k8s_target: { kubeconfig_yaml: kubeconfigYaml },
+  };
+
+  currentKubeconfig = kubeconfigYaml;
+  $('run-scan').disabled = true;
+  renderLoading('Submitting scan\u2026');
+
+  try {
+    const created = await api('/scans', { method: 'POST', body: JSON.stringify(body) });
+    await pollScan(created.scan_id);
+  } catch (e) {
+    errBox.textContent = e.message;
+    errBox.style.display = 'block';
+    renderEmpty();
+  } finally {
+    $('run-scan').disabled = false;
+  }
+});
+
+async function pollScan(scanId) {
+  renderLoading('Scanning target\u2026 (ingesting IAM + RBAC, building graph, searching for cross-layer paths)');
+  for (let i = 0; i < 60; i++) {
+    const scan = await api(`/scans/${scanId}`);
+    if (scan.status === 'completed') {
+      const [graph, paths] = await Promise.all([
+        api(`/scans/${scanId}/graph`),
+        api(`/scans/${scanId}/paths`),
+      ]);
+      renderResults(scan, graph, paths);
+      return;
+    }
+    if (scan.status === 'failed') {
+      $('scan-error').textContent = 'Scan failed: ' + (scan.error || 'unknown error');
+      $('scan-error').style.display = 'block';
+      renderEmpty();
+      return;
+    }
+    await new Promise((r) => setTimeout(r, 1200));
+  }
+  $('scan-error').textContent = 'Scan is taking longer than expected -- check the backend logs.';
+  $('scan-error').style.display = 'block';
+  renderEmpty();
+}
+
+function renderEmpty() {
+  $('stage').innerHTML = `
+    <div class="empty-state">
+      <div class="icon">&#9673;</div>
+      <p>Configure a target and run a scan to see the cross-layer graph and any escalation paths found.</p>
+    </div>`;
+}
+function renderLoading(msg) {
+  $('stage').innerHTML = `<div class="loading-state"><div class="spinner"></div><p>${msg}</p></div>`;
+}
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function renderResults(scan, graph, pathsResp) {
+  const paths = pathsResp.paths || [];
+  const vulnCount = paths.length;
+
+  $('stage').innerHTML = `
+    <h2>Scan results \u2014 ${escapeHtml(scan.name)}</h2>
+    <div class="summary-row">
+      <div class="stat"><div class="n">${graph.nodes.length}</div><div class="l">Nodes</div></div>
+      <div class="stat"><div class="n">${graph.edges.length}</div><div class="l">Edges</div></div>
+      <div class="stat ${vulnCount ? 'danger' : ''}"><div class="n">${vulnCount}</div><div class="l">Escalation paths</div></div>
+    </div>
+    <div class="graph-wrap" id="graph-svg-wrap"></div>
+    <div id="paths-list" style="margin-top:22px;"></div>
+  `;
+
+  renderGraph(graph);
+  renderPaths(paths);
+}
+
+function renderGraph(graph) {
+  const wrap = $('graph-svg-wrap');
+  const width = wrap.clientWidth || 900;
+
+  const k8sNodes = graph.nodes.filter(n => n.layer === 'k8s');
+  const awsNodes = graph.nodes.filter(n => n.layer === 'aws');
+  const maxSide = Math.max(k8sNodes.length, awsNodes.length, 1);
+  // Scale up for dense graphs (e.g. kube-system clutter) so dots don't
+  // overlap; cap the visible viewport and let it scroll rather than
+  // growing the page indefinitely.
+  const height = Math.max(460, Math.min(maxSide * 16, 4000));
+  wrap.style.maxHeight = '520px';
+  wrap.style.overflowY = maxSide > 28 ? 'auto' : 'hidden';
+
+  const marginY = 40;
+  const usableH = height - marginY * 2;
+
+  const layoutSide = (nodes, x) => {
+    const positions = {};
+    nodes.forEach((n, i) => {
+      const y = nodes.length > 1 ? marginY + (usableH * i) / (nodes.length - 1) : height / 2;
+      positions[n.id] = { x, y, node: n };
+    });
+    return positions;
+  };
+
+  const positions = { ...layoutSide(k8sNodes, width * 0.22), ...layoutSide(awsNodes, width * 0.78) };
+
+  let svg = `<svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}">`;
+  svg += `<line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="#2A303D" stroke-width="1" stroke-dasharray="4 5" />`;
+
+  graph.edges.forEach(e => {
+    const a = positions[e.source], b = positions[e.target];
+    if (!a || !b) return;
+    const hot = e.on_vulnerable_path;
+    const color = hot ? 'var(--danger)' : 'var(--safe-edge)';
+    svg += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${color}" stroke-width="${hot ? 2 : 1}" opacity="${hot ? 0.95 : 0.5}" />`;
+  });
+
+  // Only permanently label nodes that matter (on the vulnerable path, or
+  // admin nodes) -- with 100+ default kube-system entries in a real
+  // cluster, labeling everything makes the one finding that matters
+  // unreadable. Everything else is still inspectable via hover tooltip.
+  const labelAll = graph.nodes.length <= 24; // small graphs: label everything, no clutter risk
+
+  Object.values(positions).forEach(({ x, y, node }) => {
+    const hot = node.on_vulnerable_path;
+    let color = node.layer === 'k8s' ? 'var(--k8s)' : 'var(--aws)';
+    if (node.is_admin) color = 'var(--danger)';
+    const shouldLabel = hot || node.is_admin || labelAll;
+    const r = node.is_admin ? 7 : (hot ? 6 : 3.5);
+    const opacity = shouldLabel ? 1 : 0.45;
+    svg += `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="${opacity}" stroke="${hot ? '#fff' : 'none'}" stroke-width="1.5"><title>${escapeHtml(node.label)} (${escapeHtml(node.node_type)})</title></circle>`;
+    if (shouldLabel) {
+      const labelX = node.layer === 'k8s' ? x - 10 : x + 10;
+      const anchor = node.layer === 'k8s' ? 'end' : 'start';
+      svg += `<text class="node-label ${hot ? 'hot' : ''}" x="${labelX}" y="${y + 3}" text-anchor="${anchor}">${escapeHtml(node.label.slice(0, 28))}</text>`;
+    }
+  });
+
+  svg += `</svg>`;
+  wrap.innerHTML = `
+    <div class="layer-label k8s">KUBERNETES</div>
+    <div class="bridge-label">IRSA BRIDGE</div>
+    <div class="layer-label aws">AWS IAM</div>
+    <div style="max-height:520px; overflow-y:${maxSide > 28 ? 'auto' : 'hidden'}; padding-top:34px;">${svg}</div>
+  `;
+  wrap.style.maxHeight = '';
+  wrap.style.overflowY = '';
+}
+
+function renderPaths(paths) {
+  const list = $('paths-list');
+  if (paths.length === 0) {
+    list.innerHTML = `<div class="empty-state" style="height:120px;"><p>No cross-layer escalation paths found. \u2713</p></div>`;
+    return;
+  }
+  list.innerHTML = `<h2 style="margin-bottom:14px;">Escalation paths</h2>` + paths.map(p => `
+    <div class="path-card" id="path-${p.path_id}">
+      <div class="route">
+        ${p.node_sequence.map((n, i) =>
+          i === 0 ? `<b>${escapeHtml(n)}</b>`
+          : `<span class="arrow">&rarr;</span>${i === p.node_sequence.length - 1 ? '<b>' + escapeHtml(n) + '</b>' : escapeHtml(n)}`
+        ).join('')}
+      </div>
+      <div class="meta">
+        <span><b>${p.hop_count}</b> hops</span>
+        <span>risk score <b>${p.risk_score}</b></span>
+        <span>${p.cross_layer ? 'cross-layer' : 'same-layer'}</span>
+      </div>
+      ${p.remediation_summary ? `
+        <div class="fix-box" id="fix-${p.path_id}">
+          <div class="fix-label">Recommended fix</div>
+          <div style="font-size:12.5px; margin-bottom:8px;">${escapeHtml(p.remediation_summary)}</div>
+          ${p.remediation_commands.map(c => `<code>${escapeHtml(c)}</code>`).join('')}
+          <div class="fix-actions">
+            <button class="btn-danger" onclick="startApply('${p.path_id}')">Apply fix</button>
+            <span class="fix-status" id="fix-status-${p.path_id}"></span>
+          </div>
+        </div>
+      ` : ''}
+    </div>
+  `).join('');
+}
+
+async function startApply(pathId) {
+  const fixBox = $('fix-' + pathId);
+  try {
+    const confirmResp = await api('/remediation/confirm', { method: 'POST', body: JSON.stringify({ path_id: pathId }) });
+    const needsKubeconfig = confirmResp.requires_kubeconfig;
+    const box = document.createElement('div');
+    box.className = 'confirm-box';
+    box.innerHTML = `
+      <p>${escapeHtml(confirmResp.preview)}</p>
+      <div class="fix-actions">
+        <button class="btn-danger" id="confirm-yes-${pathId}">Yes, apply this fix</button>
+        <button class="btn-ghost" id="confirm-no-${pathId}">Cancel</button>
+      </div>
+    `;
+    fixBox.appendChild(box);
+
+    document.getElementById(`confirm-no-${pathId}`).onclick = () => box.remove();
+    document.getElementById(`confirm-yes-${pathId}`).onclick = async () => {
+      box.querySelector('.fix-actions').innerHTML = '<span class="fix-status">Applying\u2026</span>';
+      try {
+        const applyBody = { path_id: pathId, confirmation_token: confirmResp.confirmation_token };
+        if (needsKubeconfig) applyBody.kubeconfig_yaml = currentKubeconfig;
+        await api('/remediation/apply', { method: 'POST', body: JSON.stringify(applyBody) });
+        box.remove();
+        const status = document.getElementById('fix-status-' + pathId);
+        status.textContent = 'Applied. Re-run a scan to verify the path is closed.';
+        status.classList.add('applied');
+      } catch (e) {
+        box.remove();
+        const status = document.getElementById('fix-status-' + pathId);
+        status.textContent = 'Failed: ' + e.message;
+        status.classList.add('failed');
+      }
+    };
+  } catch (e) {
+    alert('Could not start remediation: ' + e.message);
+  }
+}
+</script>
+</body>
+</html>

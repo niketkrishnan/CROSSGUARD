@@ -193,7 +193,8 @@ def ingest_aws(
     profile: str | None = None,
     endpoint_url: str | None = None,
     region: str = "us-east-1",
-) -> dict:
+    iam_client=None,
+    ) -> dict:
     """Pull and enrich all AWS IAM entities needed for the unified graph.
 
     Args:
@@ -207,7 +208,7 @@ def ingest_aws(
         Each entity dict is the raw boto3 object PLUS the enrichment fields
         added above (policy_documents, trust_principals, is_admin, etc).
     """
-    iam = _make_iam_client(profile, endpoint_url, region)
+    iam = iam_client if iam_client is not None else _make_iam_client(profile, endpoint_url, region)
 
     logger.info("Listing IAM users/roles/groups...")
     raw_users = _paginate(iam, "list_users", "Users")
