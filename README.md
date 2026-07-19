@@ -122,6 +122,45 @@ See `benchmarks/bench1/README.md` for the documented ground truth.
 restarts. If you stop/restart the container, rerun
 `./benchmarks/bench1/setup_aws.sh` before scanning again.
 
+## Web interface (CrossGuard Live)
+
+The CLI above is the core tool. There is also a web application built on
+top of the same engine -- a FastAPI backend that wraps `ingest_aws`,
+`ingest_k8s`, `build_unified_graph`, `find_all_cross_layer_paths`,
+`score_all_paths`, and `find_minimum_remediation` behind an HTTP API, and
+a single-file browser frontend that visualizes the graph and lets you
+apply a remediation with one click.
+
+```
+crossguard-live-api/       FastAPI backend -- scan orchestration + REST API
+crossguard-live-frontend/  Single-file HTML/JS graph visualizer
+```
+
+The web app does not duplicate any analysis logic -- `crossguard-live-api/app/core_adapter.py`
+is a thin bridge that imports and calls the exact same functions used by
+`main.py` above. Same engine, same benchmarks apply, same results.
+
+**Quick start:**
+
+```bash
+cd crossguard-live-api
+pip install -r requirements.txt
+export PYTHONPATH=..:$PYTHONPATH
+export CROSSGUARD_API_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
+uvicorn app.main:app --reload
+```
+
+Then open `crossguard-live-frontend/index.html` in a browser, enter the
+API URL + key, and run a scan. See `crossguard-live-api/README.md` for
+full setup (including the IAM trust policy needed to let it assume a
+role) and deployment instructions.
+
+**Security model:** no raw AWS credentials or kubeconfigs are ever
+stored -- only `sts:AssumeRole` against a role you configure, held in
+memory for one scan/apply and discarded. Applying a remediation is a
+two-step confirm-then-apply flow with a single-use token. Full details
+in `crossguard-live-api/README.md`.
+
 ## Comparison with existing tools
 
 Running PMapper against the same benchmark environment finds 0
