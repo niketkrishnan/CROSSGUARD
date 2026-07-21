@@ -468,7 +468,15 @@ async function loadScanHistory() {
   }
 }
 
-$('refresh-history').addEventListener('click', loadScanHistory);
+$('refresh-history').addEventListener('click', async () => {
+  const btn = $('refresh-history');
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Refreshing\u2026';
+  await loadScanHistory();
+  btn.textContent = 'Refreshed \u2713';
+  setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 900);
+});
 
 async function loadPastScan(scanId) {
   renderLoading('Loading scan\u2026');
