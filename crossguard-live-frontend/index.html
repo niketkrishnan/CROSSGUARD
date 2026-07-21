@@ -357,6 +357,7 @@ async function checkConnection() {
 checkConnection();
 
 let currentKubeconfig = '';
+let lastScanRequestBody = null;
 
 $('run-scan').addEventListener('click', async () => {
   const errBox = $('scan-error');
@@ -388,6 +389,7 @@ $('run-scan').addEventListener('click', async () => {
   };
 
   currentKubeconfig = kubeconfigYaml;
+  lastScanRequestBody = body;
   $('run-scan').disabled = true;
   renderLoading('Submitting scan\u2026');
 
@@ -429,6 +431,7 @@ async function pollScan(scanId) {
 }
 
 function renderEmpty() {
+  lastRenderedGraph = null;
   $('stage').innerHTML = `
     <div class="empty-state">
       <div class="icon">&#9673;</div>
@@ -436,6 +439,7 @@ function renderEmpty() {
     </div>`;
 }
 function renderLoading(msg) {
+  lastRenderedGraph = null;
   $('stage').innerHTML = `<div class="loading-state"><div class="spinner"></div><p>${msg}</p></div>`;
 }
 function escapeHtml(s) {
@@ -447,66 +451,89 @@ function escapeHtml(s) {
 function renderResults(scan, graph, pathsResp) {
   const paths = pathsResp.paths || [];
   const vulnCount = paths.length;
+  lastRenderedGraph = graph;
 
   $('stage').innerHTML = `
     <h2>Scan results \u2014 ${escapeHtml(scan.name)}</h2>
     <div class="summary-row">
       <div class="stat"><div class="n">${graph.nodes.length}</div><div class="l">Nodes</div></div>
       <div class="stat"><div class="n">${graph.edges.length}</div><div class="l">Edges</div></div>
-      <div class="stat ${vulnCount ? 'danger' : ''}"><div class="n">${vulnCount}</div><div class="l">Escalation paths</div></div>
+      <div class="stat ${vulnCount ? 'danger' : ''}" id="path-count-stat"><div class="n">${vulnCount}</div><div class="l">Escalation paths</div></div>
     </div>
+    <div id="verify-banner"></div>
     <div class="graph-wrap" id="graph-svg-wrap"></div>
     <div id="paths-list" style="margin-top:22px;"></div>
   `;
 
-  renderGraph(graph);
+  renderGraph(graph, false);
   renderPaths(paths);
 }
 
-function renderGraph(graph) {
+function renderGraph(graph, showAll) {
   const wrap = $('graph-svg-wrap');
-  const width = wrap.clientWidth || 900;
+  const LABEL_MARGIN = 190;
+  const minWidth = 640;
+  const width = Math.max(wrap.clientWidth || 900, minWidth);
+  wrap.style.overflowX = (wrap.clientWidth || 900) < minWidth ? 'auto' : 'hidden';
 
-  const k8sNodes = graph.nodes.filter(n => n.layer === 'k8s');
-  const awsNodes = graph.nodes.filter(n => n.layer === 'aws');
+  // A node is on the irsa_bridge is what makes it worth showing even if
+  // it isn't part of an escalation path (e.g. B5's "annotated but safe"
+  // case) -- so the annotation itself stays visible as evidence the tool
+  // actually checked it, not just silently absent.
+  const irsaTouchedIds = new Set();
+  graph.edges.forEach(e => { if (e.edge_type === 'irsa_bridge') { irsaTouchedIds.add(e.source); irsaTouchedIds.add(e.target); } });
+  const isRelevant = n => n.on_vulnerable_path || n.is_admin || irsaTouchedIds.has(n.id);
+
+  const allK8s = graph.nodes.filter(n => n.layer === 'k8s');
+  const allAws = graph.nodes.filter(n => n.layer === 'aws');
+  const k8sNodes = showAll ? allK8s : allK8s.filter(isRelevant);
+  const awsNodes = showAll ? allAws : allAws.filter(isRelevant);
+  const hiddenK8s = allK8s.length - k8sNodes.length;
+  const hiddenAws = allAws.length - awsNodes.length;
+
+  // With only the relevant subset shown, node counts are small by
+  // construction (a handful of path/admin/IRSA nodes, never hundreds of
+  // routine kube-system entries) -- so a fixed, modest height comfortably
+  // fits everything with no scrolling needed, in effectively every real
+  // case. "Show all" intentionally reverts to the old dense/scrollable
+  // behavior, since at that point cramming everything into one screen
+  // isn't possible or desirable.
   const maxSide = Math.max(k8sNodes.length, awsNodes.length, 1);
-  // Scale up for dense graphs (e.g. kube-system clutter) so dots don't
-  // overlap; cap the visible viewport and let it scroll rather than
-  // growing the page indefinitely.
-  const height = Math.max(460, Math.min(maxSide * 16, 4000));
-  wrap.style.maxHeight = '520px';
-  wrap.style.overflowY = maxSide > 28 ? 'auto' : 'hidden';
+  const height = showAll ? Math.max(460, Math.min(maxSide * 16, 4000)) : Math.max(300, Math.min(maxSide * 46, 460));
 
   const marginY = 40;
   const usableH = height - marginY * 2;
 
   const layoutSide = (nodes, x) => {
+    const importance = n => (n.on_vulnerable_path ? 2 : 0) + (n.is_admin ? 1 : 0);
+    const sorted = [...nodes].sort((a, b) => importance(b) - importance(a));
     const positions = {};
-    nodes.forEach((n, i) => {
-      const y = nodes.length > 1 ? marginY + (usableH * i) / (nodes.length - 1) : height / 2;
+    sorted.forEach((n, i) => {
+      const y = sorted.length > 1 ? marginY + (usableH * i) / (sorted.length - 1) : height / 2;
       positions[n.id] = { x, y, node: n };
     });
     return positions;
   };
 
-  const positions = { ...layoutSide(k8sNodes, width * 0.22), ...layoutSide(awsNodes, width * 0.78) };
+  const k8sX = LABEL_MARGIN;
+  const awsX = width - LABEL_MARGIN;
+  const positions = { ...layoutSide(k8sNodes, k8sX), ...layoutSide(awsNodes, awsX) };
+  const shownIds = new Set(Object.keys(positions));
 
-  let svg = `<svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}">`;
+  let svg = `<svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">`;
   svg += `<line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="#2A303D" stroke-width="1" stroke-dasharray="4 5" />`;
 
   graph.edges.forEach(e => {
     const a = positions[e.source], b = positions[e.target];
-    if (!a || !b) return;
+    if (!a || !b) return; // one or both ends hidden in the filtered view -- skip, not an error
     const hot = e.on_vulnerable_path;
     const color = hot ? 'var(--danger)' : 'var(--safe-edge)';
     svg += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${color}" stroke-width="${hot ? 2 : 1}" opacity="${hot ? 0.95 : 0.5}" />`;
   });
 
-  // Only permanently label nodes that matter (on the vulnerable path, or
-  // admin nodes) -- with 100+ default kube-system entries in a real
-  // cluster, labeling everything makes the one finding that matters
-  // unreadable. Everything else is still inspectable via hover tooltip.
-  const labelAll = graph.nodes.length <= 24; // small graphs: label everything, no clutter risk
+  const labelAll = showAll ? graph.nodes.length <= 24 : true; // filtered view is always small enough to label everything
+  const maxLabelPx = LABEL_MARGIN - 26;
+  const charBudget = Math.max(8, Math.floor(maxLabelPx / 5.6));
 
   Object.values(positions).forEach(({ x, y, node }) => {
     const hot = node.on_vulnerable_path;
@@ -517,22 +544,53 @@ function renderGraph(graph) {
     const opacity = shouldLabel ? 1 : 0.45;
     svg += `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="${opacity}" stroke="${hot ? '#fff' : 'none'}" stroke-width="1.5"><title>${escapeHtml(node.label)} (${escapeHtml(node.node_type)})</title></circle>`;
     if (shouldLabel) {
+      const truncated = node.label.length > charBudget ? node.label.slice(0, charBudget - 1) + '\u2026' : node.label;
       const labelX = node.layer === 'k8s' ? x - 10 : x + 10;
       const anchor = node.layer === 'k8s' ? 'end' : 'start';
-      svg += `<text class="node-label ${hot ? 'hot' : ''}" x="${labelX}" y="${y + 3}" text-anchor="${anchor}">${escapeHtml(node.label.slice(0, 28))}</text>`;
+      svg += `<text class="node-label ${hot ? 'hot' : ''}" x="${labelX}" y="${y + 3}" text-anchor="${anchor}" textLength="${Math.min(maxLabelPx, truncated.length * 5.6)}" lengthAdjust="spacingAndGlyphs">${escapeHtml(truncated)}</text>`;
     }
   });
 
   svg += `</svg>`;
+  const scrollY = showAll && maxSide > 28;
+
+  const totalHidden = hiddenK8s + hiddenAws;
+  const toggleHtml = totalHidden > 0 || showAll
+    ? `<div style="text-align:center; padding:8px 0 2px; font-size:11px; color:var(--text-faint);">
+         ${showAll
+           ? `Showing all ${graph.nodes.length} nodes. <a href="#" id="graph-toggle-all" style="color:var(--k8s);">Show only relevant nodes</a>`
+           : `${totalHidden} other node${totalHidden === 1 ? '' : 's'} not shown (no finding, not admin, not IRSA-annotated). <a href="#" id="graph-toggle-all" style="color:var(--k8s);">Show all ${graph.nodes.length}</a>`}
+       </div>`
+    : '';
+
   wrap.innerHTML = `
     <div class="layer-label k8s">KUBERNETES</div>
     <div class="bridge-label">IRSA BRIDGE</div>
     <div class="layer-label aws">AWS IAM</div>
-    <div style="max-height:520px; overflow-y:${maxSide > 28 ? 'auto' : 'hidden'}; padding-top:34px;">${svg}</div>
+    <div style="max-height:520px; overflow-y:${scrollY ? 'auto' : 'hidden'}; padding-top:34px;">${svg}</div>
+    ${toggleHtml}
   `;
-  wrap.style.maxHeight = '';
-  wrap.style.overflowY = '';
+
+  const toggleLink = document.getElementById('graph-toggle-all');
+  if (toggleLink) {
+    toggleLink.onclick = (e) => {
+      e.preventDefault();
+      renderGraph(graph, !showAll);
+    };
+  }
 }
+
+// Re-render the last graph on resize so the fixed-margin layout stays
+// correct if the window/panel width changes -- e.g. resizing the
+// browser, or the sidebar collapsing on a narrower screen.
+let lastRenderedGraph = null;
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (lastRenderedGraph) renderGraph(lastRenderedGraph, false);
+  }, 150);
+});
 
 function renderPaths(paths) {
   const list = $('paths-list');
@@ -593,8 +651,9 @@ async function startApply(pathId) {
         await api('/remediation/apply', { method: 'POST', body: JSON.stringify(applyBody) });
         box.remove();
         const status = document.getElementById('fix-status-' + pathId);
-        status.textContent = 'Applied. Re-run a scan to verify the path is closed.';
+        status.textContent = 'Applied \u2014 verifying\u2026';
         status.classList.add('applied');
+        await verifyFixByRescanning(pathId);
       } catch (e) {
         box.remove();
         const status = document.getElementById('fix-status-' + pathId);
@@ -604,6 +663,65 @@ async function startApply(pathId) {
     };
   } catch (e) {
     alert('Could not start remediation: ' + e.message);
+  }
+}
+
+// Applying a fix isn't the same claim as verifying it -- your own B2/B6
+// methodology is "find -> fix -> re-scan -> confirm it's actually gone",
+// not "the API call didn't error so assume it worked". This does that
+// same re-scan automatically instead of asking the user to remember to,
+// and is explicit about which outcome happened rather than assuming
+// success.
+async function verifyFixByRescanning(appliedPathId) {
+  const banner = $('verify-banner');
+  if (!banner) return; // stage was navigated away from
+  if (!lastScanRequestBody) {
+    banner.innerHTML = `<div class="confirm-box" style="margin-bottom:16px;"><p>Fix applied. Could not auto-verify (no scan configuration on hand) \u2014 run a new scan manually to confirm.</p></div>`;
+    return;
+  }
+
+  const priorCount = parseInt($('path-count-stat')?.querySelector('.n')?.textContent || '0', 10);
+
+  banner.innerHTML = `
+    <div class="confirm-box" style="margin-bottom:16px; border-color:var(--k8s); background:rgba(76,158,235,0.08);">
+      <p style="color:var(--text);"><span class="spinner" style="width:14px;height:14px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:8px;"></span>Re-scanning to verify the fix actually closed the path\u2026</p>
+    </div>`;
+
+  try {
+    const created = await api('/scans', { method: 'POST', body: JSON.stringify(lastScanRequestBody) });
+    let scan;
+    for (let i = 0; i < 60; i++) {
+      scan = await api(`/scans/${created.scan_id}`);
+      if (scan.status === 'completed' || scan.status === 'failed') break;
+      await new Promise(r => setTimeout(r, 1200));
+    }
+    if (scan.status !== 'completed') {
+      banner.innerHTML = `<div class="confirm-box" style="margin-bottom:16px;"><p>Fix applied, but the verification re-scan didn't complete (${escapeHtml(scan.error || scan.status)}). Run a scan manually to confirm.</p></div>`;
+      return;
+    }
+
+    const [graph, pathsResp] = await Promise.all([
+      api(`/scans/${created.scan_id}/graph`),
+      api(`/scans/${created.scan_id}/paths`),
+    ]);
+    const newCount = pathsResp.paths.length;
+    const closed = newCount < priorCount;
+
+    banner.innerHTML = closed
+      ? `<div class="confirm-box" style="margin-bottom:16px; border-color:#2A5A3A; background:rgba(124,214,138,0.08);">
+           <p style="color:#B8F0C0;">\u2713 Fix verified \u2014 escalation paths: ${priorCount} \u2192 ${newCount}. Showing the fresh scan below.</p>
+         </div>`
+      : `<div class="confirm-box" style="margin-bottom:16px;">
+           <p>\u26a0 Fix was applied via the API, but the re-scan still shows ${newCount} path(s) (was ${priorCount}). This needs manual review \u2014 the change may not have taken effect, or a different path uses a different edge. Showing the fresh scan below.</p>
+         </div>`;
+
+    // Re-render the full results panel with the new scan, but keep the
+    // banner by re-inserting it (renderResults rebuilds #stage).
+    const bannerHtml = banner.innerHTML;
+    renderResults(scan, graph, pathsResp);
+    $('verify-banner').innerHTML = bannerHtml;
+  } catch (e) {
+    banner.innerHTML = `<div class="confirm-box" style="margin-bottom:16px;"><p>Fix applied, but auto-verification failed: ${escapeHtml(e.message)}. Run a scan manually to confirm.</p></div>`;
   }
 }
 </script>
