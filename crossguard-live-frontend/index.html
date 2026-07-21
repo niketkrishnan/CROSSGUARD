@@ -162,6 +162,37 @@
   .fix-status.failed { color: var(--danger); }
   .confirm-box { background: var(--danger-dim); border: 1px solid var(--danger); border-radius: 5px; padding: 10px 12px; margin-top: 10px; font-size: 12px; }
   .confirm-box p { margin: 0 0 10px; color: #FFE3E3; }
+
+  .history-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 8px 6px; border-radius: 5px; cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .history-item:hover { background: #0A0D13; border-color: var(--panel-border); }
+  .history-item.selected { background: rgba(76,158,235,0.08); border-color: var(--k8s); }
+  .history-item input[type="checkbox"] { margin-top: 3px; }
+  .history-item .hi-body { flex: 1; min-width: 0; }
+  .history-item .hi-name { font-size: 12.5px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .history-item .hi-meta { font-size: 10.5px; color: var(--text-muted); margin-top: 2px; display: flex; gap: 8px; }
+  .history-item .hi-meta .danger-count { color: var(--danger); }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+  .status-dot.completed { background: #7CD68A; }
+  .status-dot.failed { background: var(--danger); }
+  .status-dot.pending, .status-dot.running { background: #F5C85C; }
+
+  .compare-col { flex: 1; min-width: 0; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 780px) { .compare-grid { grid-template-columns: 1fr; } }
+  .diff-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 10px; border-radius: 5px; margin-bottom: 6px;
+    background: #0A0D13; border: 1px solid var(--panel-border);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  }
+  .diff-row .diff-tag { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; padding: 2px 7px; border-radius: 3px; white-space: nowrap; margin-left: 10px; }
+  .diff-tag.closed { background: rgba(124,214,138,0.15); color: #7CD68A; }
+  .diff-tag.new { background: rgba(255,77,77,0.15); color: var(--danger); }
+  .diff-tag.unchanged { background: rgba(138,147,166,0.15); color: var(--text-muted); }
 </style>
 </head>
 <body>
@@ -256,6 +287,15 @@
         <button class="btn-primary" id="run-scan">Run scan</button>
         <div id="scan-error"></div>
       </div>
+
+      <div class="panel">
+        <h2>Recent scans</h2>
+        <div id="scan-history-list" style="font-size:12px; color:var(--text-faint);">Loading\u2026</div>
+        <div class="fix-actions" style="margin-top:12px;">
+          <button class="btn-ghost" id="refresh-history" style="width:100%;">Refresh</button>
+        </div>
+        <button class="btn-danger" id="compare-btn" style="width:100%; margin-top:8px; display:none;">Compare selected (2)</button>
+      </div>
     </div>
 
     <div class="panel stage" id="stage">
@@ -297,6 +337,7 @@ $('save-key').addEventListener('click', () => {
   localStorage.setItem('cg_api_base', $('api-base').value.trim());
   localStorage.setItem('cg_api_key', $('api-key').value.trim());
   checkConnection();
+  loadScanHistory();
 });
 
 // --- Setup guide toggle ---
@@ -369,6 +410,160 @@ async function checkConnection() {
 }
 checkConnection();
 
+// ---------------------------------------------------------------------
+// Scan history + compare
+// ---------------------------------------------------------------------
+
+const selectedForCompare = new Set();
+
+async function loadScanHistory() {
+  const list = $('scan-history-list');
+  const { key } = getConfig();
+  if (!key) { list.innerHTML = 'Set your API key above to see recent scans.'; return; }
+  try {
+    const scans = await api('/scans');
+    scans.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    if (scans.length === 0) { list.innerHTML = 'No scans yet.'; return; }
+
+    list.innerHTML = scans.slice(0, 15).map(s => {
+      const checked = selectedForCompare.has(s.scan_id) ? 'checked' : '';
+      const pathBadge = s.status === 'completed'
+        ? `<span class="${s.path_count > 0 ? 'danger-count' : ''}">${s.path_count} path${s.path_count === 1 ? '' : 's'}</span>`
+        : '';
+      return `
+        <div class="history-item ${selectedForCompare.has(s.scan_id) ? 'selected' : ''}" data-scan-id="${s.scan_id}">
+          <input type="checkbox" data-role="compare-check" data-scan-id="${s.scan_id}" ${checked} ${s.status !== 'completed' ? 'disabled' : ''} />
+          <div class="hi-body" data-role="load-scan" data-scan-id="${s.scan_id}">
+            <div class="hi-name">${escapeHtml(s.name)}</div>
+            <div class="hi-meta">
+              <span><span class="status-dot ${s.status}"></span>${s.status}</span>
+              ${pathBadge}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    list.querySelectorAll('[data-role="load-scan"]').forEach(el => {
+      el.addEventListener('click', () => loadPastScan(el.dataset.scanId));
+    });
+    list.querySelectorAll('[data-role="compare-check"]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = el.dataset.scanId;
+        if (el.checked) {
+          if (selectedForCompare.size >= 2) { el.checked = false; return; } // cap at 2, ignore further clicks
+          selectedForCompare.add(id);
+        } else {
+          selectedForCompare.delete(id);
+        }
+        $('compare-btn').style.display = selectedForCompare.size === 2 ? 'block' : 'none';
+        loadScanHistory(); // re-render to reflect .selected highlighting
+      });
+    });
+  } catch (e) {
+    list.innerHTML = `Could not load scan history: ${escapeHtml(e.message)}`;
+  }
+}
+
+$('refresh-history').addEventListener('click', loadScanHistory);
+
+async function loadPastScan(scanId) {
+  renderLoading('Loading scan\u2026');
+  try {
+    const scan = await api(`/scans/${scanId}`);
+    if (scan.status !== 'completed') {
+      renderEmpty();
+      $('scan-error').textContent = `That scan is ${scan.status}, not completed -- nothing to show yet.`;
+      $('scan-error').style.display = 'block';
+      return;
+    }
+    const [graph, pathsResp] = await Promise.all([
+      api(`/scans/${scanId}/graph`),
+      api(`/scans/${scanId}/paths`),
+    ]);
+    renderResults(scan, graph, pathsResp);
+  } catch (e) {
+    renderEmpty();
+    $('scan-error').textContent = 'Could not load that scan: ' + e.message;
+    $('scan-error').style.display = 'block';
+  }
+}
+
+$('compare-btn').addEventListener('click', async () => {
+  const ids = [...selectedForCompare];
+  if (ids.length !== 2) return;
+  renderLoading('Loading both scans to compare\u2026');
+  try {
+    const [scanA, scanB] = await Promise.all([api(`/scans/${ids[0]}`), api(`/scans/${ids[1]}`)]);
+    // Compare in chronological order (older -> newer) so "closed" / "new"
+    // read naturally as a before/after, matching your own benchmark
+    // methodology (find -> fix -> re-scan -> confirm).
+    const [older, newer] = new Date(scanA.created_at) <= new Date(scanB.created_at) ? [scanA, scanB] : [scanB, scanA];
+    const [graphA, pathsA, graphB, pathsB] = await Promise.all([
+      api(`/scans/${older.scan_id}/graph`), api(`/scans/${older.scan_id}/paths`),
+      api(`/scans/${newer.scan_id}/graph`), api(`/scans/${newer.scan_id}/paths`),
+    ]);
+    renderCompare(older, graphA, pathsA, newer, graphB, pathsB);
+  } catch (e) {
+    renderEmpty();
+    $('scan-error').textContent = 'Could not load scans to compare: ' + e.message;
+    $('scan-error').style.display = 'block';
+  }
+});
+
+function routeKey(p) { return p.node_sequence.join(' -> '); }
+
+function renderCompare(scanA, graphA, pathsA, scanB, graphB, pathsB) {
+  lastRenderedGraph = null;
+  const routesA = new Map(pathsA.paths.map(p => [routeKey(p), p]));
+  const routesB = new Map(pathsB.paths.map(p => [routeKey(p), p]));
+  const closed = [...routesA.keys()].filter(k => !routesB.has(k));
+  const stillOpen = [...routesA.keys()].filter(k => routesB.has(k));
+  const newlyFound = [...routesB.keys()].filter(k => !routesA.has(k));
+
+  const fmtTime = iso => new Date(iso).toLocaleString();
+
+  $('stage').innerHTML = `
+    <h2>Comparing scans</h2>
+    <div class="compare-grid" style="margin-bottom:20px;">
+      <div class="compare-col">
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">EARLIER \u2014 ${escapeHtml(scanA.name)}</div>
+        <div class="summary-row">
+          <div class="stat"><div class="n">${graphA.nodes.length}</div><div class="l">Nodes</div></div>
+          <div class="stat"><div class="n">${graphA.edges.length}</div><div class="l">Edges</div></div>
+          <div class="stat ${pathsA.paths.length ? 'danger' : ''}"><div class="n">${pathsA.paths.length}</div><div class="l">Paths</div></div>
+        </div>
+        <div style="font-size:10.5px; color:var(--text-faint); margin-top:4px;">${fmtTime(scanA.created_at)}</div>
+      </div>
+      <div class="compare-col">
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">LATER \u2014 ${escapeHtml(scanB.name)}</div>
+        <div class="summary-row">
+          <div class="stat"><div class="n">${graphB.nodes.length}</div><div class="l">Nodes</div></div>
+          <div class="stat"><div class="n">${graphB.edges.length}</div><div class="l">Edges</div></div>
+          <div class="stat ${pathsB.paths.length ? 'danger' : ''}"><div class="n">${pathsB.paths.length}</div><div class="l">Paths</div></div>
+        </div>
+        <div style="font-size:10.5px; color:var(--text-faint); margin-top:4px;">${fmtTime(scanB.created_at)}</div>
+      </div>
+    </div>
+
+    <h2 style="margin-bottom:12px;">Path diff</h2>
+    <div id="compare-diff"></div>
+  `;
+
+  const diffEl = $('compare-diff');
+  if (closed.length === 0 && newlyFound.length === 0 && stillOpen.length === 0) {
+    diffEl.innerHTML = `<div class="empty-state" style="height:80px;"><p>No escalation paths in either scan.</p></div>`;
+  } else {
+    diffEl.innerHTML = [
+      ...closed.map(k => `<div class="diff-row"><span>${escapeHtml(k)}</span><span class="diff-tag closed">CLOSED</span></div>`),
+      ...newlyFound.map(k => `<div class="diff-row"><span>${escapeHtml(k)}</span><span class="diff-tag new">NEW</span></div>`),
+      ...stillOpen.map(k => `<div class="diff-row"><span>${escapeHtml(k)}</span><span class="diff-tag unchanged">STILL OPEN</span></div>`),
+    ].join('');
+  }
+}
+
+loadScanHistory();
+
 let currentKubeconfig = '';
 let lastScanRequestBody = null;
 
@@ -428,12 +623,14 @@ async function pollScan(scanId) {
         api(`/scans/${scanId}/paths`),
       ]);
       renderResults(scan, graph, paths);
+      loadScanHistory();
       return;
     }
     if (scan.status === 'failed') {
       $('scan-error').textContent = 'Scan failed: ' + (scan.error || 'unknown error');
       $('scan-error').style.display = 'block';
       renderEmpty();
+      loadScanHistory();
       return;
     }
     await new Promise((r) => setTimeout(r, 1200));
@@ -733,6 +930,7 @@ async function verifyFixByRescanning(appliedPathId) {
     const bannerHtml = banner.innerHTML;
     renderResults(scan, graph, pathsResp);
     $('verify-banner').innerHTML = bannerHtml;
+    loadScanHistory();
   } catch (e) {
     banner.innerHTML = `<div class="confirm-box" style="margin-bottom:16px;"><p>Fix applied, but auto-verification failed: ${escapeHtml(e.message)}. Run a scan manually to confirm.</p></div>`;
   }
