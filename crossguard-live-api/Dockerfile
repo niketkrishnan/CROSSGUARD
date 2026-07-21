@@ -1,9 +1,3 @@
-# Build context is the REPO ROOT (not this subfolder) -- see Render's
-# "Root Directory" setting, which must be left blank, with "Dockerfile
-# Path" set to crossguard-live-api/Dockerfile instead. This is required
-# because app/core_adapter.py imports the core engine (graph/, ingestion/,
-# pathfinder/, remediation/, scoring/), which lives at the repo root, not
-# inside crossguard-live-api/ -- so the build needs to see both.
 FROM python:3.12-slim
 
 WORKDIR /srv
@@ -17,6 +11,8 @@ COPY ingestion ./ingestion
 COPY pathfinder ./pathfinder
 COPY remediation ./remediation
 COPY scoring ./scoring
+
+COPY crossguard-live-frontend/index.html ./app/static/index.html
 
 ENV PORT=8000
 ENV PYTHONPATH=/srv

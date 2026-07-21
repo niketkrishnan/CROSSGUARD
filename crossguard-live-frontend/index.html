@@ -277,7 +277,20 @@ function getConfig() {
     key: localStorage.getItem('cg_api_key') || '',
   };
 }
-$('api-base').value = localStorage.getItem('cg_api_base') || $('api-base').value;
+$('api-base').value = localStorage.getItem('cg_api_base') || defaultApiBase();
+
+function defaultApiBase() {
+  // When this file is served BY the backend itself (same-origin
+  // deployment, e.g. Render), the API is right here -- default to it
+  // automatically so nobody has to know or paste a URL. When served
+  // separately (local dev via `python3 -m http.server` on a different
+  // port than uvicorn), fall back to the conventional local backend URL.
+  const loc = window.location;
+  if (loc.protocol.startsWith('http') && loc.hostname !== 'localhost' && loc.hostname !== '127.0.0.1') {
+    return loc.origin;
+  }
+  return 'http://127.0.0.1:8000';
+}
 $('api-key').value = localStorage.getItem('cg_api_key') || '';
 
 $('save-key').addEventListener('click', () => {
