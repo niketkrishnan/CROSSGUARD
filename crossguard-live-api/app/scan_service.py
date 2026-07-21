@@ -14,12 +14,43 @@ import tempfile
 from datetime import datetime, timezone
 
 import networkx as nx
+import yaml
 
 from app import core_adapter, store
 from app.aws_auth import AssumeRoleError, assume_role
 from app.models import EscalationPath, GraphEdge, GraphNode, RemediationStatus, ScanRequest, ScanStatus
 
 logger = logging.getLogger("crossguard_live.scan_service")
+
+
+class InvalidKubeconfigError(Exception):
+    pass
+
+
+def _validate_kubeconfig_yaml(raw: str) -> None:
+    """
+    Catches malformed kubeconfig input with a clear message before it
+    reaches the kubernetes client's config loader, whose internal errors
+    for bad input (e.g. a plain string instead of a YAML mapping) are
+    Python internals like "'str' object does not support item
+    assignment" -- accurate to what went wrong internally, but useless
+    to someone who just pasted the wrong thing.
+    """
+    try:
+        parsed = yaml.safe_load(raw)
+    except yaml.YAMLError as exc:
+        raise InvalidKubeconfigError(f"Kubeconfig is not valid YAML: {exc}") from exc
+
+    if not isinstance(parsed, dict):
+        got = "empty content" if parsed is None else f"a {type(parsed).__name__}, not a mapping"
+        raise InvalidKubeconfigError(
+            f"Kubeconfig doesn't look like a valid kubeconfig file -- got {got}. "
+            f"Expected a YAML document with 'clusters', 'contexts', and 'users' sections."
+        )
+
+    missing = [k for k in ("clusters", "contexts", "users") if k not in parsed]
+    if missing:
+        raise InvalidKubeconfigError(f"Kubeconfig is missing required section(s): {', '.join(missing)}.")
 
 
 def _now():
@@ -80,7 +111,8 @@ def run_scan(scan_id: str, req: ScanRequest) -> None:
         iam_client = creds.boto3_client("iam")
         aws_data = core_adapter.run_aws_ingestion(iam_client)
 
-        # --- K8s side: ingest_k8s wants a file path, so write one temporarily ---
+        # --- K8s side: validate first for a clean error, then ingest ---
+        _validate_kubeconfig_yaml(req.k8s_target.kubeconfig_yaml)
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=True) as tf:
             tf.write(req.k8s_target.kubeconfig_yaml)
             tf.flush()
