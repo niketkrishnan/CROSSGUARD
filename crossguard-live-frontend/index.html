@@ -6,6 +6,7 @@
 <title>CrossGuard Live</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
 <style>
   :root {
     --bg: #0B0E14;
@@ -144,6 +145,33 @@
   .layer-label.aws { right: 16px; color: var(--aws); }
   .node-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; fill: var(--text-muted); pointer-events: none; }
   .node-label.hot { fill: #FFD5D5; }
+
+  .graph-toolbar {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    padding: 10px 14px; border-bottom: 1px solid var(--panel-border);
+  }
+  .graph-legend { display: flex; gap: 16px; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; }
+  .graph-legend span { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .legend-dot.k8s { background: var(--k8s); }
+  .legend-dot.aws { background: var(--aws); }
+  .legend-dot.danger { background: var(--danger); box-shadow: 0 0 4px rgba(255,77,77,0.7); }
+  .graph-layout-toggle { display: flex; gap: 6px; }
+  .layout-btn { padding: 5px 12px; font-size: 11px; }
+  .zoom-btn { padding: 5px 11px; font-size: 12px; font-weight: 700; min-width: 30px; }
+  .layout-btn.active { background: var(--k8s); color: #04121F; border-color: var(--k8s); }
+  .cy-tooltip {
+    position: absolute; z-index: 30; pointer-events: none; display: none;
+    background: var(--panel); border: 1px solid var(--k8s); border-radius: 6px;
+    padding: 8px 10px; font-size: 11px; min-width: 160px; max-width: 260px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+  }
+  .cy-tooltip .tt-name { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text); word-break: break-all; }
+  .cy-tooltip .tt-type { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
+  .cy-tooltip .tt-tags { margin-top: 6px; display: flex; gap: 6px; }
+  .cy-tooltip .tt-tag { font-size: 9.5px; font-weight: 600; padding: 2px 6px; border-radius: 3px; }
+  .cy-tooltip .tt-tag.admin { background: rgba(255,77,77,0.18); color: var(--danger); }
+  .cy-tooltip .tt-tag.vuln { background: rgba(255,77,77,0.18); color: var(--danger); }
 
   .path-card {
     background: #0A0D13; border: 1px solid var(--panel-border); border-left: 3px solid var(--danger);
@@ -690,126 +718,220 @@ function renderResults(scan, graph, pathsResp) {
   renderPaths(paths);
 }
 
+let cyInstance = null;
+let currentGraphLayoutMode = 'hierarchical';
+
+function runCyLayout(mode) {
+  if (!cyInstance) return;
+  if (mode === 'hierarchical') {
+    // Roots = nodes with no incoming edge among what's shown -- these are
+    // the actual entry points (K8s ServiceAccounts, typically), so the
+    // layout flows naturally from entry point toward the AWS target
+    // rather than rooting at the admin node and fighting edge direction.
+    const inDegree = {};
+    cyInstance.nodes().forEach(n => { inDegree[n.id()] = 0; });
+    cyInstance.edges().forEach(e => { inDegree[e.data('target')] = (inDegree[e.data('target')] || 0) + 1; });
+    const roots = Object.keys(inDegree).filter(id => inDegree[id] === 0);
+    cyInstance.layout({
+      name: 'breadthfirst', directed: true, roots: roots.length ? roots : undefined,
+      spacingFactor: 1.5, animate: true, animationDuration: 400,
+    }).run();
+  } else {
+    cyInstance.layout({
+      name: 'cose', animate: true, animationDuration: 500,
+      randomize: true, fit: true, padding: 60,
+      // Cytoscape's own cose default for nodeRepulsion is 400000 -- the
+      // previous value here (9000) was over 40x weaker than that
+      // default, which is what caused nodes and labels to clump
+      // together instead of spreading apart. These values match or
+      // exceed the library defaults instead of guessing low.
+      nodeRepulsion: 450000, idealEdgeLength: 120, edgeElasticity: 100,
+      nodeOverlap: 20, componentSpacing: 120, gravity: 40, numIter: 2000,
+    }).run();
+  }
+}
+
 function renderGraph(graph, showAll) {
   const wrap = $('graph-svg-wrap');
-  const LABEL_MARGIN = 190;
-  const minWidth = 640;
-  const width = Math.max(wrap.clientWidth || 900, minWidth);
-  wrap.style.overflowX = (wrap.clientWidth || 900) < minWidth ? 'auto' : 'hidden';
 
-  // A node is on the irsa_bridge is what makes it worth showing even if
-  // it isn't part of an escalation path (e.g. B5's "annotated but safe"
-  // case) -- so the annotation itself stays visible as evidence the tool
-  // actually checked it, not just silently absent.
+  // Same relevance filter as before: on a path, admin, or IRSA-touched --
+  // this still matters even with a real graph library, since a real
+  // cluster's 100+ default kube-system entries would otherwise clutter
+  // a force layout just as much as they clipped the old SVG one.
   const irsaTouchedIds = new Set();
   graph.edges.forEach(e => { if (e.edge_type === 'irsa_bridge') { irsaTouchedIds.add(e.source); irsaTouchedIds.add(e.target); } });
   const isRelevant = n => n.on_vulnerable_path || n.is_admin || irsaTouchedIds.has(n.id);
 
-  const allK8s = graph.nodes.filter(n => n.layer === 'k8s');
-  const allAws = graph.nodes.filter(n => n.layer === 'aws');
-  const k8sNodes = showAll ? allK8s : allK8s.filter(isRelevant);
-  const awsNodes = showAll ? allAws : allAws.filter(isRelevant);
-  const hiddenK8s = allK8s.length - k8sNodes.length;
-  const hiddenAws = allAws.length - awsNodes.length;
+  const shownNodes = showAll ? graph.nodes : graph.nodes.filter(isRelevant);
+  const shownIds = new Set(shownNodes.map(n => n.id));
+  const shownEdges = graph.edges.filter(e => shownIds.has(e.source) && shownIds.has(e.target));
+  const hiddenCount = graph.nodes.length - shownNodes.length;
 
-  // With only the relevant subset shown, node counts are small by
-  // construction (a handful of path/admin/IRSA nodes, never hundreds of
-  // routine kube-system entries) -- so a fixed, modest height comfortably
-  // fits everything with no scrolling needed, in effectively every real
-  // case. "Show all" intentionally reverts to the old dense/scrollable
-  // behavior, since at that point cramming everything into one screen
-  // isn't possible or desirable.
-  const maxSide = Math.max(k8sNodes.length, awsNodes.length, 1);
-  const height = showAll ? Math.max(460, Math.min(maxSide * 16, 4000)) : Math.max(300, Math.min(maxSide * 46, 460));
-
-  const marginY = 40;
-  const usableH = height - marginY * 2;
-
-  const layoutSide = (nodes, x) => {
-    const importance = n => (n.on_vulnerable_path ? 2 : 0) + (n.is_admin ? 1 : 0);
-    const sorted = [...nodes].sort((a, b) => importance(b) - importance(a));
-    const positions = {};
-    sorted.forEach((n, i) => {
-      const y = sorted.length > 1 ? marginY + (usableH * i) / (sorted.length - 1) : height / 2;
-      positions[n.id] = { x, y, node: n };
-    });
-    return positions;
-  };
-
-  const k8sX = LABEL_MARGIN;
-  const awsX = width - LABEL_MARGIN;
-  const positions = { ...layoutSide(k8sNodes, k8sX), ...layoutSide(awsNodes, awsX) };
-  const shownIds = new Set(Object.keys(positions));
-
-  let svg = `<svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet">`;
-  svg += `<line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="#2A303D" stroke-width="1" stroke-dasharray="4 5" />`;
-
-  graph.edges.forEach(e => {
-    const a = positions[e.source], b = positions[e.target];
-    if (!a || !b) return; // one or both ends hidden in the filtered view -- skip, not an error
-    const hot = e.on_vulnerable_path;
-    const color = hot ? 'var(--danger)' : 'var(--safe-edge)';
-    svg += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${color}" stroke-width="${hot ? 2 : 1}" opacity="${hot ? 0.95 : 0.5}" />`;
-  });
-
-  const labelAll = showAll ? graph.nodes.length <= 24 : true; // filtered view is always small enough to label everything
-  const maxLabelPx = LABEL_MARGIN - 26;
-  const charBudget = Math.max(8, Math.floor(maxLabelPx / 5.6));
-
-  Object.values(positions).forEach(({ x, y, node }) => {
-    const hot = node.on_vulnerable_path;
-    let color = node.layer === 'k8s' ? 'var(--k8s)' : 'var(--aws)';
-    if (node.is_admin) color = 'var(--danger)';
-    const shouldLabel = hot || node.is_admin || labelAll;
-    const r = node.is_admin ? 7 : (hot ? 6 : 3.5);
-    const opacity = shouldLabel ? 1 : 0.45;
-    svg += `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}" opacity="${opacity}" stroke="${hot ? '#fff' : 'none'}" stroke-width="1.5"><title>${escapeHtml(node.label)} (${escapeHtml(node.node_type)})</title></circle>`;
-    if (shouldLabel) {
-      const truncated = node.label.length > charBudget ? node.label.slice(0, charBudget - 1) + '\u2026' : node.label;
-      const labelX = node.layer === 'k8s' ? x - 10 : x + 10;
-      const anchor = node.layer === 'k8s' ? 'end' : 'start';
-      svg += `<text class="node-label ${hot ? 'hot' : ''}" x="${labelX}" y="${y + 3}" text-anchor="${anchor}" textLength="${Math.min(maxLabelPx, truncated.length * 5.6)}" lengthAdjust="spacingAndGlyphs">${escapeHtml(truncated)}</text>`;
-    }
-  });
-
-  svg += `</svg>`;
-  const scrollY = showAll && maxSide > 28;
-
-  const totalHidden = hiddenK8s + hiddenAws;
-  const toggleHtml = totalHidden > 0 || showAll
+  const toggleHtml = hiddenCount > 0 || showAll
     ? `<div style="text-align:center; padding:8px 0 2px; font-size:11px; color:var(--text-faint);">
          ${showAll
            ? `Showing all ${graph.nodes.length} nodes. <a href="#" id="graph-toggle-all" style="color:var(--k8s);">Show only relevant nodes</a>`
-           : `${totalHidden} other node${totalHidden === 1 ? '' : 's'} not shown (no finding, not admin, not IRSA-annotated). <a href="#" id="graph-toggle-all" style="color:var(--k8s);">Show all ${graph.nodes.length}</a>`}
+           : `${hiddenCount} other node${hiddenCount === 1 ? '' : 's'} not shown (no finding, not admin, not IRSA-annotated). <a href="#" id="graph-toggle-all" style="color:var(--k8s);">Show all ${graph.nodes.length}</a>`}
        </div>`
     : '';
 
+  const containerHeight = showAll ? 560 : 440;
+
   wrap.innerHTML = `
-    <div class="layer-label k8s">KUBERNETES</div>
-    <div class="bridge-label">IRSA BRIDGE</div>
-    <div class="layer-label aws">AWS IAM</div>
-    <div style="max-height:520px; overflow-y:${scrollY ? 'auto' : 'hidden'}; padding-top:34px;">${svg}</div>
+    <div class="graph-toolbar">
+      <div class="graph-legend">
+        <span><span class="legend-dot k8s"></span>Kubernetes</span>
+        <span><span class="legend-dot aws"></span>AWS IAM</span>
+        <span><span class="legend-dot danger"></span>Admin / on escalation path</span>
+      </div>
+      <div class="graph-layout-toggle">
+        <button class="btn-ghost zoom-btn" data-action="zoomin" title="Zoom in">+</button>
+        <button class="btn-ghost zoom-btn" data-action="zoomout" title="Zoom out">\u2212</button>
+        <button class="btn-ghost zoom-btn" data-action="fit" title="Fit to screen">Fit</button>
+        <button class="btn-ghost layout-btn" data-layout="hierarchical">Hierarchical</button>
+        <button class="btn-ghost layout-btn" data-layout="force">Force-directed</button>
+      </div>
+    </div>
+    <div id="cy-container" style="width:100%; height:${containerHeight}px;"></div>
     ${toggleHtml}
   `;
+  wrap.querySelectorAll('.layout-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.layout === currentGraphLayoutMode);
+  });
+
+  const cyNodes = shownNodes.map(n => ({
+    data: { id: n.id, label: n.label, layer: n.layer, node_type: n.node_type, is_admin: n.is_admin, on_vulnerable_path: n.on_vulnerable_path },
+  }));
+  const cyEdges = shownEdges.map((e, i) => ({
+    data: { id: 'e' + i, source: e.source, target: e.target, edge_type: e.edge_type, on_vulnerable_path: e.on_vulnerable_path },
+  }));
+
+  if (cyInstance) { cyInstance.destroy(); cyInstance = null; }
+
+  cyInstance = cytoscape({
+    container: document.getElementById('cy-container'),
+    elements: [...cyNodes, ...cyEdges],
+    style: [
+      {
+        selector: 'node',
+        style: {
+          'background-color': (ele) => ele.data('is_admin') ? '#FF4D4D' : (ele.data('layer') === 'k8s' ? '#4C9EEB' : '#FF9F43'),
+          'width': (ele) => ele.data('is_admin') ? 40 : (ele.data('on_vulnerable_path') ? 30 : 20),
+          'height': (ele) => ele.data('is_admin') ? 40 : (ele.data('on_vulnerable_path') ? 30 : 20),
+          'border-width': (ele) => ele.data('on_vulnerable_path') ? 3 : 0,
+          'border-color': '#fff',
+          'label': 'data(label)',
+          'font-family': 'JetBrains Mono, monospace',
+          'font-size': 10,
+          'color': '#E6E9EF',
+          'text-valign': 'bottom',
+          'text-margin-y': 6,
+          'text-background-color': '#0B0E14',
+          'text-background-opacity': 0.85,
+          'text-background-padding': 3,
+          'text-wrap': 'ellipsis',
+          'text-max-width': '140px',
+        },
+      },
+      {
+        selector: 'edge',
+        style: {
+          'width': (ele) => ele.data('on_vulnerable_path') ? 3 : 1,
+          'line-color': (ele) => ele.data('on_vulnerable_path') ? '#FF4D4D' : '#3A4152',
+          'target-arrow-color': (ele) => ele.data('on_vulnerable_path') ? '#FF4D4D' : '#3A4152',
+          'target-arrow-shape': 'triangle',
+          'curve-style': 'bezier',
+          'opacity': (ele) => ele.data('on_vulnerable_path') ? 0.95 : 0.4,
+        },
+      },
+    ],
+    wheelSensitivity: 0.2,
+    userPanningEnabled: true,
+    userZoomingEnabled: true,
+    panningEnabled: true,
+    zoomingEnabled: true,
+    boxSelectionEnabled: false,
+    minZoom: 0.2,
+    maxZoom: 3,
+  });
+
+  runCyLayout(currentGraphLayoutMode);
+
+  // Zoom/fit buttons work via direct API calls -- reliable regardless of
+  // whether mouse-drag panning behaves correctly in a given browser, and
+  // a more discoverable way to navigate a dense graph than "just drag it"
+  // for anyone giving a demo.
+  wrap.querySelectorAll('.zoom-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!cyInstance) return;
+      const action = btn.dataset.action;
+      if (action === 'zoomin') {
+        cyInstance.zoom({ level: cyInstance.zoom() * 1.3, renderedPosition: { x: cyInstance.width() / 2, y: cyInstance.height() / 2 } });
+      } else if (action === 'zoomout') {
+        cyInstance.zoom({ level: cyInstance.zoom() / 1.3, renderedPosition: { x: cyInstance.width() / 2, y: cyInstance.height() / 2 } });
+      } else if (action === 'fit') {
+        cyInstance.fit(undefined, 40);
+      }
+    });
+  });
+
+  // Hover tooltip -- positioned relative to the graph box, following the
+  // node's on-screen (not graph-space) position so it tracks correctly
+  // through pan/zoom.
+  const tooltip = document.createElement('div');
+  tooltip.className = 'cy-tooltip';
+  wrap.appendChild(tooltip);
+
+  cyInstance.on('mouseover', 'node', (evt) => {
+    const d = evt.target.data();
+    const pos = evt.target.renderedPosition();
+    const toolbarH = wrap.querySelector('.graph-toolbar').offsetHeight;
+    tooltip.innerHTML = `
+      <div class="tt-name">${escapeHtml(d.label)}</div>
+      <div class="tt-type">${escapeHtml(d.node_type)}</div>
+      ${(d.is_admin || d.on_vulnerable_path) ? `<div class="tt-tags">${d.is_admin ? '<span class="tt-tag admin">ADMIN</span>' : ''}${d.on_vulnerable_path ? '<span class="tt-tag vuln">ON PATH</span>' : ''}</div>` : ''}
+    `;
+    tooltip.style.left = (pos.x + 16) + 'px';
+    tooltip.style.top = (pos.y + toolbarH - 10) + 'px';
+    tooltip.style.display = 'block';
+  });
+  cyInstance.on('mouseout', 'node', () => { tooltip.style.display = 'none'; });
+  cyInstance.on('drag pan zoom', () => { tooltip.style.display = 'none'; });
+
+  wrap.querySelectorAll('.layout-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentGraphLayoutMode = btn.dataset.layout;
+      wrap.querySelectorAll('.layout-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      runCyLayout(currentGraphLayoutMode);
+    });
+  });
 
   const toggleLink = document.getElementById('graph-toggle-all');
   if (toggleLink) {
     toggleLink.onclick = (e) => {
       e.preventDefault();
-      renderGraph(graph, !showAll);
+      const switchingToShowAll = !showAll;
+      if (switchingToShowAll && currentGraphLayoutMode === 'hierarchical') {
+        // Hierarchical/breadthfirst has no good story for a graph that's
+        // mostly disconnected nodes (routine kube-system entries with no
+        // edges at all) -- force-directed handles that case far better,
+        // so switch automatically rather than showing a degenerate tree.
+        currentGraphLayoutMode = 'force';
+      }
+      renderGraph(graph, switchingToShowAll);
     };
   }
 }
 
-// Re-render the last graph on resize so the fixed-margin layout stays
-// correct if the window/panel width changes -- e.g. resizing the
-// browser, or the sidebar collapsing on a narrower screen.
+// Re-render the last graph on resize so it stays correctly sized if the
+// window/panel width changes.
 let lastRenderedGraph = null;
 let resizeTimer = null;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
-    if (lastRenderedGraph) renderGraph(lastRenderedGraph, false);
+    if (cyInstance) cyInstance.resize();
   }, 150);
 });
 
