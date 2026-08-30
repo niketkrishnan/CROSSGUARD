@@ -1,0 +1,34 @@
+{
+    "UserDetailList": [
+        {
+            "Path": "/",
+            "UserName": "b4-low-priv-user",
+            "UserId": "d21vqrefwpkutkdr9feq",
+            "Arn": "arn:aws:iam::000000000000:user/b4-low-priv-user",
+            "CreateDate": "2026-08-03T08:57:01.953504Z",
+            "UserPolicyList": [],
+            "GroupList": [
+                "b4-admin-group"
+            ],
+            "AttachedManagedPolicies": []
+        }
+    ],
+    "GroupDetailList": [
+        {
+            "Path": "/",
+            "GroupName": "b4-admin-group",
+            "GroupId": "4qcc4ckf3ff9qrngyoh9",
+            "Arn": "arn:aws:iam::000000000000:group/b4-admin-group",
+            "CreateDate": "2026-08-03T08:57:00.580972Z",
+            "GroupPolicyList": [],
+            "AttachedManagedPolicies": [
+                {
+                    "PolicyName": "AdministratorAccess",
+                    "PolicyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+                }
+            ]
+        }
+    ],
+    "RoleDetailList": [],
+    "Policies": []
+}

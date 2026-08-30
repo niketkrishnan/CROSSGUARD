@@ -1,0 +1,45 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 3,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 44,
+    "roles": 12,
+    "cluster_roles": 70
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "bench2-sa",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b2-role-a"
+    }
+  ],
+  "graph_nodes": 129,
+  "graph_edges": 47,
+  "paths": [
+    {
+      "start": "k8s:sa:default:bench2-sa",
+      "end": "arn:aws:iam::000000000000:role/b2-admin-role",
+      "path": [
+        "k8s:sa:default:bench2-sa",
+        "arn:aws:iam::000000000000:role/b2-role-a",
+        "arn:aws:iam::000000000000:role/b2-role-b",
+        "arn:aws:iam::000000000000:role/b2-admin-role"
+      ],
+      "hops": 3,
+      "cross_layer": true,
+      "risk_score": 5.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove b2-role-b from the trust policy of role b2-admin-role",
+      "edge_type": "sts:AssumeRole",
+      "command": "aws iam update-assume-role-policy --role-name b2-admin-role --policy-document file://updated-trust-policy.json   # (remove the statement allowing b2-role-b to assume this role)",
+      "source": "arn:aws:iam::000000000000:role/b2-role-b",
+      "target": "arn:aws:iam::000000000000:role/b2-admin-role"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 7,
+    "groups": 1
+  },
+  "k8s_summary": {
+    "service_accounts": 53,
+    "roles": 12,
+    "cluster_roles": 73
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "b8-sa-1",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b8-role-shared"
+    },
+    {
+      "service_account": "b8-sa-2",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b8-role-shared"
+    },
+    {
+      "service_account": "b9-amp-ingest",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-amp-ingest-role"
+    },
+    {
+      "service_account": "b9-aws-node",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-aws-node-role"
+    },
+    {
+      "service_account": "b9-cluster-autoscaler",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role"
+    },
+    {
+      "service_account": "b9-efs-csi-controller-sa",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-efs-csi-controller-role"
+    }
+  ],
+  "graph_nodes": 146,
+  "graph_edges": 56,
+  "paths": [
+    {
+      "start": "k8s:sa:kube-system:b9-cluster-autoscaler",
+      "end": "arn:aws:iam::000000000000:role/b9-autoscaler-admin",
+      "path": [
+        "k8s:sa:kube-system:b9-cluster-autoscaler",
+        "arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role",
+        "arn:aws:iam::000000000000:role/b9-autoscaler-admin"
+      ],
+      "hops": 2,
+      "cross_layer": true,
+      "risk_score": 5.5
+    },
+    {
+      "start": "k8s:sa:kube-system:b9-aws-node",
+      "end": "arn:aws:iam::000000000000:role/b9-autoscaler-admin",
+      "path": [
+        "k8s:sa:kube-system:b9-aws-node",
+        "arn:aws:iam::000000000000:role/b9-aws-node-role",
+        "arn:aws:iam::000000000000:role/b9-shared-jump-role",
+        "arn:aws:iam::000000000000:role/b9-autoscaler-admin"
+      ],
+      "hops": 3,
+      "cross_layer": true,
+      "risk_score": 5.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove iam:PassRole permission for b9-autoscaler-admin from b9-shared-jump-role's policy",
+      "edge_type": "iam:PassRole",
+      "command": "# Edit the inline/attached policy on b9-shared-jump-role: remove the iam:PassRole statement whose Resource includes b9-autoscaler-admin (or replace a wildcard Resource with the specific roles actually needed)",
+      "source": "arn:aws:iam::000000000000:role/b9-shared-jump-role",
+      "target": "arn:aws:iam::000000000000:role/b9-autoscaler-admin"
+    },
+    {
+      "action": "Remove iam:PassRole permission for b9-autoscaler-admin from b9-cluster-autoscaler-role's policy",
+      "edge_type": "iam:PassRole",
+      "command": "# Edit the inline/attached policy on b9-cluster-autoscaler-role: remove the iam:PassRole statement whose Resource includes b9-autoscaler-admin (or replace a wildcard Resource with the specific roles actually needed)",
+      "source": "arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role",
+      "target": "arn:aws:iam::000000000000:role/b9-autoscaler-admin"
+    }
+  ]
+}

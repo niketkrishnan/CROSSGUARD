@@ -1,0 +1,61 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 2,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 49,
+    "roles": 12,
+    "cluster_roles": 73
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "b8-sa-1",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b8-role-shared"
+    },
+    {
+      "service_account": "b8-sa-2",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b8-role-shared"
+    }
+  ],
+  "graph_nodes": 136,
+  "graph_edges": 46,
+  "paths": [
+    {
+      "start": "k8s:sa:default:b8-sa-1",
+      "end": "arn:aws:iam::000000000000:role/b8-admin",
+      "path": [
+        "k8s:sa:default:b8-sa-1",
+        "arn:aws:iam::000000000000:role/b8-role-shared",
+        "arn:aws:iam::000000000000:role/b8-admin"
+      ],
+      "hops": 2,
+      "cross_layer": true,
+      "risk_score": 5.5
+    },
+    {
+      "start": "k8s:sa:default:b8-sa-2",
+      "end": "arn:aws:iam::000000000000:role/b8-admin",
+      "path": [
+        "k8s:sa:default:b8-sa-2",
+        "arn:aws:iam::000000000000:role/b8-role-shared",
+        "arn:aws:iam::000000000000:role/b8-admin"
+      ],
+      "hops": 2,
+      "cross_layer": true,
+      "risk_score": 5.5
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove iam:PassRole permission for b8-admin from b8-role-shared's policy",
+      "edge_type": "iam:PassRole",
+      "command": "# Edit the inline/attached policy on b8-role-shared: remove the iam:PassRole statement whose Resource includes b8-admin (or replace a wildcard Resource with the specific roles actually needed)",
+      "source": "arn:aws:iam::000000000000:role/b8-role-shared",
+      "target": "arn:aws:iam::000000000000:role/b8-admin"
+    }
+  ]
+}

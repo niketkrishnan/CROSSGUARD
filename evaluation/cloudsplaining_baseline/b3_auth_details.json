@@ -1,0 +1,36 @@
+{
+    "UserDetailList": [],
+    "GroupDetailList": [],
+    "RoleDetailList": [
+        {
+            "Path": "/",
+            "RoleName": "b3-admin-role",
+            "RoleId": "AROAQAAAAAAAMTVBYRRRQ",
+            "Arn": "arn:aws:iam::000000000000:role/b3-admin-role",
+            "CreateDate": "2026-08-03T08:56:28.841328Z",
+            "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": "ec2.amazonaws.com"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                ]
+            },
+            "InstanceProfileList": [],
+            "RolePolicyList": [],
+            "AttachedManagedPolicies": [
+                {
+                    "PolicyName": "AdministratorAccess",
+                    "PolicyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+                }
+            ],
+            "Tags": [],
+            "RoleLastUsed": {}
+        }
+    ],
+    "Policies": []
+}

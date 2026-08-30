@@ -1,0 +1,98 @@
+{
+    "UserDetailList": [],
+    "GroupDetailList": [],
+    "RoleDetailList": [
+        {
+            "Path": "/",
+            "RoleName": "b2-admin-role",
+            "RoleId": "AROAQAAAAAAADXEOJKBP7",
+            "Arn": "arn:aws:iam::000000000000:role/b2-admin-role",
+            "CreateDate": "2026-08-03T08:50:49.459800Z",
+            "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "AWS": "arn:aws:iam::000000000000:role/b2-role-b"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                ]
+            },
+            "InstanceProfileList": [],
+            "RolePolicyList": [],
+            "AttachedManagedPolicies": [
+                {
+                    "PolicyName": "AdministratorAccess",
+                    "PolicyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+                }
+            ],
+            "Tags": [],
+            "RoleLastUsed": {}
+        },
+        {
+            "Path": "/",
+            "RoleName": "b2-role-b",
+            "RoleId": "AROAQAAAAAAAJZDBUL42U",
+            "Arn": "arn:aws:iam::000000000000:role/b2-role-b",
+            "CreateDate": "2026-08-03T08:50:50.736461Z",
+            "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "AWS": "arn:aws:iam::000000000000:role/b2-role-a"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                ]
+            },
+            "InstanceProfileList": [],
+            "RolePolicyList": [],
+            "AttachedManagedPolicies": [],
+            "Tags": [],
+            "RoleLastUsed": {}
+        },
+        {
+            "Path": "/",
+            "RoleName": "b2-role-a",
+            "RoleId": "AROAQAAAAAAALBDA6Y7SM",
+            "Arn": "arn:aws:iam::000000000000:role/b2-role-a",
+            "CreateDate": "2026-08-03T08:50:51.440645Z",
+            "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": "ec2.amazonaws.com"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                ]
+            },
+            "InstanceProfileList": [],
+            "RolePolicyList": [
+                {
+                    "PolicyName": "allow-passrole-to-role-b",
+                    "PolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": "iam:PassRole",
+                                "Resource": "arn:aws:iam::000000000000:role/b2-role-b"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "AttachedManagedPolicies": [],
+            "Tags": [],
+            "RoleLastUsed": {}
+        }
+    ],
+    "Policies": []
+}

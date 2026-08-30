@@ -1,0 +1,28 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 4,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 46,
+    "roles": 12,
+    "cluster_roles": 70
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "b8-sa-1",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b8-role-shared"
+    },
+    {
+      "service_account": "b8-sa-2",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b8-role-shared"
+    }
+  ],
+  "graph_nodes": 132,
+  "graph_edges": 51,
+  "paths": [],
+  "remediations": []
+}

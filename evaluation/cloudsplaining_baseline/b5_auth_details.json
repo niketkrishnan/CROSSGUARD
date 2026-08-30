@@ -1,0 +1,48 @@
+{
+    "UserDetailList": [],
+    "GroupDetailList": [],
+    "RoleDetailList": [
+        {
+            "Path": "/",
+            "RoleName": "b5-safe-role",
+            "RoleId": "AROAQAAAAAAAGXTGFT7UW",
+            "Arn": "arn:aws:iam::000000000000:role/b5-safe-role",
+            "CreateDate": "2026-08-03T08:57:33.796010Z",
+            "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": "ec2.amazonaws.com"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                ]
+            },
+            "InstanceProfileList": [],
+            "RolePolicyList": [
+                {
+                    "PolicyName": "s3-read-only",
+                    "PolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "s3:GetObject",
+                                    "s3:ListBucket"
+                                ],
+                                "Resource": "*"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "AttachedManagedPolicies": [],
+            "Tags": [],
+            "RoleLastUsed": {}
+        }
+    ],
+    "Policies": []
+}

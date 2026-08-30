@@ -1,0 +1,67 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 4,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 46,
+    "roles": 12,
+    "cluster_roles": 70
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "b8-sa-1",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b8-role-shared"
+    },
+    {
+      "service_account": "b8-sa-2",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b8-role-shared"
+    },
+    {
+      "service_account": "bench6-sa",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b6-role-a"
+    }
+  ],
+  "graph_nodes": 132,
+  "graph_edges": 52,
+  "paths": [
+    {
+      "start": "k8s:sa:default:bench6-sa",
+      "end": "arn:aws:iam::000000000000:role/b6-admin-near",
+      "path": [
+        "k8s:sa:default:bench6-sa",
+        "arn:aws:iam::000000000000:role/b6-role-a",
+        "arn:aws:iam::000000000000:role/b6-admin-near"
+      ],
+      "hops": 2,
+      "cross_layer": true,
+      "risk_score": 5.5
+    },
+    {
+      "start": "k8s:sa:default:bench6-sa",
+      "end": "arn:aws:iam::000000000000:role/b6-admin-far",
+      "path": [
+        "k8s:sa:default:bench6-sa",
+        "arn:aws:iam::000000000000:role/b6-role-a",
+        "arn:aws:iam::000000000000:role/b6-role-b",
+        "arn:aws:iam::000000000000:role/b6-admin-far"
+      ],
+      "hops": 3,
+      "cross_layer": true,
+      "risk_score": 5.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove IRSA annotation from ServiceAccount default/bench6-sa",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount bench6-sa -n default eks.amazonaws.com/role-arn-",
+      "source": "k8s:sa:default:bench6-sa",
+      "target": "arn:aws:iam::000000000000:role/b6-role-a"
+    }
+  ]
+}

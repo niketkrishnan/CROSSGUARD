@@ -1,0 +1,76 @@
+{
+    "groups": {},
+    "users": {},
+    "roles": {
+        "AROAQAAAAAAAMTVBYRRRQ": {
+            "arn": "arn:aws:iam::000000000000:role/b3-admin-role",
+            "assume_role_policy": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "ec2.amazonaws.com"
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                }
+            },
+            "create_date": "2026-08-03T08:56:28.841328Z",
+            "role_last_used": null,
+            "id": "AROAQAAAAAAAMTVBYRRRQ",
+            "name": "b3-admin-role",
+            "inline_policies": {},
+            "instance_profiles": [],
+            "instances_count": 0,
+            "path": "/",
+            "customer_managed_policies": {},
+            "aws_managed_policies": {},
+            "is_excluded": false
+        }
+    },
+    "aws_managed_policies": {},
+    "customer_managed_policies": {},
+    "inline_policies": {},
+    "exclusions": {
+        "policies": [
+            "AWSServiceRoleFor*",
+            "*ServiceRolePolicy",
+            "*ServiceLinkedRolePolicy",
+            "AdministratorAccess",
+            "service-role*",
+            "aws-service-role*",
+            "/service-role*",
+            "/aws-service-role*",
+            "MyRole"
+        ],
+        "roles": [
+            "service-role*",
+            "aws-service-role*"
+        ],
+        "users": [
+            ""
+        ],
+        "groups": [
+            ""
+        ],
+        "include-actions": [
+            "s3:GetObject",
+            "ssm:GetParameter",
+            "ssm:GetParameters",
+            "ssm:GetParametersByPath",
+            "secretsmanager:GetSecretValue",
+            "rds:CopyDBSnapshot",
+            "rds:CreateDBSnapshot"
+        ],
+        "exclude-actions": [
+            ""
+        ],
+        "known-accounts": [
+            ""
+        ]
+    },
+    "links": {}
+}

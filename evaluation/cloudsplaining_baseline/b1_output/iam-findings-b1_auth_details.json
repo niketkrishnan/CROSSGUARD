@@ -1,0 +1,89 @@
+{
+    "groups": {},
+    "users": {
+        "7nkur9bbsejbe358v44v": {
+            "arn": "arn:aws:iam::000000000000:user/low-priv-user",
+            "create_date": "2026-08-03T08:47:18.841734Z",
+            "id": "7nkur9bbsejbe358v44v",
+            "name": "low-priv-user",
+            "inline_policies": {},
+            "groups": {},
+            "path": "/",
+            "customer_managed_policies": {},
+            "aws_managed_policies": {},
+            "is_excluded": false
+        }
+    },
+    "roles": {
+        "AROAQAAAAAAAFP3Y2YAQA": {
+            "arn": "arn:aws:iam::000000000000:role/admin-role",
+            "assume_role_policy": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": "ec2.amazonaws.com"
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                    ]
+                }
+            },
+            "create_date": "2026-08-03T08:47:17.459303Z",
+            "role_last_used": null,
+            "id": "AROAQAAAAAAAFP3Y2YAQA",
+            "name": "admin-role",
+            "inline_policies": {},
+            "instance_profiles": [],
+            "instances_count": 0,
+            "path": "/",
+            "customer_managed_policies": {},
+            "aws_managed_policies": {},
+            "is_excluded": false
+        }
+    },
+    "aws_managed_policies": {},
+    "customer_managed_policies": {},
+    "inline_policies": {},
+    "exclusions": {
+        "policies": [
+            "AWSServiceRoleFor*",
+            "*ServiceRolePolicy",
+            "*ServiceLinkedRolePolicy",
+            "AdministratorAccess",
+            "service-role*",
+            "aws-service-role*",
+            "/service-role*",
+            "/aws-service-role*",
+            "MyRole"
+        ],
+        "roles": [
+            "service-role*",
+            "aws-service-role*"
+        ],
+        "users": [
+            ""
+        ],
+        "groups": [
+            ""
+        ],
+        "include-actions": [
+            "s3:GetObject",
+            "ssm:GetParameter",
+            "ssm:GetParameters",
+            "ssm:GetParametersByPath",
+            "secretsmanager:GetSecretValue",
+            "rds:CopyDBSnapshot",
+            "rds:CreateDBSnapshot"
+        ],
+        "exclude-actions": [
+            ""
+        ],
+        "known-accounts": [
+            ""
+        ]
+    },
+    "links": {}
+}

@@ -1,0 +1,47 @@
+{
+    "UserDetailList": [
+        {
+            "Path": "/",
+            "UserName": "low-priv-user",
+            "UserId": "7nkur9bbsejbe358v44v",
+            "Arn": "arn:aws:iam::000000000000:user/low-priv-user",
+            "CreateDate": "2026-08-03T08:47:18.841734Z",
+            "UserPolicyList": [],
+            "GroupList": [],
+            "AttachedManagedPolicies": []
+        }
+    ],
+    "GroupDetailList": [],
+    "RoleDetailList": [
+        {
+            "Path": "/",
+            "RoleName": "admin-role",
+            "RoleId": "AROAQAAAAAAAFP3Y2YAQA",
+            "Arn": "arn:aws:iam::000000000000:role/admin-role",
+            "CreateDate": "2026-08-03T08:47:17.459303Z",
+            "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": "ec2.amazonaws.com"
+                        },
+                        "Action": "sts:AssumeRole"
+                    }
+                ]
+            },
+            "InstanceProfileList": [],
+            "RolePolicyList": [],
+            "AttachedManagedPolicies": [
+                {
+                    "PolicyName": "AdministratorAccess",
+                    "PolicyArn": "arn:aws:iam::aws:policy/AdministratorAccess"
+                }
+            ],
+            "Tags": [],
+            "RoleLastUsed": {}
+        }
+    ],
+    "Policies": []
+}
