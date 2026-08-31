@@ -1,0 +1,57 @@
+{
+  "total_files_checked": 10,
+  "total_configs": 4,
+  "total_paths": 4,
+  "results": [
+    {
+      "file": "squareops_terraform-aws-eks-bootstrap/EKS-Blueprint/modules/kubernetes-addons/aws-ebs-csi-driver/main.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "squareops_terraform-aws-eks-bootstrap/EKS-Blueprint/modules/kubernetes-addons/crossplane/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "squareops_terraform-aws-eks-bootstrap/EKS-Blueprint/modules/kubernetes-addons/prometheus/main.tf",
+      "status": "extracted",
+      "configs_tested": 2
+    },
+    {
+      "file": "squareops_terraform-aws-eks-bootstrap/EKS-Blueprint/modules/kubernetes-addons/aws-vpc-cni/main.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "bootlabstech_terraform-aws-fully-loaded-eks-cluster/modules/kubernetes-addons/aws-ebs-csi-driver/main.tf",
+      "status": "duplicate_or_failed",
+      "configs_tested": 0
+    },
+    {
+      "file": "bootlabstech_terraform-aws-fully-loaded-eks-cluster/modules/kubernetes-addons/crossplane/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "bootlabstech_terraform-aws-fully-loaded-eks-cluster/modules/kubernetes-addons/prometheus/main.tf",
+      "status": "duplicate_or_failed",
+      "configs_tested": 0
+    },
+    {
+      "file": "bootlabstech_terraform-aws-fully-loaded-eks-cluster/modules/kubernetes-addons/aws-vpc-cni/main.tf",
+      "status": "duplicate_or_failed",
+      "configs_tested": 0
+    },
+    {
+      "file": "squareops_terraform-aws-eks-addons/modules/z-archieve/crossplane/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "clouddrove_terraform-aws-eks-addons/addons/helm/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    }
+  ]
+}

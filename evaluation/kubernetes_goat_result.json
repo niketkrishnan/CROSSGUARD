@@ -1,0 +1,46 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 1,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 45,
+    "roles": 12,
+    "cluster_roles": 70
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "deep-chain-sa",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/deep-role-1"
+    },
+    {
+      "service_account": "superadmin",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/goat-admin-role"
+    }
+  ],
+  "graph_nodes": 128,
+  "graph_edges": 44,
+  "paths": [
+    {
+      "start": "k8s:sa:kube-system:superadmin",
+      "end": "arn:aws:iam::000000000000:role/goat-admin-role",
+      "path": [
+        "k8s:sa:kube-system:superadmin",
+        "arn:aws:iam::000000000000:role/goat-admin-role"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove IRSA annotation from ServiceAccount kube-system/superadmin",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount superadmin -n kube-system eks.amazonaws.com/role-arn-"
+    }
+  ]
+}

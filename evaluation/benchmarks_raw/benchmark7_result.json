@@ -1,0 +1,17 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 0,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 45,
+    "roles": 13,
+    "cluster_roles": 70
+  },
+  "irsa_mappings": [],
+  "graph_nodes": 128,
+  "graph_edges": 43,
+  "paths": [],
+  "remediations": []
+}

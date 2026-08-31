@@ -31,7 +31,11 @@ import time
 
 import networkx as nx
 
-sys.path.insert(0, "/home/zoro/projects/iam-k8s-privesc")
+import os
+
+# Repo root is two levels up from this file (evaluation/scalability/).
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, _REPO_ROOT)
 from pathfinder.search import find_all_cross_layer_paths  # noqa: E402
 
 

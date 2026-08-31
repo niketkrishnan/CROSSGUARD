@@ -1,0 +1,23 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 1,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 44,
+    "roles": 12,
+    "cluster_roles": 70
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "bench5-sa",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b5-safe-role"
+    }
+  ],
+  "graph_nodes": 127,
+  "graph_edges": 43,
+  "paths": [],
+  "remediations": []
+}

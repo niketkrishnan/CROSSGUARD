@@ -1,0 +1,46 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 2,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 46,
+    "roles": 12,
+    "cluster_roles": 71
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "cert-manager",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager"
+    },
+    {
+      "service_account": "cert-manager-scoped",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager-scoped"
+    }
+  ],
+  "graph_nodes": 131,
+  "graph_edges": 46,
+  "paths": [
+    {
+      "start": "k8s:sa:cert-manager:cert-manager",
+      "end": "arn:aws:iam::000000000000:role/cert-manager",
+      "path": [
+        "k8s:sa:cert-manager:cert-manager",
+        "arn:aws:iam::000000000000:role/cert-manager"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove IRSA annotation from ServiceAccount cert-manager/cert-manager",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount cert-manager -n cert-manager eks.amazonaws.com/role-arn-"
+    }
+  ]
+}

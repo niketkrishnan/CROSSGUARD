@@ -1,0 +1,107 @@
+{
+  "total_charts": 18,
+  "total_configs": 8,
+  "total_paths": 8,
+  "results": [
+    {
+      "chart": "Sarthakx67_retail-store-aws-deployment/retail-store-helm-chart",
+      "status": "no_sa_in_render",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "Sarthakx67_retail-store-aws-deployment/retail-store-helm-chart/charts/cart",
+      "status": "no_sa_in_render",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "aws-samples_amazon-eks-machine-learning-with-terraform-and-kubeflow/charts/ml-platform/kubeflow-profiles-and-kfam",
+      "status": "rendered",
+      "configs_tested": 1
+    },
+    {
+      "chart": "aws-samples_eks-blueprints-actions-workflow/argocd",
+      "status": "render_failed",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "aws-samples_eks-blueprints-for-terraform-workshop/gitops/addons/charts/gitops-bridge",
+      "status": "no_sa_in_render",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "devopscorner_laravel-eks-deployment/helm/charts/others/kube-prometheus",
+      "status": "render_failed",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "erankitcs_BookStoreAppOnEKS/clients-api/infra/helm",
+      "status": "rendered",
+      "configs_tested": 1
+    },
+    {
+      "chart": "erankitcs_BookStoreAppOnEKS/front-end/infra/helm",
+      "status": "rendered",
+      "configs_tested": 1
+    },
+    {
+      "chart": "erankitcs_BookStoreAppOnEKS/infrastructure/k8s-tooling/app-mesh/appmesh-sa",
+      "status": "rendered",
+      "configs_tested": 1
+    },
+    {
+      "chart": "erankitcs_BookStoreAppOnEKS/inventory-api/infra/helm",
+      "status": "rendered",
+      "configs_tested": 1
+    },
+    {
+      "chart": "erankitcs_BookStoreAppOnEKS/renting-api/infra/helm",
+      "status": "rendered",
+      "configs_tested": 1
+    },
+    {
+      "chart": "erankitcs_BookStoreAppOnEKS/resource-api/infra/helm",
+      "status": "rendered",
+      "configs_tested": 1
+    },
+    {
+      "chart": "msfidelis_eks-with-istio/helm/sample",
+      "status": "rendered",
+      "configs_tested": 1
+    },
+    {
+      "chart": "sloweyyy_cloud-native-ecommerce-platform/Deployments/helm/catalog",
+      "status": "no_sa_in_render",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "sourcefuse_terraform-aws-arc-eks-saas/files/control-plane/control-plane-helm-chart",
+      "status": "render_failed",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "sourcefuse_terraform-aws-arc-eks-saas/files/tenant-samples/bridge/tenant-helm-chart",
+      "status": "render_failed",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "sourcefuse_terraform-aws-arc-eks-saas/files/tenant-samples/pooled/tenant-helm-chart",
+      "status": "render_failed",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "chart": "sourcefuse_terraform-aws-arc-eks-saas/files/tenant-samples/silo/tenant-helm-chart",
+      "status": "render_failed",
+      "configs_tested": 0,
+      "paths_found": 0
+    }
+  ]
+}

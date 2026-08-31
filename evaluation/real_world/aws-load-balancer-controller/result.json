@@ -1,0 +1,46 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 2,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 46,
+    "roles": 12,
+    "cluster_roles": 71
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "aws-load-balancer-controller",
+      "namespace": "aws-lb-controller",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/aws-load-balancer-controller"
+    },
+    {
+      "service_account": "aws-load-balancer-controller-safe",
+      "namespace": "aws-lb-controller",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/aws-load-balancer-controller-safe"
+    }
+  ],
+  "graph_nodes": 131,
+  "graph_edges": 46,
+  "paths": [
+    {
+      "start": "k8s:sa:aws-lb-controller:aws-load-balancer-controller",
+      "end": "arn:aws:iam::000000000000:role/aws-load-balancer-controller",
+      "path": [
+        "k8s:sa:aws-lb-controller:aws-load-balancer-controller",
+        "arn:aws:iam::000000000000:role/aws-load-balancer-controller"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove IRSA annotation from ServiceAccount aws-lb-controller/aws-load-balancer-controller",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount aws-load-balancer-controller -n aws-lb-controller eks.amazonaws.com/role-arn-"
+    }
+  ]
+}

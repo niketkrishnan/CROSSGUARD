@@ -1,0 +1,46 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 2,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 46,
+    "roles": 12,
+    "cluster_roles": 71
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "external-secrets",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator"
+    },
+    {
+      "service_account": "external-secrets-scoped",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator-scoped"
+    }
+  ],
+  "graph_nodes": 131,
+  "graph_edges": 46,
+  "paths": [
+    {
+      "start": "k8s:sa:external-secrets:external-secrets",
+      "end": "arn:aws:iam::000000000000:role/external-secrets-operator",
+      "path": [
+        "k8s:sa:external-secrets:external-secrets",
+        "arn:aws:iam::000000000000:role/external-secrets-operator"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove IRSA annotation from ServiceAccount external-secrets/external-secrets",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount external-secrets -n external-secrets eks.amazonaws.com/role-arn-"
+    }
+  ]
+}

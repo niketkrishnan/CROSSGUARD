@@ -1,97 +1,72 @@
 # Evaluation Results Summary
 
-## Table 1 -- Benchmark Correctness Results
+**This file is a short pointer/snapshot, not the source of truth.** The
+complete, current evaluation record — with a full change-log of every
+correction made across evaluation sessions — is
+`evaluation_complete_final.md` at the repo root. Read that file for
+anything beyond the headline numbers below; this file exists only so a
+reader browsing `paper/` doesn't hit a dead end.
 
-| Benchmark | Description | Paths found | Ground truth | FP | FN | Remediation verified |
-|---|---|---|---|---|---|---|
-| B1 | Direct IRSA (1 hop) | 1 | 1 | 0 | 0 | Yes (1->0 paths) |
-| B2 | Multi-hop chain (3 hops) | 1 | 1 | 0 | 0 | Yes (1->0 paths) |
-| B3 | 5 SAs, 1 vulnerable | 1 | 1 | 0 | 0 | Yes (1->0 paths) |
-| B4 | Group membership (same-layer) | N/A | N/A | 0 | 0 | N/A (completeness test) |
-| B5 | No path (false positive control) | 0 | 0 | 0 | 0 | N/A (no path to remediate) |
-| B6 | Multiple paths, ranking | 2 | 2 | 0* | 0 | Yes (2->0 paths, single fix) |
-| B7 | Cross-namespace RBAC | N/A | N/A | 0 | 0 | N/A (completeness test) |
+*(An earlier version of this file, covering only benchmarks B1-B7 and
+predating the real-world evaluation, the scalability sweep, and the
+PassRole Confirmed/Conservative-Potential classification, has been
+replaced — it was going stale independently of the main evaluation
+record. See `evaluation_complete_final.md` Section 0 for the full
+change history.)*
 
-*B6 note: the 2-hop route via iam:PassRole-only (no paired use-action)
-may be a false positive by the strict standard PMapper applies. Disclosed
-as a known limitation. See evaluation/pmapper_comparison.md.
+## Headline numbers (see `evaluation_complete_final.md` for full detail + sources)
 
-## Table 2 -- PMapper Comparison
-
-| Benchmark | Our tool | PMapper | Note |
-|---|---|---|---|
-| B1 | 1 path (IRSA bridge, 1 hop) | 0 paths | PMapper has no K8s awareness |
-| B2 | 1 complete path incl. K8s entry point | Partial: AWS-only sub-chain found, no entry point | PMapper sees the IAM sub-chain but cannot identify who can reach it |
-| B3 | 1 path, 0 FP on 4 clean SAs | 0 paths | PMapper cannot see any of the 5 SAs |
-| B4 | Edge found (same-layer parity) | Would find (same-layer AWS-only) | Parity case by design |
-| B5 | 0 paths (correct analysis) | 0 paths (no visibility) | Same answer, different reason |
-| B6 | 2 paths, correctly ranked | Partial: 1 of 2 routes (AssumeRole only, missed PassRole-only) | PMapper requires paired use-action for PassRole |
-| B7 | Correct cross-namespace resolution | N/A | No RBAC concept in PMapper |
-
-Core finding: PMapper correctly analyzes whatever is entirely within
-AWS IAM, but cannot identify the actual attacker-reachable entry point
-when that entry point is a compromised Kubernetes identity. Our tool
-closes this gap via C1 (unified graph) and C2 (IRSA bridge edge).
-
-## Table 3 -- Scale Test Results (5 runs each, mean +/- stdev)
-
-| Test | Graph size | Time (mean) | Time (stdev) | Memory (mean) | Memory (stdev) | Correctness |
-|---|---|---|---|---|---|---|
-| Scale 1: 50 users, 100 roles, 10 IRSA SAs | 285 nodes, 250 edges | 6.16s | 0.574s | 11.7MB | 0.73MB | 2/2 paths found, 0 FP |
-| Scale 2: 10-hop deep chain | 136 nodes, 61 edges | 1.04s | 0.052s | 10.6MB | 0.35MB | 10/10 hops, correct remediation |
-
-Note: Scale Test 1 runtime is dominated by sequential boto3 API calls
-during ingestion (Module 1), not by graph algorithm complexity. BFS
-itself is effectively instantaneous even at 10 hops. Parallelizing
-ingestion API calls is the highest-leverage optimization available if
-runtime becomes a concern at larger account sizes.
-
-## Table 4 -- Remediation Verification
-
-| Benchmark | Paths before | Fix applied | Paths after | Edge delta | Verified |
-|---|---|---|---|---|---|
-| B1 | 1 | Remove IRSA annotation (vulnerable-sa) | 0 | 43->42 | Yes |
-| B2 | 1 | Remove b2-role-b from b2-admin-role trust policy | 0 | 47->46 | Yes |
-| B3 | 1 | Remove IRSA annotation (bench3-sa-2) | 0 | 43->42 | Yes |
-| B6 | 2 | Remove IRSA annotation (bench6-sa) -- single fix, both paths | 0 | 52->51 | Yes |
-
-Key result: in B6, one remediation action (recommended by the global
-minimum-cut engine) broke two structurally different escalation routes
-simultaneously. This directly validates the super-source/super-sink
-min-cut design choice over per-path cuts.
-
-## Table 5 -- Novel Contribution Coverage
-
-| Contribution | Test(s) that validate it |
-|---|---|
-| C1: Unified cross-layer graph | B1-B7 (all benchmarks use the unified graph) |
-| C2: IRSA modeled as graph edge | B1, B2, B3, B5, B6, Scale 1, Scale 2 |
-| C3: Cross-layer path discovery | B1, B2, B3, B6, Scale 1, Scale 2 + PMapper comparison |
-| C4: Minimal remediation | B1, B2, B3, B6 (remediation verification table) |
+- **Synthetic benchmark confusion matrix (B1-B9)**: TP=9, FP=0, FN=0,
+  TN=5 -> Precision = Recall = F1 = 1.000
+- **Real-world live-verified**: 44/44 correct, 0 FP, 0 FN, across 6
+  independent mechanical extraction methods on real EKS repositories
+  (full per-case table: `evaluation/real_world/RW_MANIFEST.md`)
+- **Scalability**: empirically O(n^2.012), R^2=0.9852, up to 25,000
+  nodes (`evaluation/scalability/`)
+- **Remediation**: 40/40 trials successful across 4 fix types, 0 side
+  effects (`evaluation/remediation_trials/`)
+- **PassRole two-tier classification**: of 12 tested PassRole-relevant
+  paths, 5 Confirmed (every hop backed by explicit `sts:AssumeRole`
+  trust), 7 Conservative-Potential (relies on a bare `iam:PassRole`
+  grant with no independently-modeled completing action) --
+  `evaluation/passrole_classification/`
+- **B10 FP stress test**: 14/14 standard safe configs correctly
+  unflagged; 2 deliberately adversarial edge cases (explicit Deny,
+  MFA-gated trust) exposed one documented, root-caused limitation:
+  CrossGuard checks for presence of a trust/policy relationship, not
+  policy Conditions
+- **B11 adversarial/evasion testing**: 4/4 structurally correct,
+  including cycle-safety. The wildcard-trust case's detection is via
+  IRSA binding only -- `graph/builder.py` explicitly does not evaluate
+  wildcard (`Principal: {"AWS": "*"}`) trust as a graph edge. Do not
+  cite this case as evidence of wildcard-trust modeling.
+- **Baselines**: PMapper (`principalmapper` v1.1.5) correctly traces
+  AWS-side `sts:AssumeRole` chains but cannot see the K8s-to-AWS
+  bridge at all; Cloudsplaining (v0.9.1) misses the same benchmarks for
+  two independent structural reasons (default `AdministratorAccess`
+  exclusion, single-policy pattern matching instead of cross-role graph
+  traversal)
 
 ## Known Limitations (for paper limitations section)
 
-1. iam:PassRole edges are created for any PassRole grant, regardless
-   of whether a paired use-action exists. This may produce false
-   positives on PassRole-only grants. Mitigation: flag as a
-   conservative design choice (recall over precision) and list
-   paired-action checking as future work.
-
-2. is_admin detection checks AdministratorAccess ARN and Action:"*"/
-   Resource:"*" inline policies. Does not account for SCPs,
-   permission boundaries, or session policies that might restrict
-   effective admin access. These are noted as out-of-scope in the
-   threat model.
-
-3. Attached managed policy resolution requires iam:GetPolicy and
-   iam:GetPolicyVersion. Without these, affected policies are skipped
+1. Policy Condition evaluation (explicit Deny, MFA/context requirements)
+   is not modeled -- root-caused and documented via B10.
+2. Wildcard trust principals (`Principal: {"AWS": "*"}`) are not
+   evaluated as a graph edge -- confirmed directly in `graph/builder.py`.
+3. Bare `iam:PassRole` grants with no independently-modeled completing
+   action are reported as Conservative-Potential, not a confirmed
+   exploit chain -- see `evaluation/passrole_classification/`.
+4. `is_admin` detection checks the `AdministratorAccess` managed policy
+   and `Action:"*"`/`Resource:"*"` inline/attached policies; does not
+   account for SCPs, permission boundaries, or session policies.
+5. Attached managed policy resolution requires `iam:GetPolicy` and
+   `iam:GetPolicyVersion`; without them, affected policies are skipped
    with a warning rather than failing the scan.
-
-4. IRSA detection is annotation-based, not OIDC-validation-based.
-   A stale annotation pointing at a deleted role produces a warning
-   and a gracefully skipped edge, not a false positive path (validated
-   incidentally during Benchmark 7 testing).
-
-5. Runtime is dominated by sequential boto3 ingestion API calls. At
-   very large account sizes (thousands of roles) this may become slow.
-   Parallelization is the recommended future optimization.
+6. IRSA detection is annotation-based, not OIDC-validation-based -- a
+   stale annotation pointing at a deleted role produces a warning and a
+   gracefully skipped edge, not a false positive path.
+7. Runtime is dominated by sequential boto3 ingestion API calls at very
+   large account sizes; parallelization is the recommended future
+   optimization. Pathfinding itself is O(n^2) from entry-point x
+   admin-node pair checking; a multi-source BFS would reduce this
+   toward O(n*m) (future work, not yet implemented).

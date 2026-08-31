@@ -1,0 +1,196 @@
+{
+  "total_repos": 30,
+  "total_configs": 10,
+  "total_paths": 10,
+  "results": [
+    {
+      "repo": "aws-ia/terraform-aws-eks-blueprints",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "awslabs/data-on-eks",
+      "status": "scanned",
+      "yaml_files": 3,
+      "configs_tested": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "msfidelis/eks-with-istio",
+      "status": "scanned",
+      "yaml_files": 1,
+      "configs_tested": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "aws-samples/amazon-eks-machine-learning-with-terraform-and-kubeflow",
+      "status": "scanned",
+      "yaml_files": 1,
+      "configs_tested": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "stacksimplify/devops-real-world-project-implementation-on-aws",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "bootlabstech/terraform-aws-fully-loaded-eks-cluster",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "erankitcs/BookStoreAppOnEKS",
+      "status": "scanned",
+      "yaml_files": 7,
+      "configs_tested": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "Josh-Tracy/Terraform-Helm-EKS-Jenkins",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "aws-samples/eks-blueprints-for-terraform-workshop",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "squareops/terraform-aws-eks-bootstrap",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "sourcefuse/terraform-aws-arc-eks-saas",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "devopscorner/laravel-eks-deployment",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "devopscorner/terraform-infra",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "aws-samples/eks-cluster-upgrades-workshop",
+      "status": "scanned",
+      "yaml_files": 2,
+      "configs_tested": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "hyand-dev-team/terraform-eks-env-workshop",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "clouddrove/terraform-aws-eks-addons",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "aws-samples/eks-blueprints-actions-workflow",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "aws-samples/multi-cluster-allocation-demo-for-agones-on-eks",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "sloweyyy/cloud-native-ecommerce-platform",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "devopsmakers/terraform-aws-eks",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "adavarski/AWS-EKS-Terraform",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "Abhiram-Rakesh/Three-Tier-EKS-Terraform",
+      "status": "scanned",
+      "yaml_files": 2,
+      "configs_tested": 2,
+      "paths_found": 2
+    },
+    {
+      "repo": "moonswitch-workshops/terraform-eks-flux",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "rallyware/terraform-argocd-aws-eks-cluster-bootstrap",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "AaronForce1/terraform-aws-infrastructure-eks",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "squareops/terraform-aws-eks-addons",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "Sarthakx67/retail-store-aws-deployment",
+      "status": "scanned",
+      "yaml_files": 2,
+      "configs_tested": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "devopscorner/nifi",
+      "status": "no_valid_sa",
+      "configs_tested": 0,
+      "paths_found": 0
+    },
+    {
+      "repo": "clusterfrak-dynamics/terraform-eks-addons",
+      "status": "scanned",
+      "yaml_files": 1,
+      "configs_tested": 1,
+      "paths_found": 1
+    },
+    {
+      "repo": "liferaft/kubekit",
+      "status": "scanned",
+      "yaml_files": 1,
+      "configs_tested": 1,
+      "paths_found": 1
+    }
+  ]
+}

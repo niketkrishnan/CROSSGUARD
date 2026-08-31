@@ -209,7 +209,7 @@ docker build -t privesc-scan .
 # references certificate files by absolute host path.
 docker run --rm --network host \
   -v ~/.kube:/root/.kube:ro \
-  -v ~/.minikube:/home/zoro/.minikube:ro \
+  -v ~/.minikube:/root/.minikube:ro \
   privesc-scan --endpoint-url http://localhost:4566
 ```
 

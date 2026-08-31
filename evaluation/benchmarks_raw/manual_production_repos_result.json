@@ -1,0 +1,132 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 8,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 55,
+    "roles": 12,
+    "cluster_roles": 73
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "aws-load-balancer-controller",
+      "namespace": "aws-lb-controller",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/aws-load-balancer-controller"
+    },
+    {
+      "service_account": "aws-load-balancer-controller-safe",
+      "namespace": "aws-lb-controller",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/aws-load-balancer-controller-safe"
+    },
+    {
+      "service_account": "cert-manager",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager"
+    },
+    {
+      "service_account": "cert-manager-scoped",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager-scoped"
+    },
+    {
+      "service_account": "external-secrets",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator"
+    },
+    {
+      "service_account": "external-secrets-scoped",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator-scoped"
+    },
+    {
+      "service_account": "sample-app",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-karpenter"
+    },
+    {
+      "service_account": "sample-app-scoped",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-app-scoped"
+    }
+  ],
+  "graph_nodes": 148,
+  "graph_edges": 81,
+  "paths": [
+    {
+      "start": "k8s:sa:aws-lb-controller:aws-load-balancer-controller",
+      "end": "arn:aws:iam::000000000000:role/aws-load-balancer-controller",
+      "path": [
+        "k8s:sa:aws-lb-controller:aws-load-balancer-controller",
+        "arn:aws:iam::000000000000:role/aws-load-balancer-controller"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    },
+    {
+      "start": "k8s:sa:cert-manager:cert-manager",
+      "end": "arn:aws:iam::000000000000:role/cert-manager",
+      "path": [
+        "k8s:sa:cert-manager:cert-manager",
+        "arn:aws:iam::000000000000:role/cert-manager"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    },
+    {
+      "start": "k8s:sa:external-secrets:external-secrets",
+      "end": "arn:aws:iam::000000000000:role/external-secrets-operator",
+      "path": [
+        "k8s:sa:external-secrets:external-secrets",
+        "arn:aws:iam::000000000000:role/external-secrets-operator"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    },
+    {
+      "start": "k8s:sa:istio-sample:sample-app",
+      "end": "arn:aws:iam::000000000000:role/eks-istio-karpenter",
+      "path": [
+        "k8s:sa:istio-sample:sample-app",
+        "arn:aws:iam::000000000000:role/eks-istio-karpenter"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove IRSA annotation from ServiceAccount cert-manager/cert-manager",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount cert-manager -n cert-manager eks.amazonaws.com/role-arn-",
+      "source": "k8s:sa:cert-manager:cert-manager",
+      "target": "arn:aws:iam::000000000000:role/cert-manager"
+    },
+    {
+      "action": "Remove IRSA annotation from ServiceAccount external-secrets/external-secrets",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount external-secrets -n external-secrets eks.amazonaws.com/role-arn-",
+      "source": "k8s:sa:external-secrets:external-secrets",
+      "target": "arn:aws:iam::000000000000:role/external-secrets-operator"
+    },
+    {
+      "action": "Remove IRSA annotation from ServiceAccount istio-sample/sample-app",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount sample-app -n istio-sample eks.amazonaws.com/role-arn-",
+      "source": "k8s:sa:istio-sample:sample-app",
+      "target": "arn:aws:iam::000000000000:role/eks-istio-karpenter"
+    },
+    {
+      "action": "Remove IRSA annotation from ServiceAccount aws-lb-controller/aws-load-balancer-controller",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount aws-load-balancer-controller -n aws-lb-controller eks.amazonaws.com/role-arn-",
+      "source": "k8s:sa:aws-lb-controller:aws-load-balancer-controller",
+      "target": "arn:aws:iam::000000000000:role/aws-load-balancer-controller"
+    }
+  ]
+}

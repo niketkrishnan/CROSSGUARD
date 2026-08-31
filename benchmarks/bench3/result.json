@@ -1,0 +1,41 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 1,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 48,
+    "roles": 12,
+    "cluster_roles": 70
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "bench3-sa-2",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b3-admin-role"
+    }
+  ],
+  "graph_nodes": 131,
+  "graph_edges": 43,
+  "paths": [
+    {
+      "start": "k8s:sa:default:bench3-sa-2",
+      "end": "arn:aws:iam::000000000000:role/b3-admin-role",
+      "path": [
+        "k8s:sa:default:bench3-sa-2",
+        "arn:aws:iam::000000000000:role/b3-admin-role"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "risk_score": 6.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove IRSA annotation from ServiceAccount default/bench3-sa-2",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount bench3-sa-2 -n default eks.amazonaws.com/role-arn-"
+    }
+  ]
+}

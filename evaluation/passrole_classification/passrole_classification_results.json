@@ -1,0 +1,26 @@
+{
+  "summary": {
+    "Confirmed": 1,
+    "Conservative-Potential": 2
+  },
+  "paths": [
+    {
+      "file": "b11_classify_fresh.json",
+      "start": "k8s:sa:default:b11-wildcard-principal-admin",
+      "end": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "verdict": "Confirmed"
+    },
+    {
+      "file": "b11_classify_fresh.json",
+      "start": "k8s:sa:default:b11-nested-conditions",
+      "end": "arn:aws:iam::000000000000:role/b11-nested-conditions-target",
+      "verdict": "Conservative-Potential"
+    },
+    {
+      "file": "b11_classify_fresh.json",
+      "start": "k8s:sa:default:b11-hop1",
+      "end": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "verdict": "Conservative-Potential"
+    }
+  ]
+}

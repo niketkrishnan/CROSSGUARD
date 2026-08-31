@@ -1,5 +1,5 @@
-boto3>=1.34
-kubernetes>=29.0.0
-networkx>=3.2
-matplotlib>=3.8
-pytest>=8.0
+boto3==1.43.36
+kubernetes==36.0.2
+networkx==3.6.1
+matplotlib==3.11.0
+pytest==9.1.1

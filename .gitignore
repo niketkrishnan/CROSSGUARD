@@ -4,6 +4,12 @@ __pycache__/
 .pytest_cache/
 *.egg-info/
 .env
-*_result*.json
-result.json
-benchmark_results.json
+
+# NOTE: result JSON files are evaluation EVIDENCE in this repo, not scratch
+# output -- they are intentionally tracked under evaluation/, benchmarks/,
+# and paper/. Do not add a broad *_result*.json / result.json ignore rule
+# here again; a previous version of this pattern silently blocked the
+# real-world evaluation's v5-v9 scan results and multiple benchmark result
+# files from ever being committed, and was only caught by an explicit
+# repo audit. If you need to ignore a specific scratch/local-only result
+# file, ignore it by its exact full path, not a wildcard.

@@ -1,0 +1,172 @@
+{
+  "total_files_checked": 33,
+  "total_configs": 12,
+  "total_paths": 12,
+  "results": [
+    {
+      "file": "AmanPathak-DevOps_EKS-ArgoCD-AWS-LB-Controller-Terraform/eks/kubernetes-sa-lb-controller.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "Harshetjain666_terraform-aws-eks-fargate-cluster/kubernetes/main.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "DrFaust92_terraform-kubernetes-ebs-csi-driver/node-rbac.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "DrFaust92_terraform-kubernetes-ebs-csi-driver/csi_rbac.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "mipsel64_my-cluster/efs-csi-driver/service_account.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "automat-it_terraform-aws-eks-auxiliary/modules/helm-chart/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "yukccy_terraform-argocd-on-eks/aws-alb-controller.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "a-pavithraa_AWSEKSPOC/TerraformEKSRDS/k8s_externaldns_serviceaccount.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "a-pavithraa_AWSEKSPOC/TerraformEKSRDS/k8s_dynamodb_serviceaccount.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "peak-ai_terraform-modules/k8s_irsa/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "Ajaypathak372_eks-fargate-terraform/kubernetes/aws-load-balancer-controller.tf",
+      "status": "apply_failed",
+      "configs_tested": 0
+    },
+    {
+      "file": "AheadAviation_terraform-aws-eks-2.0/service-accounts.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "dasmeta_terraform-aws-eks/modules/efs-csi/serviceaccount.tf",
+      "status": "apply_failed",
+      "configs_tested": 0
+    },
+    {
+      "file": "dasmeta_terraform-aws-eks/modules/api-gw/sa.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "dasmeta_terraform-aws-eks/modules/adot/service-account.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "dasmeta_terraform-aws-eks/modules/autoscaler/kube-resoures.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "johnbedeir_AWS-EKS-Cross-Platform/modules/eks-prod/clusterautoscaler.tf",
+      "status": "apply_failed",
+      "configs_tested": 0
+    },
+    {
+      "file": "johnbedeir_AWS-EKS-Cross-Platform/modules/eks-prod/loadbalancer-controller.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "johnbedeir_AWS-EKS-Cross-Platform/modules/eks-gitops/clusterautoscaler.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "johnbedeir_AWS-EKS-Cross-Platform/modules/eks-gitops/loadbalancer-controller.tf",
+      "status": "apply_failed",
+      "configs_tested": 0
+    },
+    {
+      "file": "bootlabstech_terraform-aws-fully-loaded-eks-cluster/modules/irsa/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "bootlabstech_terraform-aws-fully-loaded-eks-cluster/modules/aws-eks-teams/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "squareops_terraform-aws-eks-bootstrap/EKS-Blueprint/modules/irsa/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "squareops_terraform-aws-eks-bootstrap/EKS-Blueprint/modules/aws-eks-teams/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "squareops_terraform-aws-eks-bootstrap/EKS-Blueprint/modules/kubernetes-addons/crossplane/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "clouddrove_terraform-aws-eks-addons/modules/irsa/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "adavarski_AWS-EKS-Terraform/helm/lb_ingress_controller/main.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "squareops_terraform-aws-eks-addons/modules/irsa/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "squareops_terraform-aws-eks-addons/modules/kubernetes-dashboard/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "squareops_terraform-aws-eks-addons/modules/argocd-workflow/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "squareops_terraform-aws-eks-addons/modules/z-archieve/crossplane/main.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    },
+    {
+      "file": "aws-samples_amazon-eks-machine-learning-with-terraform-and-kubeflow/eks-cluster/terraform/aws-eks-cluster-and-nodegroup/kagent/main.tf",
+      "status": "extracted",
+      "configs_tested": 1
+    },
+    {
+      "file": "stacksimplify_terraform-on-aws-eks/13-EKS-IRSA/02-eks-irsa-demo-terraform-manifests/c4-03-irsa-k8s-service-account.tf",
+      "status": "no_valid_sa",
+      "configs_tested": 0
+    }
+  ]
+}
