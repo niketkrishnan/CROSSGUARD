@@ -1,0 +1,155 @@
+{
+ "seed": 20260919,
+ "n": 20000,
+ "controlled": false,
+ "pmapper_version": "1.1.5",
+ "statement_level": {
+  "total": 20000,
+  "agree": 19789,
+  "agreement": 0.9895,
+  "disagree": 211,
+  "ours_unknown": 0,
+  "statements_matching": 1943,
+  "match_rate": 0.0972
+ },
+ "decision_level": {
+  "total": 20000,
+  "agree": 19568,
+  "agreement": 0.9784,
+  "disagree": 432,
+  "outcome_distribution_pmapper": {
+   "implicit_deny": 15296,
+   "allow": 2990,
+   "deny": 1714
+  }
+ },
+ "feature_disagreement_rates": {
+  "Action": {
+   "cases": 17609,
+   "disagree": 164,
+   "rate": 0.0093
+  },
+  "IfExists": {
+   "cases": 3935,
+   "disagree": 33,
+   "rate": 0.0084
+  },
+  "NotAction": {
+   "cases": 2391,
+   "disagree": 47,
+   "rate": 0.0197
+  },
+  "NotResource": {
+   "cases": 2409,
+   "disagree": 37,
+   "rate": 0.0154
+  },
+  "Resource": {
+   "cases": 17591,
+   "disagree": 174,
+   "rate": 0.0099
+  },
+  "negated-op": {
+   "cases": 4191,
+   "disagree": 80,
+   "rate": 0.0191
+  },
+  "op:ArnEquals": {
+   "cases": 438,
+   "disagree": 4,
+   "rate": 0.0091
+  },
+  "op:ArnEqualsIfExists": {
+   "cases": 422,
+   "disagree": 5,
+   "rate": 0.0118
+  },
+  "op:ArnLike": {
+   "cases": 426,
+   "disagree": 4,
+   "rate": 0.0094
+  },
+  "op:ArnLikeIfExists": {
+   "cases": 388,
+   "disagree": 4,
+   "rate": 0.0103
+  },
+  "op:ArnNotEquals": {
+   "cases": 420,
+   "disagree": 10,
+   "rate": 0.0238
+  },
+  "op:ArnNotLike": {
+   "cases": 414,
+   "disagree": 8,
+   "rate": 0.0193
+  },
+  "op:Bool": {
+   "cases": 981,
+   "disagree": 4,
+   "rate": 0.0041
+  },
+  "op:BoolIfExists": {
+   "cases": 901,
+   "disagree": 7,
+   "rate": 0.0078
+  },
+  "op:Null": {
+   "cases": 2191,
+   "disagree": 7,
+   "rate": 0.0032
+  },
+  "op:StringEquals": {
+   "cases": 876,
+   "disagree": 0,
+   "rate": 0.0
+  },
+  "op:StringEqualsIfExists": {
+   "cases": 825,
+   "disagree": 2,
+   "rate": 0.0024
+  },
+  "op:StringEqualsIgnoreCase": {
+   "cases": 866,
+   "disagree": 0,
+   "rate": 0.0
+  },
+  "op:StringEqualsIgnoreCaseIfExists": {
+   "cases": 822,
+   "disagree": 5,
+   "rate": 0.0061
+  },
+  "op:StringLike": {
+   "cases": 940,
+   "disagree": 0,
+   "rate": 0.0
+  },
+  "op:StringNotEquals": {
+   "cases": 934,
+   "disagree": 14,
+   "rate": 0.015
+  },
+  "op:StringNotEqualsIfExists": {
+   "cases": 843,
+   "disagree": 11,
+   "rate": 0.013
+  },
+  "op:StringNotEqualsIgnoreCase": {
+   "cases": 936,
+   "disagree": 10,
+   "rate": 0.0107
+  },
+  "op:StringNotLike": {
+   "cases": 917,
+   "disagree": 39,
+   "rate": 0.0425
+  }
+ },
+ "unsupported_operators_return_unknown": true,
+ "statement_disagreement_causes": {
+  "resource ARN matched case-insensitively by PMapper (AWS: case-sensitive)": 159,
+  "StringNotLike with an absent key returns false in PMapper (AWS: true)": 36,
+  "ARN condition operator matched case-insensitively by PMapper (AWS: case-sensitive)": 20
+ },
+ "decision_disagreements_not_explained_by_a_statement_disagreement": 0
+}

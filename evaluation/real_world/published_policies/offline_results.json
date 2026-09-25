@@ -1,0 +1,50 @@
+{
+ "results": [
+  {
+   "case_id": "RWP-aws-load-balancer-controller",
+   "source": "https://github.com/kubernetes-sigs/aws-load-balancer-controller/blob/main/docs/install/iam_policy.json",
+   "fully_verbatim": true,
+   "declared": false,
+   "found": false,
+   "confidence": null,
+   "outcome": "TN"
+  },
+  {
+   "case_id": "RWP-aws-ebs-csi-driver",
+   "source": "https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/example-iam-policy.json",
+   "fully_verbatim": true,
+   "declared": false,
+   "found": false,
+   "confidence": null,
+   "outcome": "TN"
+  },
+  {
+   "case_id": "RWP-aws-efs-csi-driver",
+   "source": "https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/docs/iam-policy-example.json",
+   "fully_verbatim": false,
+   "declared": false,
+   "found": false,
+   "confidence": null,
+   "outcome": "TN"
+  },
+  {
+   "case_id": "RWP-cluster-autoscaler",
+   "source": "https://gist.github.com/inductor/eb1d8f455e0be46f7f5a1d3640670b97",
+   "fully_verbatim": false,
+   "declared": false,
+   "found": false,
+   "confidence": null,
+   "outcome": "TN"
+  },
+  {
+   "case_id": "RWP-unit42-passrole-chain",
+   "source": "https://unit42.paloaltonetworks.com/iam-roles-compromised-workloads/ (pattern description, not a verbatim policy -- see module docstring)",
+   "fully_verbatim": false,
+   "declared": true,
+   "found": true,
+   "confidence": "confirmed",
+   "outcome": "TP"
+  }
+ ],
+ "all_correct": true
+}

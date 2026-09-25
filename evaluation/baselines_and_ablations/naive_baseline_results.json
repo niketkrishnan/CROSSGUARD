@@ -1,0 +1,240 @@
+{
+ "dev": {
+  "split": "dev",
+  "n": 4000,
+  "outcomes": {
+   "FP": 632,
+   "FN": 1053,
+   "TN": 1474,
+   "TP": 420,
+   "unresolved(naive says no)": 211,
+   "unresolved(naive can't distinguish)": 210
+  },
+  "by_category": {
+   "hard_negative": {
+    "FP": 632,
+    "TN": 1054
+   },
+   "hard_positive": {
+    "FN": 1053,
+    "TP": 420
+   },
+   "decoy": {
+    "TN": 420
+   },
+   "unresolved_by_design": {
+    "unresolved(naive says no)": 211,
+    "unresolved(naive can't distinguish)": 210
+   }
+  },
+  "by_recipe": {
+   "direct_admin_mfa_gated": {
+    "FP": 210
+   },
+   "passrole_paired_confirmed": {
+    "FN": 210
+   },
+   "passrole_glob_resource": {
+    "FN": 211
+   },
+   "assumerole_chain_3hop": {
+    "FN": 117
+   },
+   "direct_admin_wrong_subject": {
+    "FP": 211
+   },
+   "decoy_unreachable_admin": {
+    "TN": 210
+   },
+   "passrole_wrong_service_condition": {
+    "TN": 211
+   },
+   "assumerole_chain_broken_2hop": {
+    "TN": 119
+   },
+   "direct_admin_partial_deny": {
+    "TP": 210
+   },
+   "passrole_target_untrusted": {
+    "TN": 210
+   },
+   "wildcard_trust_exploitable": {
+    "FN": 210
+   },
+   "passrole_bare": {
+    "FN": 211
+   },
+   "wildcard_trust_conditioned": {
+    "unresolved(naive says no)": 211
+   },
+   "direct_admin_explicit_deny": {
+    "FP": 211
+   },
+   "wildcard_trust_not_exploitable": {
+    "TN": 211
+   },
+   "direct_admin_ip_condition": {
+    "unresolved(naive can't distinguish)": 210
+   },
+   "decoy_rbac_only_no_irsa": {
+    "TN": 210
+   },
+   "deny_cancels_passrole": {
+    "TN": 211
+   },
+   "direct_admin_valid": {
+    "TP": 210
+   },
+   "assumerole_chain_2hop": {
+    "FN": 94
+   },
+   "assumerole_chain_broken_3hop": {
+    "TN": 92
+   }
+  },
+  "summary": {
+   "precision": 0.3992,
+   "recall": 0.2851
+  }
+ },
+ "heldout": {
+  "split": "heldout",
+  "n": 4000,
+  "outcomes": {
+   "TP": 422,
+   "FN": 1053,
+   "TN": 1473,
+   "unresolved(naive can't distinguish)": 210,
+   "unresolved(naive says no)": 210,
+   "FP": 632
+  },
+  "by_category": {
+   "hard_positive": {
+    "TP": 422,
+    "FN": 1053
+   },
+   "decoy": {
+    "TN": 421
+   },
+   "unresolved_by_design": {
+    "unresolved(naive can't distinguish)": 210,
+    "unresolved(naive says no)": 210
+   },
+   "hard_negative": {
+    "FP": 632,
+    "TN": 1052
+   }
+  },
+  "by_recipe": {
+   "direct_admin_valid": {
+    "TP": 211
+   },
+   "passrole_paired_confirmed": {
+    "FN": 210
+   },
+   "passrole_glob_resource": {
+    "FN": 211
+   },
+   "decoy_unreachable_admin": {
+    "TN": 210
+   },
+   "direct_admin_ip_condition": {
+    "unresolved(naive can't distinguish)": 210
+   },
+   "wildcard_trust_conditioned": {
+    "unresolved(naive says no)": 210
+   },
+   "direct_admin_wrong_subject": {
+    "FP": 210
+   },
+   "direct_admin_partial_deny": {
+    "TP": 211
+   },
+   "passrole_bare": {
+    "FN": 210
+   },
+   "passrole_target_untrusted": {
+    "TN": 211
+   },
+   "wildcard_trust_not_exploitable": {
+    "TN": 210
+   },
+   "assumerole_chain_3hop": {
+    "FN": 112
+   },
+   "passrole_wrong_service_condition": {
+    "TN": 210
+   },
+   "decoy_rbac_only_no_irsa": {
+    "TN": 211
+   },
+   "deny_cancels_passrole": {
+    "TN": 211
+   },
+   "wildcard_trust_exploitable": {
+    "FN": 211
+   },
+   "assumerole_chain_broken_2hop": {
+    "TN": 110
+   },
+   "direct_admin_explicit_deny": {
+    "FP": 211
+   },
+   "direct_admin_mfa_gated": {
+    "FP": 211
+   },
+   "assumerole_chain_broken_3hop": {
+    "TN": 100
+   },
+   "assumerole_chain_2hop": {
+    "FN": 99
+   }
+  },
+  "summary": {
+   "precision": 0.4004,
+   "recall": 0.2861
+  }
+ },
+ "rwp": {
+  "outcomes": {
+   "TN": 4,
+   "FN": 1
+  },
+  "rows": [
+   {
+    "case_id": "RWP-aws-load-balancer-controller",
+    "declared": false,
+    "found": false,
+    "outcome": "TN"
+   },
+   {
+    "case_id": "RWP-aws-ebs-csi-driver",
+    "declared": false,
+    "found": false,
+    "outcome": "TN"
+   },
+   {
+    "case_id": "RWP-aws-efs-csi-driver",
+    "declared": false,
+    "found": false,
+    "outcome": "TN"
+   },
+   {
+    "case_id": "RWP-cluster-autoscaler",
+    "declared": false,
+    "found": false,
+    "outcome": "TN"
+   },
+   {
+    "case_id": "RWP-unit42-passrole-chain",
+    "declared": true,
+    "found": false,
+    "outcome": "FN"
+   }
+  ],
+  "summary": {
+   "precision": null,
+   "recall": 0.0
+  }
+ }
+}

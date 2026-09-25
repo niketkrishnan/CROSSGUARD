@@ -1,0 +1,75 @@
+{
+ "StringNotLike with an absent key returns false in PMapper (AWS: true)": {
+  "stmt": {
+   "Effect": "Allow",
+   "Action": "*",
+   "Resource": "arn:aws:iam::123456789012:role/*",
+   "Condition": {
+    "StringNotLike": {
+     "iam:PassedToService": "ec2.amazonaws.com"
+    }
+   }
+  },
+  "action": "iam:CreateRole",
+  "resource": "arn:aws:iam::123456789012:role/Team-A",
+  "context": {
+   "iam:passedtoservice": "<absent>",
+   "aws:requesttag/env": "prod",
+   "aws:userid": "AIDA1",
+   "aws:principalarn": "arn:aws:iam::999999999999:user/bob",
+   "aws:multifactorauthpresent": "true"
+  },
+  "ours": "true",
+  "pmapper": false
+ },
+ "resource ARN matched case-insensitively by PMapper (AWS: case-sensitive)": {
+  "stmt": {
+   "Effect": "Deny",
+   "NotAction": "ec2:RunInstances",
+   "Resource": [
+    "arn:aws:iam::123456789012:role/app-ADMIN",
+    "arn:aws:iam::123456789012:role/Team-A"
+   ]
+  },
+  "action": "s3:PutObject",
+  "resource": "arn:aws:iam::123456789012:role/app-admin",
+  "context": {
+   "iam:passedtoservice": "ec2.amazonaws.com",
+   "aws:requesttag/env": "Prod",
+   "aws:userid": "AIDA2",
+   "aws:principalarn": "arn:aws:iam::123456789012:role/Team-A",
+   "aws:multifactorauthpresent": "<absent>"
+  },
+  "ours": "false",
+  "pmapper": true
+ },
+ "ARN condition operator matched case-insensitively by PMapper (AWS: case-sensitive)": {
+  "stmt": {
+   "Effect": "Deny",
+   "Action": "sts:AssumeRole",
+   "Resource": [
+    "arn:aws:iam::*:role/app-*",
+    "arn:aws:iam::123456789012:role/app-ADMIN"
+   ],
+   "Condition": {
+    "ArnNotLike": {
+     "aws:PrincipalArn": "arn:aws:iam::123456789012:role/team-a"
+    },
+    "StringEqualsIfExists": {
+     "aws:userid": "prod*"
+    }
+   }
+  },
+  "action": "sts:AssumeRole",
+  "resource": "arn:aws:iam::123456789012:role/app-admin",
+  "context": {
+   "iam:passedtoservice": "lambda.amazonaws.com",
+   "aws:requesttag/env": "<absent>",
+   "aws:userid": "<absent>",
+   "aws:principalarn": "arn:aws:iam::123456789012:role/Team-A",
+   "aws:multifactorauthpresent": "true"
+  },
+  "ours": "true",
+  "pmapper": false
+ }
+}

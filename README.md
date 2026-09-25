@@ -170,9 +170,19 @@ cannot represent this attack path in any form.
 
 ## Evaluation & Results
 
+**For a complete, case-by-case accounting of every benchmark used to
+evaluate this tool — what each case is, why it exists, where it's
+sourced from, how ground truth was established, and exact commands to
+reproduce it — see [`BENCHMARK_CASE_CATALOG.md`](BENCHMARK_CASE_CATALOG.md).**
+That is the authoritative reference for any question about case counts,
+provenance, or methodology.
+
 Full evaluation record, evidence trail, and reproducibility details live
-in `evaluation_complete_final.md` (repo root) and the `evaluation/`
-directory (`evaluation/README.md` is the index). Highlights:
+in `evaluation_complete_final.md` (repo root), `evaluation/policy_semantics/POLICY_SEMANTICS_EVALUATION.md`
+(policy-semantics fixes, the generated benchmark, real-world published
+policies, baselines/ablations, and the risk-score decoupling proof), and
+the `evaluation/` directory (`evaluation/README.md` is the index).
+Highlights:
 
 - Confusion matrix: TP=9, FP=0, FN=0, TN=5 on 9 synthetic benchmarks
   (of the 9 TPs, 5 are fully confirmed exploit chains and 4 rely on a

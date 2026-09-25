@@ -1,0 +1,6 @@
+{"case_id": "dev-00120-r_assumerole_chain_confirmed", "target": "arn:aws:iam::000000000000:role/gc75c96847e-target-admin", "declared": true, "outcome": "TP", "n_paths": 1, "confidence": "confirmed"}
+{"case_id": "dev-00194-r_assumerole_chain_confirmed", "target": "arn:aws:iam::000000000000:role/g76a70a91b9-target-admin", "declared": true, "outcome": "TP", "n_paths": 1, "confidence": "confirmed"}
+{"case_id": "dev-00003-r_assumerole_chain_confirmed", "target": "arn:aws:iam::000000000000:role/gc1295330b5-target-admin", "declared": true, "outcome": "TP", "n_paths": 1, "confidence": "confirmed"}
+{"case_id": "dev-00035-r_assumerole_chain_confirmed", "target": "arn:aws:iam::000000000000:role/g9419e92f66-target-admin", "declared": true, "outcome": "TP", "n_paths": 1, "confidence": "confirmed"}
+{"case_id": "dev-00007-r_assumerole_chain_broken", "target": "arn:aws:iam::000000000000:role/gcb738ec52c-target-admin", "declared": false, "outcome": "TN", "n_paths": 0, "confidence": null}
+{"case_id": "dev-00025-r_assumerole_chain_broken", "target": "arn:aws:iam::000000000000:role/g0540da6dcc-target-admin", "declared": false, "outcome": "TN", "n_paths": 0, "confidence": null}

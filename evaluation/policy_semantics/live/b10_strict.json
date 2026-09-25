@@ -1,0 +1,306 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 16,
+    "groups": 1
+  },
+  "k8s_summary": {
+    "service_accounts": 69,
+    "roles": 12,
+    "cluster_roles": 73
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "cert-manager",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager"
+    },
+    {
+      "service_account": "cert-manager-scoped",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager-scoped"
+    },
+    {
+      "service_account": "b10-chain-start",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-chain-start"
+    },
+    {
+      "service_account": "b10-cw-readonly",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-cw-readonly"
+    },
+    {
+      "service_account": "b10-ddb-readonly",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-ddb-readonly"
+    },
+    {
+      "service_account": "b10-ec2-describe",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-ec2-describe"
+    },
+    {
+      "service_account": "b10-explicit-deny-admin",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin"
+    },
+    {
+      "service_account": "b10-iam-readonly",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-iam-readonly"
+    },
+    {
+      "service_account": "b10-logs-wildcard",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-logs-wildcard"
+    },
+    {
+      "service_account": "b10-mfa-gated-admin",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-mfa-gated-admin"
+    },
+    {
+      "service_account": "b10-minimal",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-minimal"
+    },
+    {
+      "service_account": "b10-passrole-conditioned",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-passrole-conditioned"
+    },
+    {
+      "service_account": "b10-passrole-scoped",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-passrole-scoped"
+    },
+    {
+      "service_account": "b10-s3-readonly",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-s3-readonly"
+    },
+    {
+      "service_account": "b10-s3-scoped-star",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b10-s3-scoped-star"
+    },
+    {
+      "service_account": "external-secrets",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator"
+    },
+    {
+      "service_account": "external-secrets-scoped",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator-scoped"
+    },
+    {
+      "service_account": "sample-app",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-karpenter"
+    },
+    {
+      "service_account": "sample-app-scoped",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-app-scoped"
+    },
+    {
+      "service_account": "b9-aws-node",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-aws-node-role"
+    },
+    {
+      "service_account": "b9-cluster-autoscaler",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role"
+    },
+    {
+      "service_account": "b9-efs-csi-controller-sa",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-efs-csi-controller-role"
+    }
+  ],
+  "graph_nodes": 171,
+  "graph_edges": 75,
+  "paths": [],
+  "remediations": [],
+  "semantics": "strict",
+  "suppressed_edges": [
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-cw-readonly",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-passrole-target",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-chain-start",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-passrole-scoped",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-passrole-conditioned",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-s3-readonly",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-ec2-describe",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-minimal",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-iam-readonly",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-logs-wildcard",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-s3-scoped-star",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-mfa-gated-admin",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-chain-end",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-dangling",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-ddb-readonly",
+      "type": "iam:PassRole",
+      "reason": "explicit Deny on iam:PassRole"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b10-passrole-conditioned",
+      "target": "arn:aws:iam::000000000000:role/b10-mfa-gated-admin",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "k8s:sa:default:b10-chain-start",
+      "target": "arn:aws:iam::000000000000:role/b10-chain-start",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-cw-readonly",
+      "target": "arn:aws:iam::000000000000:role/b10-cw-readonly",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-ddb-readonly",
+      "target": "arn:aws:iam::000000000000:role/b10-ddb-readonly",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-ec2-describe",
+      "target": "arn:aws:iam::000000000000:role/b10-ec2-describe",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-explicit-deny-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-explicit-deny-admin",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-iam-readonly",
+      "target": "arn:aws:iam::000000000000:role/b10-iam-readonly",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-logs-wildcard",
+      "target": "arn:aws:iam::000000000000:role/b10-logs-wildcard",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-mfa-gated-admin",
+      "target": "arn:aws:iam::000000000000:role/b10-mfa-gated-admin",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-minimal",
+      "target": "arn:aws:iam::000000000000:role/b10-minimal",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-passrole-conditioned",
+      "target": "arn:aws:iam::000000000000:role/b10-passrole-conditioned",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-passrole-scoped",
+      "target": "arn:aws:iam::000000000000:role/b10-passrole-scoped",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-s3-readonly",
+      "target": "arn:aws:iam::000000000000:role/b10-s3-readonly",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b10-s3-scoped-star",
+      "target": "arn:aws:iam::000000000000:role/b10-s3-scoped-star",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    }
+  ],
+  "wildcard_trust_roles": []
+}

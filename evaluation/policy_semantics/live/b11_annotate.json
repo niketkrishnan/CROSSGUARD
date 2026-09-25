@@ -1,0 +1,187 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 9,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 60,
+    "roles": 12,
+    "cluster_roles": 73
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "cert-manager",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager"
+    },
+    {
+      "service_account": "cert-manager-scoped",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager-scoped"
+    },
+    {
+      "service_account": "b11-circular-a",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-circular-a"
+    },
+    {
+      "service_account": "b11-hop1",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-hop1"
+    },
+    {
+      "service_account": "b11-nested-conditions",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-nested-conditions"
+    },
+    {
+      "service_account": "b11-wildcard-principal-admin",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin"
+    },
+    {
+      "service_account": "external-secrets",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator"
+    },
+    {
+      "service_account": "external-secrets-scoped",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator-scoped"
+    },
+    {
+      "service_account": "sample-app",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-karpenter"
+    },
+    {
+      "service_account": "sample-app-scoped",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-app-scoped"
+    },
+    {
+      "service_account": "b9-aws-node",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-aws-node-role"
+    },
+    {
+      "service_account": "b9-cluster-autoscaler",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role"
+    },
+    {
+      "service_account": "b9-efs-csi-controller-sa",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-efs-csi-controller-role"
+    }
+  ],
+  "graph_nodes": 154,
+  "graph_edges": 78,
+  "paths": [
+    {
+      "start": "k8s:sa:default:b11-wildcard-principal-admin",
+      "end": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "path": [
+        "k8s:sa:default:b11-wildcard-principal-admin",
+        "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin"
+      ],
+      "hops": 1,
+      "cross_layer": true,
+      "confidence": "unresolved",
+      "weakest_edge": [
+        "k8s:sa:default:b11-wildcard-principal-admin",
+        "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+        "irsa_bridge"
+      ],
+      "irsa_trust": "invalid",
+      "sink_admin_status": "full",
+      "risk_score": 6.0
+    },
+    {
+      "start": "k8s:sa:default:b11-nested-conditions",
+      "end": "arn:aws:iam::000000000000:role/b11-nested-conditions-target",
+      "path": [
+        "k8s:sa:default:b11-nested-conditions",
+        "arn:aws:iam::000000000000:role/b11-nested-conditions",
+        "arn:aws:iam::000000000000:role/b11-nested-conditions-target"
+      ],
+      "hops": 2,
+      "cross_layer": true,
+      "confidence": "unresolved",
+      "weakest_edge": [
+        "k8s:sa:default:b11-nested-conditions",
+        "arn:aws:iam::000000000000:role/b11-nested-conditions",
+        "irsa_bridge"
+      ],
+      "irsa_trust": "invalid",
+      "sink_admin_status": "full",
+      "risk_score": 5.5
+    },
+    {
+      "start": "k8s:sa:default:b11-hop1",
+      "end": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "path": [
+        "k8s:sa:default:b11-hop1",
+        "arn:aws:iam::000000000000:role/b11-hop1",
+        "arn:aws:iam::000000000000:role/b11-hop2",
+        "arn:aws:iam::000000000000:role/b11-hop3",
+        "arn:aws:iam::000000000000:role/b11-hop4-admin"
+      ],
+      "hops": 4,
+      "cross_layer": true,
+      "confidence": "unresolved",
+      "weakest_edge": [
+        "k8s:sa:default:b11-hop1",
+        "arn:aws:iam::000000000000:role/b11-hop1",
+        "irsa_bridge"
+      ],
+      "irsa_trust": "invalid",
+      "sink_admin_status": "full",
+      "risk_score": 5.0
+    }
+  ],
+  "remediations": [
+    {
+      "action": "Remove iam:PassRole permission for b11-nested-conditions-target from b11-nested-conditions's policy",
+      "edge_type": "iam:PassRole",
+      "command": "# Edit the inline/attached policy on b11-nested-conditions: remove the iam:PassRole statement whose Resource includes b11-nested-conditions-target (or replace a wildcard Resource with the specific roles actually needed)",
+      "source": "arn:aws:iam::000000000000:role/b11-nested-conditions",
+      "target": "arn:aws:iam::000000000000:role/b11-nested-conditions-target",
+      "parallel_mechanisms": 1
+    },
+    {
+      "action": "Remove IRSA annotation from ServiceAccount default/b11-wildcard-principal-admin",
+      "edge_type": "irsa_bridge",
+      "command": "kubectl annotate serviceaccount b11-wildcard-principal-admin -n default eks.amazonaws.com/role-arn-",
+      "source": "k8s:sa:default:b11-wildcard-principal-admin",
+      "target": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "parallel_mechanisms": 1
+    },
+    {
+      "action": "Remove iam:PassRole permission for b11-hop4-admin from b11-hop3's policy",
+      "edge_type": "iam:PassRole",
+      "command": "# Edit the inline/attached policy on b11-hop3: remove the iam:PassRole statement whose Resource includes b11-hop4-admin (or replace a wildcard Resource with the specific roles actually needed)",
+      "source": "arn:aws:iam::000000000000:role/b11-hop3",
+      "target": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "parallel_mechanisms": 2
+    },
+    {
+      "action": "Remove b11-hop3 from the trust policy of role b11-hop4-admin",
+      "edge_type": "sts:AssumeRole",
+      "command": "aws iam update-assume-role-policy --role-name b11-hop4-admin --policy-document file://updated-trust-policy.json   # (remove the statement allowing b11-hop3 to assume this role)",
+      "source": "arn:aws:iam::000000000000:role/b11-hop3",
+      "target": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "parallel_mechanisms": 2
+    }
+  ],
+  "semantics": "annotate",
+  "suppressed_edges": [],
+  "wildcard_trust_roles": [
+    {
+      "role": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "status": "unrestricted",
+      "is_admin": true
+    }
+  ]
+}

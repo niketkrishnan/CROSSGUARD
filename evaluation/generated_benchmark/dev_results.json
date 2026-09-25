@@ -1,0 +1,96 @@
+{
+ "split": "dev",
+ "semantics": "strict",
+ "n_cases": 4000,
+ "confusion": {
+  "TP": 1473,
+  "FP": 0,
+  "FN": 0,
+  "TN": 2106,
+  "TP_wrong_tier": 0,
+  "unresolved_handled_correctly": 421,
+  "unresolved_wrongly_confirmed": 0
+ },
+ "precision": 1.0,
+ "recall_strict_tier": 1.0,
+ "by_category": {
+  "hard_negative": {
+   "TN": 1686
+  },
+  "hard_positive": {
+   "TP": 1473
+  },
+  "decoy": {
+   "TN": 420
+  },
+  "unresolved_by_design": {
+   "handled_correctly": 421
+  }
+ },
+ "by_recipe": {
+  "direct_admin_mfa_gated": {
+   "TN": 210
+  },
+  "passrole_paired_confirmed": {
+   "TP": 210
+  },
+  "passrole_glob_resource": {
+   "TP": 211
+  },
+  "assumerole_chain_3hop": {
+   "TP": 117
+  },
+  "direct_admin_wrong_subject": {
+   "TN": 211
+  },
+  "decoy_unreachable_admin": {
+   "TN": 210
+  },
+  "passrole_wrong_service_condition": {
+   "TN": 211
+  },
+  "assumerole_chain_broken_2hop": {
+   "TN": 119
+  },
+  "direct_admin_partial_deny": {
+   "TP": 210
+  },
+  "passrole_target_untrusted": {
+   "TN": 210
+  },
+  "wildcard_trust_exploitable": {
+   "TP": 210
+  },
+  "passrole_bare": {
+   "TP": 211
+  },
+  "wildcard_trust_conditioned": {
+   "handled_correctly": 211
+  },
+  "direct_admin_explicit_deny": {
+   "TN": 211
+  },
+  "wildcard_trust_not_exploitable": {
+   "TN": 211
+  },
+  "direct_admin_ip_condition": {
+   "handled_correctly": 210
+  },
+  "decoy_rbac_only_no_irsa": {
+   "TN": 210
+  },
+  "deny_cancels_passrole": {
+   "TN": 211
+  },
+  "direct_admin_valid": {
+   "TP": 210
+  },
+  "assumerole_chain_2hop": {
+   "TP": 94
+  },
+  "assumerole_chain_broken_3hop": {
+   "TN": 92
+  }
+ },
+ "n_errors": 0
+}

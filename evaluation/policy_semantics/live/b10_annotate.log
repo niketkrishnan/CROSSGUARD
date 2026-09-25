@@ -1,0 +1,37 @@
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:cert-manager:cert-manager (exists=True), role=arn:aws:iam::000000000000:role/cert-manager (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:cert-manager:cert-manager-scoped (exists=True), role=arn:aws:iam::000000000000:role/cert-manager-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:external-secrets:external-secrets (exists=True), role=arn:aws:iam::000000000000:role/external-secrets-operator (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:external-secrets:external-secrets-scoped (exists=True), role=arn:aws:iam::000000000000:role/external-secrets-operator-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:istio-sample:sample-app (exists=True), role=arn:aws:iam::000000000000:role/eks-istio-karpenter (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:istio-sample:sample-app-scoped (exists=True), role=arn:aws:iam::000000000000:role/eks-istio-app-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-aws-node (exists=True), role=arn:aws:iam::000000000000:role/b9-aws-node-role (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-cluster-autoscaler (exists=True), role=arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-efs-csi-controller-sa (exists=True), role=arn:aws:iam::000000000000:role/b9-efs-csi-controller-role (exists=False)
+WARNING: Found 2 cross-layer escalation path(s)
+[1] Ingesting AWS IAM config...
+    0 users, 16 roles, 1 groups
+[2] Ingesting Kubernetes RBAC config...
+    69 service accounts, 12 roles, 73 cluster roles
+[3] Finding IRSA mappings...
+    22 mapping(s) found
+[4] Building unified privilege graph...
+    Graph: 171 nodes, 89 edges
+[5] Finding cross-layer escalation paths...
+
+[!] Found 2 cross-layer escalation path(s):
+
+Path 1 (Risk Score: 6.0, confidence: unresolved):
+  b10-mfa-gated-admin --[irsa_bridge]--> b10-mfa-gated-admin
+
+Path 2 (Risk Score: 5.5, confidence: unresolved):
+  b10-passrole-conditioned --[irsa_bridge]--> b10-passrole-conditioned --[iam:PassRole]--> b10-mfa-gated-admin
+
+[6] Computing minimal remediation...
+
+Remediation recommendations:
+  - Remove IRSA annotation from ServiceAccount default/b10-mfa-gated-admin
+    Command: kubectl annotate serviceaccount b10-mfa-gated-admin -n default eks.amazonaws.com/role-arn-
+  - Remove iam:PassRole permission for b10-mfa-gated-admin from b10-passrole-conditioned's policy
+    Command: # Edit the inline/attached policy on b10-passrole-conditioned: remove the iam:PassRole statement whose Resource includes b10-mfa-gated-admin (or replace a wildcard Resource with the specific roles actually needed)
+
+Full results written to evaluation/step01_tool_fixes/live/b10_annotate.json

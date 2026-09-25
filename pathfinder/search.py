@@ -114,6 +114,42 @@ def find_all_cross_layer_paths(G: nx.DiGraph) -> list[dict]:
     return all_paths
 
 
+_CONF_RANK = {"confirmed": 3, "potential": 2, "unresolved": 1}
+
+
+def annotate_path_confidence(G: nx.DiGraph, paths: list[dict]) -> list[dict]:
+    """Attach `confidence` and related audit fields to each path.
+
+    A path is only as confident as its weakest edge (and its admin sink).
+    Kept separate from find_escalation_paths so the timing measured by the
+    scalability experiments is unaffected.
+
+      confirmed  -- every edge confirmed, sink is full admin
+      potential  -- at least one edge is a bare PassRole grant
+      unresolved -- at least one edge/sink depends on context not known
+                    statically (undecidable Condition, invalid or unknown
+                    IRSA trust, conditional Deny)
+    """
+    for p in paths:
+        path = p["path"]
+        worst = "confirmed"
+        weakest = None
+        for i in range(len(path) - 1):
+            e = G.edges[path[i], path[i + 1]]
+            c = e.get("confidence", "confirmed")
+            if _CONF_RANK[c] < _CONF_RANK[worst]:
+                worst, weakest = c, (path[i], path[i + 1], e.get("type"))
+        sink_conf = G.nodes[path[-1]].get("admin_confidence", "confirmed")
+        if _CONF_RANK[sink_conf] < _CONF_RANK[worst]:
+            worst, weakest = sink_conf, (path[-1], None, "admin_sink")
+        p["confidence"] = worst
+        p["weakest_edge"] = weakest
+        first = G.edges[path[0], path[1]] if len(path) > 1 else {}
+        p["irsa_trust"] = first.get("trust_status") if first.get("type") == "irsa_bridge" else None
+        p["sink_admin_status"] = G.nodes[path[-1]].get("admin_status", "full")
+    return paths
+
+
 def describe_path(G: nx.DiGraph, path_dict: dict) -> str:
     """Human-readable rendering of a path, e.g.:
     k8s:sa:default:vulnerable-sa --[irsa_bridge]--> arn:...role/admin-role

@@ -1,0 +1,77 @@
+
+== as-built ==  (confirmed/potential/unresolved paths; exposure findings)
+B10-01 s3-readonly                                         truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-02 ddb-readonly                                        truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-03 cw-readonly                                         truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-04 scoped-passrole                                     truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-05 logs-wildcard                                       truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-06 s3-scoped-star                                      truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-07 iam-readonly                                        truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-08 minimal                                             truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-09 ec2-describe                                        truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-10 safe-assume-chain                                   truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-11 scoped-group                                        truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-12 passrole-conditioned (PassedToService=ec2, Resource truth=none        legacy:0/2/0  annotate:0/0/1  strict:0/0/0
+B10-13 dangling-assume                                     truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-14 mfa-gated-admin (IRSA binds the admin role directly truth=none        legacy:1/0/0  annotate:0/0/1  strict:0/0/0
+B10-15 explicit-deny-admin (IRSA binds the admin role dire truth=none        legacy:1/0/0  annotate:0/0/0  strict:0/0/0
+B11-01 wildcard-principal-admin (IRSA binds it directly)   truth=exposure    legacy:1/0/0  annotate:0/0/1+E1  strict:0/0/0+E1
+B11-02 nested-conditions PassRole                          truth=conditional legacy:0/1/0  annotate:0/0/1  strict:0/0/0
+B11-03 5-hop chain                                         truth=conditional legacy:0/1/0  annotate:0/0/1  strict:0/0/0
+B11-04 circular trust (no admin)                           truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+X-01 wildcard trust, caller may AssumeRole                 truth=exploitable legacy:0/0/0  annotate:0/0/1+E1  strict:0/0/0+E1
+X-02 wildcard trust, caller lacks AssumeRole               truth=none        legacy:0/0/0  annotate:0/0/0+E1  strict:0/0/0+E1
+X-03 wildcard trust gated by PrincipalOrgID                truth=conditional legacy:0/0/0  annotate:0/0/1+E1  strict:0/0/0+E1
+X-04 PassRole glob resource -> admin                       truth=exploitable legacy:0/0/0  annotate:0/0/1  strict:0/0/0
+X-05 PassRole + paired action (lambda) -> admin            truth=exploitable legacy:0/1/0  annotate:0/0/1  strict:0/0/0
+X-06 PassRole to admin whose trust lists no service        truth=none        legacy:0/1/0  annotate:0/0/1  strict:0/0/0
+X-07 admin with conditional Deny                           truth=conditional legacy:1/0/0  annotate:0/0/1  strict:0/0/0
+X-08 correct IRSA admin (positive control)                 truth=exploitable legacy:1/0/0  annotate:0/0/1  strict:0/0/0
+
+== irsa-realistic ==  (confirmed/potential/unresolved paths; exposure findings)
+B10-01 s3-readonly                                         truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-02 ddb-readonly                                        truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-03 cw-readonly                                         truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-04 scoped-passrole                                     truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-05 logs-wildcard                                       truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-06 s3-scoped-star                                      truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-07 iam-readonly                                        truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-08 minimal                                             truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-09 ec2-describe                                        truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-10 safe-assume-chain                                   truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-11 scoped-group                                        truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-12 passrole-conditioned (PassedToService=ec2, Resource truth=none        legacy:0/2/0  annotate:0/1/0  strict:0/0/0
+B10-13 dangling-assume                                     truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+B10-14 mfa-gated-admin (IRSA binds the admin role directly truth=none        legacy:1/0/0  annotate:0/0/1  strict:0/0/0
+B10-15 explicit-deny-admin (IRSA binds the admin role dire truth=none        legacy:1/0/0  annotate:0/0/0  strict:0/0/0
+B11-01 wildcard-principal-admin (IRSA binds it directly)   truth=exposure    legacy:1/0/0  annotate:1/0/0+E1  strict:1/0/0+E1
+B11-02 nested-conditions PassRole                          truth=conditional legacy:0/1/0  annotate:0/0/1  strict:0/0/1
+B11-03 5-hop chain                                         truth=conditional legacy:0/1/0  annotate:0/1/0  strict:0/1/0
+B11-04 circular trust (no admin)                           truth=none        legacy:0/0/0  annotate:0/0/0  strict:0/0/0
+X-01 wildcard trust, caller may AssumeRole                 truth=exploitable legacy:0/0/0  annotate:1/0/0+E1  strict:1/0/0+E1
+X-02 wildcard trust, caller lacks AssumeRole               truth=none        legacy:0/0/0  annotate:0/0/0+E1  strict:0/0/0+E1
+X-03 wildcard trust gated by PrincipalOrgID                truth=conditional legacy:0/0/0  annotate:0/0/1+E1  strict:0/0/1+E1
+X-04 PassRole glob resource -> admin                       truth=exploitable legacy:0/0/0  annotate:1/0/0  strict:1/0/0
+X-05 PassRole + paired action (lambda) -> admin            truth=exploitable legacy:0/1/0  annotate:1/0/0  strict:1/0/0
+X-06 PassRole to admin whose trust lists no service        truth=none        legacy:0/1/0  annotate:0/1/0  strict:0/0/0
+X-07 admin with conditional Deny                           truth=conditional legacy:1/0/0  annotate:0/0/1  strict:0/0/1
+X-08 correct IRSA admin (positive control)                 truth=exploitable legacy:1/0/0  annotate:1/0/0  strict:1/0/0
+
+as-built|legacy|confirmed              {'TP': 1, 'FP': 2, 'FN': 4, 'TN': 16, 'COND': 4}
+as-built|legacy|flagged                {'TP': 2, 'FP': 4, 'FN': 3, 'TN': 14, 'COND': 4}
+as-built|legacy|any                    {'TP': 2, 'FP': 4, 'FN': 3, 'TN': 14, 'COND': 4}
+as-built|annotate|confirmed            {'TP': 1, 'FP': 0, 'FN': 4, 'TN': 18, 'COND': 4}
+as-built|annotate|flagged              {'TP': 1, 'FP': 0, 'FN': 4, 'TN': 18, 'COND': 4}
+as-built|annotate|any                  {'TP': 5, 'FP': 3, 'FN': 0, 'TN': 15, 'COND': 4}
+as-built|strict|confirmed              {'TP': 1, 'FP': 0, 'FN': 4, 'TN': 18, 'COND': 4}
+as-built|strict|flagged                {'TP': 1, 'FP': 0, 'FN': 4, 'TN': 18, 'COND': 4}
+as-built|strict|any                    {'TP': 1, 'FP': 0, 'FN': 4, 'TN': 18, 'COND': 4}
+irsa-realistic|legacy|confirmed        {'TP': 1, 'FP': 2, 'FN': 4, 'TN': 16, 'COND': 4}
+irsa-realistic|legacy|flagged          {'TP': 2, 'FP': 4, 'FN': 3, 'TN': 14, 'COND': 4}
+irsa-realistic|legacy|any              {'TP': 2, 'FP': 4, 'FN': 3, 'TN': 14, 'COND': 4}
+irsa-realistic|annotate|confirmed      {'TP': 5, 'FP': 0, 'FN': 0, 'TN': 18, 'COND': 4}
+irsa-realistic|annotate|flagged        {'TP': 5, 'FP': 2, 'FN': 0, 'TN': 16, 'COND': 4}
+irsa-realistic|annotate|any            {'TP': 5, 'FP': 3, 'FN': 0, 'TN': 15, 'COND': 4}
+irsa-realistic|strict|confirmed        {'TP': 5, 'FP': 0, 'FN': 0, 'TN': 18, 'COND': 4}
+irsa-realistic|strict|flagged          {'TP': 5, 'FP': 0, 'FN': 0, 'TN': 18, 'COND': 4}
+irsa-realistic|strict|any              {'TP': 5, 'FP': 0, 'FN': 0, 'TN': 18, 'COND': 4}

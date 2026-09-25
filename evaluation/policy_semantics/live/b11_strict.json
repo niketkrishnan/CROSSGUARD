@@ -1,0 +1,183 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 9,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 60,
+    "roles": 12,
+    "cluster_roles": 73
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "cert-manager",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager"
+    },
+    {
+      "service_account": "cert-manager-scoped",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager-scoped"
+    },
+    {
+      "service_account": "b11-circular-a",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-circular-a"
+    },
+    {
+      "service_account": "b11-hop1",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-hop1"
+    },
+    {
+      "service_account": "b11-nested-conditions",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-nested-conditions"
+    },
+    {
+      "service_account": "b11-wildcard-principal-admin",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin"
+    },
+    {
+      "service_account": "external-secrets",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator"
+    },
+    {
+      "service_account": "external-secrets-scoped",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator-scoped"
+    },
+    {
+      "service_account": "sample-app",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-karpenter"
+    },
+    {
+      "service_account": "sample-app-scoped",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-app-scoped"
+    },
+    {
+      "service_account": "b9-aws-node",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-aws-node-role"
+    },
+    {
+      "service_account": "b9-cluster-autoscaler",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role"
+    },
+    {
+      "service_account": "b9-efs-csi-controller-sa",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-efs-csi-controller-role"
+    }
+  ],
+  "graph_nodes": 154,
+  "graph_edges": 66,
+  "paths": [],
+  "remediations": [],
+  "semantics": "strict",
+  "suppressed_edges": [
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-nested-conditions-target",
+      "target": "arn:aws:iam::000000000000:role/b11-circular-b",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-nested-conditions-target",
+      "target": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-nested-conditions-target",
+      "target": "arn:aws:iam::000000000000:role/b11-circular-a",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-nested-conditions-target",
+      "target": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "target": "arn:aws:iam::000000000000:role/b11-circular-b",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "target": "arn:aws:iam::000000000000:role/b11-circular-a",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "target": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "target": "arn:aws:iam::000000000000:role/b11-circular-b",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "target": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "target": "arn:aws:iam::000000000000:role/b11-circular-a",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b11-hop3",
+      "target": "arn:aws:iam::000000000000:role/b11-hop4-admin",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "k8s:sa:default:b11-circular-a",
+      "target": "arn:aws:iam::000000000000:role/b11-circular-a",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b11-hop1",
+      "target": "arn:aws:iam::000000000000:role/b11-hop1",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b11-nested-conditions",
+      "target": "arn:aws:iam::000000000000:role/b11-nested-conditions",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    },
+    {
+      "source": "k8s:sa:default:b11-wildcard-principal-admin",
+      "target": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "type": "irsa_bridge",
+      "reason": "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+    }
+  ],
+  "wildcard_trust_roles": [
+    {
+      "role": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin",
+      "status": "unrestricted",
+      "is_admin": true
+    }
+  ]
+}

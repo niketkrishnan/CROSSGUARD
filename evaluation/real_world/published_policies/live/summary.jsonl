@@ -1,0 +1,5 @@
+{"case_id": "RWP-aws-load-balancer-controller", "target": null, "declared": false, "outcome": "TN", "n_paths": 0, "confidence": null}
+{"case_id": "RWP-aws-ebs-csi-driver", "target": null, "declared": false, "outcome": "TN", "n_paths": 0, "confidence": null}
+{"case_id": "RWP-aws-efs-csi-driver", "target": null, "declared": false, "outcome": "TN", "n_paths": 0, "confidence": null}
+{"case_id": "RWP-cluster-autoscaler", "target": null, "declared": false, "outcome": "TN", "n_paths": 0, "confidence": null}
+{"case_id": "RWP-unit42-passrole-chain", "target": "arn:aws:iam::000000000000:role/ci-deploy-admin-role", "declared": true, "outcome": "TP", "n_paths": 1, "confidence": "confirmed"}

@@ -1,0 +1,299 @@
+{
+  "aws_summary": {
+    "users": 0,
+    "roles": 2,
+    "groups": 0
+  },
+  "k8s_summary": {
+    "service_accounts": 104,
+    "roles": 12,
+    "cluster_roles": 73
+  },
+  "irsa_mappings": [
+    {
+      "service_account": "sa-assumerole-chain-3hop-832890",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gc1295330b5-hop0"
+    },
+    {
+      "service_account": "sa-assumerole-chain-broken-2hop-132840",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g0540da6dcc-hop0"
+    },
+    {
+      "service_account": "sa-assumerole-chain-broken-3hop-197935",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g11b3125086-hop0"
+    },
+    {
+      "service_account": "sa-decoy-unreachable-admin-67913",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g596cbcfafb-entry"
+    },
+    {
+      "service_account": "sa-deny-cancels-passrole-757283",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g46c21ae46e-entry"
+    },
+    {
+      "service_account": "sa-direct-admin-ip-condition-823371",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g637910cc0b-target"
+    },
+    {
+      "service_account": "sa-passrole-bare-497899",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g036a3b9ed8-entry"
+    },
+    {
+      "service_account": "sa-passrole-glob-resource-802779",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gb755997b1a-entry"
+    },
+    {
+      "service_account": "sa-passrole-target-untrusted-353405",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g39a0d4031d-entry"
+    },
+    {
+      "service_account": "sa-passrole-target-untrusted-375714",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g1474091669-entry"
+    },
+    {
+      "service_account": "sa-wildcard-trust-conditioned-82350",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g828838f781-entry"
+    },
+    {
+      "service_account": "sa-wildcard-trust-conditioned-968217",
+      "namespace": "app-ns",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gbcf4a7d8bf-entry"
+    },
+    {
+      "service_account": "cert-manager",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager"
+    },
+    {
+      "service_account": "cert-manager-scoped",
+      "namespace": "cert-manager",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/cert-manager-scoped"
+    },
+    {
+      "service_account": "b11-circular-a",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-circular-a"
+    },
+    {
+      "service_account": "b11-hop1",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-hop1"
+    },
+    {
+      "service_account": "b11-nested-conditions",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-nested-conditions"
+    },
+    {
+      "service_account": "b11-wildcard-principal-admin",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b11-wildcard-principal-admin"
+    },
+    {
+      "service_account": "sa-assumerole-chain-broken-3hop-650558",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g0fe09f410b-hop0"
+    },
+    {
+      "service_account": "sa-direct-admin-ip-condition-55472",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g592412cf3d-target"
+    },
+    {
+      "service_account": "sa-direct-admin-valid-19375",
+      "namespace": "default",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g1b32e391dd-target"
+    },
+    {
+      "service_account": "external-secrets",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator"
+    },
+    {
+      "service_account": "external-secrets-scoped",
+      "namespace": "external-secrets",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/external-secrets-operator-scoped"
+    },
+    {
+      "service_account": "sample-app",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-karpenter"
+    },
+    {
+      "service_account": "sample-app-scoped",
+      "namespace": "istio-sample",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/eks-istio-app-scoped"
+    },
+    {
+      "service_account": "b9-aws-node",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-aws-node-role"
+    },
+    {
+      "service_account": "b9-cluster-autoscaler",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role"
+    },
+    {
+      "service_account": "b9-efs-csi-controller-sa",
+      "namespace": "kube-system",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/b9-efs-csi-controller-role"
+    },
+    {
+      "service_account": "sa-direct-admin-explicit-deny-360989",
+      "namespace": "ml-team",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/ga0ae22fb33-target"
+    },
+    {
+      "service_account": "sa-direct-admin-partial-deny-223062",
+      "namespace": "ml-team",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g59558359e5-target"
+    },
+    {
+      "service_account": "sa-direct-admin-partial-deny-853809",
+      "namespace": "ml-team",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gf98e39e23d-target"
+    },
+    {
+      "service_account": "sa-direct-admin-valid-951481",
+      "namespace": "ml-team",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gbc681294e8-target"
+    },
+    {
+      "service_account": "sa-passrole-bare-173955",
+      "namespace": "ml-team",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g75f707d5e3-entry"
+    },
+    {
+      "service_account": "sa-passrole-glob-resource-431770",
+      "namespace": "ml-team",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gbf87680ba9-entry"
+    },
+    {
+      "service_account": "sa-passrole-paired-confirmed-554176",
+      "namespace": "ml-team",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g1820067e82-entry"
+    },
+    {
+      "service_account": "sa-passrole-wrong-service-condition-283342",
+      "namespace": "ml-team",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g533a424cb7-entry"
+    },
+    {
+      "service_account": "sa-assumerole-chain-2hop-167895",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g76a70a91b9-hop0"
+    },
+    {
+      "service_account": "sa-deny-cancels-passrole-761709",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g04a5c7a0ff-entry"
+    },
+    {
+      "service_account": "sa-direct-admin-explicit-deny-722072",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g2a753c23bc-target"
+    },
+    {
+      "service_account": "sa-direct-admin-mfa-gated-524224",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/ged659f6da9-target"
+    },
+    {
+      "service_account": "sa-direct-admin-wrong-subject-15055",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g40f5054845-target"
+    },
+    {
+      "service_account": "sa-passrole-paired-confirmed-17156",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g057d9c4d0a-entry"
+    },
+    {
+      "service_account": "sa-wildcard-trust-exploitable-244835",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g342cabaeed-entry"
+    },
+    {
+      "service_account": "sa-wildcard-trust-not-exploitable-282432",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/ge95dad1154-entry"
+    },
+    {
+      "service_account": "sa-wildcard-trust-not-exploitable-643172",
+      "namespace": "payments",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g1df581d959-entry"
+    },
+    {
+      "service_account": "sa-assumerole-chain-2hop-776246",
+      "namespace": "prod",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gc75c96847e-hop0"
+    },
+    {
+      "service_account": "sa-assumerole-chain-3hop-213978",
+      "namespace": "prod",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g9419e92f66-hop0"
+    },
+    {
+      "service_account": "sa-assumerole-chain-broken-2hop-985729",
+      "namespace": "prod",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gcb738ec52c-hop0"
+    },
+    {
+      "service_account": "sa-decoy-unreachable-admin-67022",
+      "namespace": "prod",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g5b5b3c9ef4-entry"
+    },
+    {
+      "service_account": "sa-direct-admin-mfa-gated-155915",
+      "namespace": "prod",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g826dfd37f3-target"
+    },
+    {
+      "service_account": "sa-direct-admin-wrong-subject-474266",
+      "namespace": "prod",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/g6837385e37-target"
+    },
+    {
+      "service_account": "sa-passrole-wrong-service-condition-659955",
+      "namespace": "prod",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/ged32084827-entry"
+    },
+    {
+      "service_account": "sa-wildcard-trust-exploitable-725538",
+      "namespace": "prod",
+      "aws_role_arn": "arn:aws:iam::000000000000:role/gbf615d1ac5-entry"
+    }
+  ],
+  "graph_nodes": 191,
+  "graph_edges": 45,
+  "paths": [],
+  "remediations": [],
+  "semantics": "strict",
+  "suppressed_edges": [
+    {
+      "source": "arn:aws:iam::000000000000:role/g39a0d4031d-entry",
+      "target": "arn:aws:iam::000000000000:role/g39a0d4031d-target-admin",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/g39a0d4031d-target-admin",
+      "target": "arn:aws:iam::000000000000:role/g39a0d4031d-entry",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    }
+  ],
+  "wildcard_trust_roles": []
+}

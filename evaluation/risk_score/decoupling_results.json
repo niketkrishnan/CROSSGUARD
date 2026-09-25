@@ -1,0 +1,153 @@
+{
+ "all_cases_remediation_invariant_to_risk_weights": true,
+ "cases": [
+  {
+   "case": "shared_bottleneck_4",
+   "n_paths": 4,
+   "remediation_identical_across_all_weight_sets": true,
+   "per_weight": {
+    "production": {
+     "cut_edges": [
+      "shared-hub->shared-admin:iam:PassRole",
+      "shared-hub->shared-admin:sts:AssumeRole"
+     ],
+     "risk_scores": [
+      5.0,
+      5.0,
+      5.0,
+      5.0
+     ]
+    },
+    "flattened": {
+     "cut_edges": [
+      "shared-hub->shared-admin:iam:PassRole",
+      "shared-hub->shared-admin:sts:AssumeRole"
+     ],
+     "risk_scores": [
+      3.53,
+      3.53,
+      3.53,
+      3.53
+     ]
+    },
+    "adversarial_inverted": {
+     "cut_edges": [
+      "shared-hub->shared-admin:iam:PassRole",
+      "shared-hub->shared-admin:sts:AssumeRole"
+     ],
+     "risk_scores": [
+      3.67,
+      3.67,
+      3.67,
+      3.67
+     ]
+    }
+   }
+  },
+  {
+   "case": "alternate_route",
+   "n_paths": 1,
+   "remediation_identical_across_all_weight_sets": true,
+   "per_weight": {
+    "production": {
+     "cut_edges": [
+      "sa-alt-route->hub:irsa_bridge"
+     ],
+     "risk_scores": [
+      5.0
+     ]
+    },
+    "flattened": {
+     "cut_edges": [
+      "sa-alt-route->hub:irsa_bridge"
+     ],
+     "risk_scores": [
+      3.5
+     ]
+    },
+    "adversarial_inverted": {
+     "cut_edges": [
+      "sa-alt-route->hub:irsa_bridge"
+     ],
+     "risk_scores": [
+      4.0
+     ]
+    }
+   }
+  },
+  {
+   "case": "unreported_pair",
+   "n_paths": 2,
+   "remediation_identical_across_all_weight_sets": true,
+   "per_weight": {
+    "production": {
+     "cut_edges": [
+      "entry-y->admin-y:iam:PassRole",
+      "sa-x->entry-x:irsa_bridge"
+     ],
+     "risk_scores": [
+      5.5,
+      5.5
+     ]
+    },
+    "flattened": {
+     "cut_edges": [
+      "entry-y->admin-y:iam:PassRole",
+      "sa-x->entry-x:irsa_bridge"
+     ],
+     "risk_scores": [
+      3.8,
+      3.8
+     ]
+    },
+    "adversarial_inverted": {
+     "cut_edges": [
+      "entry-y->admin-y:iam:PassRole",
+      "sa-x->entry-x:irsa_bridge"
+     ],
+     "risk_scores": [
+      2.5,
+      2.5
+     ]
+    }
+   }
+  },
+  {
+   "case": "disjoint",
+   "n_paths": 2,
+   "remediation_identical_across_all_weight_sets": true,
+   "per_weight": {
+    "production": {
+     "cut_edges": [
+      "entry-p->admin-p:iam:PassRole",
+      "entry-q->admin-q:iam:PassRole"
+     ],
+     "risk_scores": [
+      5.5,
+      5.5
+     ]
+    },
+    "flattened": {
+     "cut_edges": [
+      "entry-p->admin-p:iam:PassRole",
+      "entry-q->admin-q:iam:PassRole"
+     ],
+     "risk_scores": [
+      3.8,
+      3.8
+     ]
+    },
+    "adversarial_inverted": {
+     "cut_edges": [
+      "entry-p->admin-p:iam:PassRole",
+      "entry-q->admin-q:iam:PassRole"
+     ],
+     "risk_scores": [
+      2.5,
+      2.5
+     ]
+    }
+   }
+  }
+ ]
+}

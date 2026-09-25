@@ -1,0 +1,22 @@
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:cert-manager:cert-manager (exists=True), role=arn:aws:iam::000000000000:role/cert-manager (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:cert-manager:cert-manager-scoped (exists=True), role=arn:aws:iam::000000000000:role/cert-manager-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:external-secrets:external-secrets (exists=True), role=arn:aws:iam::000000000000:role/external-secrets-operator (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:external-secrets:external-secrets-scoped (exists=True), role=arn:aws:iam::000000000000:role/external-secrets-operator-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:istio-sample:sample-app (exists=True), role=arn:aws:iam::000000000000:role/eks-istio-karpenter (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:istio-sample:sample-app-scoped (exists=True), role=arn:aws:iam::000000000000:role/eks-istio-app-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-aws-node (exists=True), role=arn:aws:iam::000000000000:role/b9-aws-node-role (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-cluster-autoscaler (exists=True), role=arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-efs-csi-controller-sa (exists=True), role=arn:aws:iam::000000000000:role/b9-efs-csi-controller-role (exists=False)
+[1] Ingesting AWS IAM config...
+    0 users, 16 roles, 1 groups
+[2] Ingesting Kubernetes RBAC config...
+    69 service accounts, 12 roles, 73 cluster roles
+[3] Finding IRSA mappings...
+    22 mapping(s) found
+[4] Building unified privilege graph...
+    Graph: 171 nodes, 75 edges
+[5] Finding cross-layer escalation paths...
+
+No cross-layer escalation paths found.
+
+Full results written to evaluation/step01_tool_fixes/live/b10_strict.json

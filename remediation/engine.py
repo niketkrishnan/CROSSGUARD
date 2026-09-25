@@ -201,11 +201,16 @@ def find_minimum_remediation(G: nx.DiGraph, paths: list[dict]) -> list[dict]:
     recommendations = []
     for src, dst in cut_edges:
         edge_data = G.edges[src, dst]
-        edge_type = edge_data.get("type", "unknown")
-        rec = format_remediation(src, dst, edge_type, G)
-        rec["source"] = src
-        rec["target"] = dst
-        recommendations.append(rec)
+        # A node pair can be connected by several mechanisms (e.g. AssumeRole
+        # trust AND a PassRole grant). Cutting the pair means removing all of
+        # them, so emit one recommendation per mechanism.
+        edge_types = edge_data.get("edge_types") or [edge_data.get("type", "unknown")]
+        for edge_type in edge_types:
+            rec = format_remediation(src, dst, edge_type, G)
+            rec["source"] = src
+            rec["target"] = dst
+            rec["parallel_mechanisms"] = len(edge_types)
+            recommendations.append(rec)
 
     # Deduplicate by the human-readable action string (shouldn't be needed
     # now that we compute one global cut, but cheap safety net).

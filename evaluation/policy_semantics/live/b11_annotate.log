@@ -1,0 +1,44 @@
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:cert-manager:cert-manager (exists=True), role=arn:aws:iam::000000000000:role/cert-manager (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:cert-manager:cert-manager-scoped (exists=True), role=arn:aws:iam::000000000000:role/cert-manager-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:external-secrets:external-secrets (exists=True), role=arn:aws:iam::000000000000:role/external-secrets-operator (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:external-secrets:external-secrets-scoped (exists=True), role=arn:aws:iam::000000000000:role/external-secrets-operator-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:istio-sample:sample-app (exists=True), role=arn:aws:iam::000000000000:role/eks-istio-karpenter (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:istio-sample:sample-app-scoped (exists=True), role=arn:aws:iam::000000000000:role/eks-istio-app-scoped (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-aws-node (exists=True), role=arn:aws:iam::000000000000:role/b9-aws-node-role (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-cluster-autoscaler (exists=True), role=arn:aws:iam::000000000000:role/b9-cluster-autoscaler-role (exists=False)
+WARNING: IRSA mapping references missing node(s): sa=k8s:sa:kube-system:b9-efs-csi-controller-sa (exists=True), role=arn:aws:iam::000000000000:role/b9-efs-csi-controller-role (exists=False)
+WARNING: Found 3 cross-layer escalation path(s)
+[1] Ingesting AWS IAM config...
+    0 users, 9 roles, 0 groups
+[2] Ingesting Kubernetes RBAC config...
+    60 service accounts, 12 roles, 73 cluster roles
+[3] Finding IRSA mappings...
+    13 mapping(s) found
+[4] Building unified privilege graph...
+    Graph: 154 nodes, 78 edges
+[5] Finding cross-layer escalation paths...
+
+[!] Found 3 cross-layer escalation path(s):
+
+Path 1 (Risk Score: 6.0, confidence: unresolved):
+  b11-wildcard-principal-admin --[irsa_bridge]--> b11-wildcard-principal-admin
+
+Path 2 (Risk Score: 5.5, confidence: unresolved):
+  b11-nested-conditions --[irsa_bridge]--> b11-nested-conditions --[iam:PassRole]--> b11-nested-conditions-target
+
+Path 3 (Risk Score: 5.0, confidence: unresolved):
+  b11-hop1 --[irsa_bridge]--> b11-hop1 --[iam:PassRole]--> b11-hop2 --[sts:AssumeRole]--> b11-hop3 --[iam:PassRole]--> b11-hop4-admin
+
+[6] Computing minimal remediation...
+
+Remediation recommendations:
+  - Remove iam:PassRole permission for b11-nested-conditions-target from b11-nested-conditions's policy
+    Command: # Edit the inline/attached policy on b11-nested-conditions: remove the iam:PassRole statement whose Resource includes b11-nested-conditions-target (or replace a wildcard Resource with the specific roles actually needed)
+  - Remove IRSA annotation from ServiceAccount default/b11-wildcard-principal-admin
+    Command: kubectl annotate serviceaccount b11-wildcard-principal-admin -n default eks.amazonaws.com/role-arn-
+  - Remove iam:PassRole permission for b11-hop4-admin from b11-hop3's policy
+    Command: # Edit the inline/attached policy on b11-hop3: remove the iam:PassRole statement whose Resource includes b11-hop4-admin (or replace a wildcard Resource with the specific roles actually needed)
+  - Remove b11-hop3 from the trust policy of role b11-hop4-admin
+    Command: aws iam update-assume-role-policy --role-name b11-hop4-admin --policy-document file://updated-trust-policy.json   # (remove the statement allowing b11-hop3 to assume this role)
+
+Full results written to evaluation/step01_tool_fixes/live/b11_annotate.json

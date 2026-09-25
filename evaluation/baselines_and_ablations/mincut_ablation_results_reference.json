@@ -1,0 +1,112 @@
+{
+ "ablation_1_mincut_vs_greedy": [
+  {
+   "n_entries": 2,
+   "n_paths_found": 2,
+   "mincut_edge_count": 1,
+   "greedy_edge_count": 2,
+   "mincut_edges": [
+    "role/shared-hub->shared-admin"
+   ],
+   "greedy_edges": [
+    "sa-entry-0->entry-0",
+    "sa-entry-1->entry-1"
+   ]
+  },
+  {
+   "n_entries": 3,
+   "n_paths_found": 3,
+   "mincut_edge_count": 1,
+   "greedy_edge_count": 3,
+   "mincut_edges": [
+    "role/shared-hub->shared-admin"
+   ],
+   "greedy_edges": [
+    "sa-entry-0->entry-0",
+    "sa-entry-1->entry-1",
+    "sa-entry-2->entry-2"
+   ]
+  },
+  {
+   "n_entries": 4,
+   "n_paths_found": 4,
+   "mincut_edge_count": 1,
+   "greedy_edge_count": 4,
+   "mincut_edges": [
+    "role/shared-hub->shared-admin"
+   ],
+   "greedy_edges": [
+    "sa-entry-0->entry-0",
+    "sa-entry-1->entry-1",
+    "sa-entry-2->entry-2",
+    "sa-entry-3->entry-3"
+   ]
+  },
+  {
+   "n_entries": 8,
+   "n_paths_found": 8,
+   "mincut_edge_count": 1,
+   "greedy_edge_count": 8,
+   "mincut_edges": [
+    "role/shared-hub->shared-admin"
+   ],
+   "greedy_edges": [
+    "sa-entry-0->entry-0",
+    "sa-entry-1->entry-1",
+    "sa-entry-2->entry-2",
+    "sa-entry-3->entry-3",
+    "sa-entry-4->entry-4",
+    "sa-entry-5->entry-5",
+    "sa-entry-6->entry-6",
+    "sa-entry-7->entry-7"
+   ]
+  }
+ ],
+ "ablation_2_reported_vs_full_path_space": {
+  "paths_found_for_this_source_admin_pair_by_pathfinder": 1,
+  "reported_path_hops": 2,
+  "all_simple_routes_in_full_graph": [
+   [
+    "sa-alt-route",
+    "hub",
+    "target-admin"
+   ],
+   [
+    "sa-alt-route",
+    "hub",
+    "mid1",
+    "mid2",
+    "mid3",
+    "target-admin"
+   ]
+  ],
+  "min_cut_edges": [
+   "sa-alt-route->hub"
+  ],
+  "long_route_(4_hop)_present_in_full_graph": true,
+  "reported_path_set_contained_only_the_shortest_route": true,
+  "src_still_connected_to_target_after_applying_the_computed_cut": false
+ },
+ "ablation_2b_unreported_pair_still_severed": {
+  "reported_pairs": [
+   "sa-x->admin-x",
+   "sa-y->admin-y"
+  ],
+  "cross_pair_(sa_x_to_admin_y)_individually_reported_by_pathfinder": false,
+  "cross_pair_(sa_x_to_admin_y)_actually_connects_in_full_graph": true,
+  "min_cut_edges": [
+   "role/entry-y->admin-y",
+   "sa-x->entry-x"
+  ],
+  "cross_pair_severed_by_the_computed_cut_despite_never_being_reported": true
+ },
+ "ablation_2c_disjoint_chains_need_two_cuts_sanity_check": {
+  "n_paths": 2,
+  "min_cut_edge_count": 2,
+  "min_cut_edges": [
+   "role/entry-p->admin-p",
+   "role/entry-q->admin-q"
+  ],
+  "correctly_requires_two_separate_cuts": true
+ }
+}

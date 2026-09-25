@@ -1,0 +1,2106 @@
+{
+ "rows": [
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-01 s3-readonly",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-02 ddb-readonly",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-03 cw-readonly",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-04 scoped-passrole",
+   "truth": "none",
+   "note": "PassRole to a non-admin role",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-05 logs-wildcard",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-06 s3-scoped-star",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-07 iam-readonly",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-08 minimal",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-09 ec2-describe",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-10 safe-assume-chain",
+   "truth": "none",
+   "note": "chain ends at a read-only role",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-11 scoped-group",
+   "truth": "none",
+   "note": "bare IAM group, no ServiceAccount binding (N/A to path search)",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-12 passrole-conditioned (PassedToService=ec2, Resource *)",
+   "truth": "none",
+   "note": "PassRole+PassedToService=ec2 to admin-labelled roles; no ec2:RunInstances granted; one target MFA-gated, one all-Deny",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 2,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [
+      "explicit Deny on iam:PassRole",
+      "explicit Deny on iam:PassRole"
+     ],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition",
+      "explicit Deny on iam:PassRole",
+      "explicit Deny on iam:PassRole",
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-13 dangling-assume",
+   "truth": "none",
+   "note": "no IRSA annotation at all",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-14 mfa-gated-admin (IRSA binds the admin role directly)",
+   "truth": "none",
+   "note": "MFA condition can never be met by web identity",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "as-built",
+   "case": "B10-15 explicit-deny-admin (IRSA binds the admin role directly)",
+   "truth": "none",
+   "note": "Deny * wins in AWS evaluation",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B11",
+   "variant": "as-built",
+   "case": "B11-01 wildcard-principal-admin (IRSA binds it directly)",
+   "truth": "exposure",
+   "note": "publicly assumable admin role: a real exposure, but NOT an IRSA path (no OIDC trust)",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B11",
+   "variant": "as-built",
+   "case": "B11-02 nested-conditions PassRole",
+   "truth": "conditional",
+   "note": "PassRole gated by RequestTag/SecureTransport; no paired action",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B11",
+   "variant": "as-built",
+   "case": "B11-03 5-hop chain",
+   "truth": "conditional",
+   "note": "reachable, but hop1->hop2 is a bare PassRole",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition",
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B11",
+   "variant": "as-built",
+   "case": "B11-04 circular trust (no admin)",
+   "truth": "none",
+   "note": "cycle must terminate with 0 paths",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "as-built",
+   "case": "X-01 wildcard trust, caller may AssumeRole",
+   "truth": "exploitable",
+   "note": "IRSA role can assume a wildcard-trust admin role",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "as-built",
+   "case": "X-02 wildcard trust, caller lacks AssumeRole",
+   "truth": "none",
+   "note": "no identity-side permission",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "as-built",
+   "case": "X-03 wildcard trust gated by PrincipalOrgID",
+   "truth": "conditional",
+   "note": "org membership unknowable statically",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "as-built",
+   "case": "X-04 PassRole glob resource -> admin",
+   "truth": "exploitable",
+   "note": "glob Resource + paired ec2:RunInstances; original builder treats the glob as a literal ARN",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "as-built",
+   "case": "X-05 PassRole + paired action (lambda) -> admin",
+   "truth": "exploitable",
+   "note": "Rhino-documented technique",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "as-built",
+   "case": "X-06 PassRole to admin whose trust lists no service",
+   "truth": "none",
+   "note": "no service can assume the target, so the PassRole is unusable",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition",
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "as-built",
+   "case": "X-07 admin with conditional Deny",
+   "truth": "conditional",
+   "note": "Deny gated by source IP",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "as-built",
+   "case": "X-08 correct IRSA admin (positive control)",
+   "truth": "exploitable",
+   "note": "plain direct IRSA -> admin with valid OIDC trust",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust policy has no Allow statement granting sts:AssumeRoleWithWebIdentity to an OIDC federated principal"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-01 s3-readonly",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-02 ddb-readonly",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-03 cw-readonly",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-04 scoped-passrole",
+   "truth": "none",
+   "note": "PassRole to a non-admin role",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-05 logs-wildcard",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-06 s3-scoped-star",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-07 iam-readonly",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-08 minimal",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-09 ec2-describe",
+   "truth": "none",
+   "note": "",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-10 safe-assume-chain",
+   "truth": "none",
+   "note": "chain ends at a read-only role",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-11 scoped-group",
+   "truth": "none",
+   "note": "bare IAM group, no ServiceAccount binding (N/A to path search)",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-12 passrole-conditioned (PassedToService=ec2, Resource *)",
+   "truth": "none",
+   "note": "PassRole+PassedToService=ec2 to admin-labelled roles; no ec2:RunInstances granted; one target MFA-gated, one all-Deny",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 2,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "explicit Deny on iam:PassRole",
+      "explicit Deny on iam:PassRole"
+     ],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition",
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition",
+      "explicit Deny on iam:PassRole",
+      "explicit Deny on iam:PassRole"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-13 dangling-assume",
+   "truth": "none",
+   "note": "no IRSA annotation at all",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-14 mfa-gated-admin (IRSA binds the admin role directly)",
+   "truth": "none",
+   "note": "MFA condition can never be met by web identity",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "invalid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "trust conditions (sub/aud/MFA) do not match this ServiceAccount"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B10",
+   "variant": "irsa-realistic",
+   "case": "B10-15 explicit-deny-admin (IRSA binds the admin role directly)",
+   "truth": "none",
+   "note": "Deny * wins in AWS evaluation",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "B11",
+   "variant": "irsa-realistic",
+   "case": "B11-01 wildcard-principal-admin (IRSA binds it directly)",
+   "truth": "exposure",
+   "note": "publicly assumable admin role: a real exposure, but NOT an IRSA path (no OIDC trust)",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  },
+  {
+   "suite": "B11",
+   "variant": "irsa-realistic",
+   "case": "B11-02 nested-conditions PassRole",
+   "truth": "conditional",
+   "note": "PassRole gated by RequestTag/SecureTransport; no paired action",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+     ],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  },
+  {
+   "suite": "B11",
+   "variant": "irsa-realistic",
+   "case": "B11-03 5-hop chain",
+   "truth": "conditional",
+   "note": "reachable, but hop1->hop2 is a bare PassRole",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition",
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+     ],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  },
+  {
+   "suite": "B11",
+   "variant": "irsa-realistic",
+   "case": "B11-04 circular trust (no admin)",
+   "truth": "none",
+   "note": "cycle must terminate with 0 paths",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "irsa-realistic",
+   "case": "X-01 wildcard trust, caller may AssumeRole",
+   "truth": "exploitable",
+   "note": "IRSA role can assume a wildcard-trust admin role",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+     ],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "irsa-realistic",
+   "case": "X-02 wildcard trust, caller lacks AssumeRole",
+   "truth": "none",
+   "note": "no identity-side permission",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 1,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "irsa-realistic",
+   "case": "X-03 wildcard trust gated by PrincipalOrgID",
+   "truth": "conditional",
+   "note": "org membership unknowable statically",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 1,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 1,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+     ],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "irsa-realistic",
+   "case": "X-04 PassRole glob resource -> admin",
+   "truth": "exploitable",
+   "note": "glob Resource + paired ec2:RunInstances; original builder treats the glob as a literal ARN",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": []
+    },
+    "annotate": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+     ],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "irsa-realistic",
+   "case": "X-05 PassRole + paired action (lambda) -> admin",
+   "truth": "exploitable",
+   "note": "Rhino-documented technique",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+     ],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "irsa-realistic",
+   "case": "X-06 PassRole to admin whose trust lists no service",
+   "truth": "none",
+   "note": "no service can assume the target, so the PassRole is unusable",
+   "modes": {
+    "legacy": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 1,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition",
+      "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+     ],
+     "irsa_trust": []
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "irsa-realistic",
+   "case": "X-07 admin with conditional Deny",
+   "truth": "conditional",
+   "note": "Deny gated by source IP",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 0,
+     "potential": 0,
+     "unresolved": 1,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  },
+  {
+   "suite": "REG",
+   "variant": "irsa-realistic",
+   "case": "X-08 correct IRSA admin (positive control)",
+   "truth": "exploitable",
+   "note": "plain direct IRSA -> admin with valid OIDC trust",
+   "modes": {
+    "legacy": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "not_evaluated"
+     ]
+    },
+    "annotate": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    },
+    "strict": {
+     "confirmed": 1,
+     "potential": 0,
+     "unresolved": 0,
+     "exposure_findings": 0,
+     "suppressed": [],
+     "irsa_trust": [
+      "valid"
+     ]
+    }
+   }
+  }
+ ],
+ "summary": {
+  "as-built|legacy|confirmed": {
+   "TP": 1,
+   "FP": 2,
+   "FN": 4,
+   "TN": 16,
+   "COND": 4
+  },
+  "as-built|legacy|flagged": {
+   "TP": 2,
+   "FP": 4,
+   "FN": 3,
+   "TN": 14,
+   "COND": 4
+  },
+  "as-built|legacy|any": {
+   "TP": 2,
+   "FP": 4,
+   "FN": 3,
+   "TN": 14,
+   "COND": 4
+  },
+  "as-built|annotate|confirmed": {
+   "TP": 1,
+   "FP": 0,
+   "FN": 4,
+   "TN": 18,
+   "COND": 4
+  },
+  "as-built|annotate|flagged": {
+   "TP": 1,
+   "FP": 0,
+   "FN": 4,
+   "TN": 18,
+   "COND": 4
+  },
+  "as-built|annotate|any": {
+   "TP": 5,
+   "FP": 3,
+   "FN": 0,
+   "TN": 15,
+   "COND": 4
+  },
+  "as-built|strict|confirmed": {
+   "TP": 1,
+   "FP": 0,
+   "FN": 4,
+   "TN": 18,
+   "COND": 4
+  },
+  "as-built|strict|flagged": {
+   "TP": 1,
+   "FP": 0,
+   "FN": 4,
+   "TN": 18,
+   "COND": 4
+  },
+  "as-built|strict|any": {
+   "TP": 1,
+   "FP": 0,
+   "FN": 4,
+   "TN": 18,
+   "COND": 4
+  },
+  "irsa-realistic|legacy|confirmed": {
+   "TP": 1,
+   "FP": 2,
+   "FN": 4,
+   "TN": 16,
+   "COND": 4
+  },
+  "irsa-realistic|legacy|flagged": {
+   "TP": 2,
+   "FP": 4,
+   "FN": 3,
+   "TN": 14,
+   "COND": 4
+  },
+  "irsa-realistic|legacy|any": {
+   "TP": 2,
+   "FP": 4,
+   "FN": 3,
+   "TN": 14,
+   "COND": 4
+  },
+  "irsa-realistic|annotate|confirmed": {
+   "TP": 5,
+   "FP": 0,
+   "FN": 0,
+   "TN": 18,
+   "COND": 4
+  },
+  "irsa-realistic|annotate|flagged": {
+   "TP": 5,
+   "FP": 2,
+   "FN": 0,
+   "TN": 16,
+   "COND": 4
+  },
+  "irsa-realistic|annotate|any": {
+   "TP": 5,
+   "FP": 3,
+   "FN": 0,
+   "TN": 15,
+   "COND": 4
+  },
+  "irsa-realistic|strict|confirmed": {
+   "TP": 5,
+   "FP": 0,
+   "FN": 0,
+   "TN": 18,
+   "COND": 4
+  },
+  "irsa-realistic|strict|flagged": {
+   "TP": 5,
+   "FP": 0,
+   "FN": 0,
+   "TN": 18,
+   "COND": 4
+  },
+  "irsa-realistic|strict|any": {
+   "TP": 5,
+   "FP": 0,
+   "FN": 0,
+   "TN": 18,
+   "COND": 4
+  }
+ }
+}
