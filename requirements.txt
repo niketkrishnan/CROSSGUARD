@@ -3,3 +3,4 @@ kubernetes==36.0.2
 networkx==3.6.1
 matplotlib==3.11.0
 pytest==9.1.1
+principalmapper==1.1.5
