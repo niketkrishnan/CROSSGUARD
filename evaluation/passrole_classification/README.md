@@ -27,7 +27,7 @@ contaminated/stale runs):
 wildcard trust (`Principal: {"AWS": "*"}`) is never evaluated (confirmed
 directly in `graph/builder.py`: `if principal_arn == "*": continue`).
 Detection came entirely from IRSA binding, not wildcard-trust modeling.
-Table IX should NOT claim wildcard-trust detection based on this case.
+The paper should not claim wildcard-trust detection based on this case.
 
 B10's two Condition-blindness false positives (explicit Deny, MFA-gated
 trust) are a SEPARATE, already-documented limitation -- not part of this

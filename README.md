@@ -185,7 +185,7 @@ the `evaluation/` directory (`evaluation/README.md` is the index).
 Highlights:
 
 - Confusion matrix: TP=9, FP=0, FN=0, TN=5 on 9 synthetic benchmarks
-  (of the 9 TPs, 5 are fully confirmed exploit chains and 4 rely on a
+  (of the 9 TPs, 4 are fully confirmed exploit chains and 5 rely on a
   bare `iam:PassRole` grant with no independently-modeled completing
   action — see `evaluation/passrole_classification/` for the precise
   per-path breakdown before citing a flat TP count)

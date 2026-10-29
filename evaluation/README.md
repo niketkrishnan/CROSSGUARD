@@ -33,9 +33,9 @@ directory is the raw evidence those documents summarize and cite.
 | `risk_score/` | Empirical proof that remediation output is independent of the risk-scoring heuristic's weights, plus a documented search for (and absence of) an external severity ranking to validate those weights against. |
 | `remediation_trials/` | Raw per-trial JSON for all 40 remediation trials (4 fix types × 10 trials), with a README noting which trials have fully recovered raw data vs. transcript-only values |
 | `scalability/` | `scale_sweep_trial.py` (synthetic graph generator + real pathfinder timing) and `scale_sweep_results_fresh.csv` (11 sizes × 5 trials, raw). This is the CURRENT scalability data — an earlier sweep's raw files were lost and are not recoverable; do not cite old scalability numbers from anywhere outside this folder. |
-| `bishopfox_evaluation.md`, `bishopfox_result.json` | BishopFox IAM-Vulnerable test environment results |
+| `bishopfox_evaluation.md`, `bishopfox_result_SUPERSEDED.json` (earlier run; the paper uses `benchmarks_raw/bishopfox_result.json`) | BishopFox IAM-Vulnerable test environment results |
 | `eks_goat_assessment.md` | Why OWASP EKS Goat is correctly out of scope (no IRSA annotations anywhere in its manifests) |
-| `kubernetes_goat_evaluation.md`, `kubernetes_goat_result.json` | Kubernetes Goat compounding-misconfiguration test |
+| `kubernetes_goat_evaluation.md`, `kubernetes_goat_result_SUPERSEDED.json` (earlier run; the paper uses `benchmarks_raw/kubernetes_goat_result.json`) | Kubernetes Goat compounding-misconfiguration test |
 | `pmapper_comparison.md` | PMapper baseline methodology and per-benchmark comparison |
 | `remediation_verification.md` | Remediation correctness verification notes |
 
