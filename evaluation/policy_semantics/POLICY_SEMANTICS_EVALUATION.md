@@ -62,7 +62,7 @@ Details:
 - B10 legacy: explicit-Deny admin (confirmed), MFA-gated admin (confirmed), and two PassRole paths from `b10-passrole-conditioned` to those two roles (potential). This is the paper's 4 flagged paths in 3 cases.
 - B10 annotate: the explicit-Deny admin path disappears (the role is inert). Two paths remain, both `unresolved` with `irsa_trust=invalid`: the MFA-gated admin bound directly, and PassRole from `b10-passrole-conditioned` to the MFA-gated admin. The 15 suppressed edges are all PassRole edges from `b10-explicit-deny-admin` (which has `Deny *`) to the other roles, logged as "explicit Deny on iam:PassRole".
 - B10 strict: 29 suppressed = 15 explicit-Deny PassRole edges + 1 PassRole edge whose target's trust policy no service can satisfy (the MFA-gated target) + 13 IRSA edges whose role trust has no OIDC principal.
-- B11 legacy: wildcard-principal admin (confirmed, IRSA-only), nested-conditions PassRole (potential), 5-hop chain (potential). Circular trust: 0 paths, no hang.
+- B11 legacy: wildcard-principal admin (confirmed, IRSA-only), nested-conditions PassRole (potential), 4-hop (5-node) chain (potential). Circular trust: 0 paths, no hang.
 - B11 annotate: the three paths remain as `unresolved`, all with `irsa_trust=invalid`, and the wildcard-trust role is reported once as an exposure finding.
 - B11 strict: no IRSA paths; exposure finding retained; 15 suppressed = 11 PassRole edges (target trust unusable) + 4 IRSA edges (no OIDC principal). The 11 PassRole edges were not inspected individually; inspect `evaluation/policy_semantics/live/b11_strict.json` (`suppressed_edges`) before quoting their origin.
 
@@ -93,7 +93,7 @@ Cell format: confirmed / potential / unresolved paths; `+E1` = one wildcard-trus
 | B10-15 explicit-deny-admin (IRSA binds the admin role directly) | none | 1/0/0 | 0/0/0 | 0/0/0 |
 | B11-01 wildcard-principal-admin (IRSA binds it directly) | exposure | 1/0/0 | 0/0/1 +E1 | 0/0/0 +E1 |
 | B11-02 nested-conditions PassRole | conditional | 0/1/0 | 0/0/1 | 0/0/0 |
-| B11-03 5-hop chain | conditional | 0/1/0 | 0/0/1 | 0/0/0 |
+| B11-03 4-hop (5-node) chain | conditional | 0/1/0 | 0/0/1 | 0/0/0 |
 | B11-04 circular trust (no admin) | none | 0/0/0 | 0/0/0 | 0/0/0 |
 
 **B10 and B11, irsa-realistic fixtures (OIDC trust on ServiceAccount-bound roles)**
@@ -117,13 +117,13 @@ Cell format: confirmed / potential / unresolved paths; `+E1` = one wildcard-trus
 | B10-15 explicit-deny-admin (IRSA binds the admin role directly) | none | 1/0/0 | 0/0/0 | 0/0/0 |
 | B11-01 wildcard-principal-admin (IRSA binds it directly) | exposure | 1/0/0 | 1/0/0 +E1 | 1/0/0 +E1 |
 | B11-02 nested-conditions PassRole | conditional | 0/1/0 | 0/0/1 | 0/0/1 |
-| B11-03 5-hop chain | conditional | 0/1/0 | 0/1/0 | 0/1/0 |
+| B11-03 4-hop (5-node) chain | conditional | 0/1/0 | 0/1/0 | 0/1/0 |
 | B11-04 circular trust (no admin) | none | 0/0/0 | 0/0/0 | 0/0/0 |
 
 How to read these:
 - The as-built variant matches the live results in 4.1 path for path (annotate: 2 unresolved in B10, 3 in B11; strict: none).
 - In the as-built variant the B10 MFA and Deny cases vanish under strict because IRSA trust is invalid, not because of the MFA or Deny logic. The irsa-realistic variant isolates those mechanisms: the all-Deny admin is inert, the MFA condition can never be satisfied by web identity (invalid trust), the conditioned-PassRole case has no usable admin target, and in annotate mode two paths survive as `potential`/`unresolved` (target unusable or trust invalid) that strict removes.
-- B11-02 (nested conditions) becomes `unresolved` because `aws:RequestTag/...` cannot be evaluated statically. B11-03 (5-hop) stays `potential` because hop 1 is a bare PassRole.
+- B11-02 (nested conditions) becomes `unresolved` because `aws:RequestTag/...` cannot be evaluated statically. B11-03 (4-hop) stays `potential` because hop 1 is a bare PassRole.
 
 **Summary over all 27 replay cases** (TP / FP / FN / TN; 4 `conditional` cases excluded). These counts include the 8 regression fixtures and **must not be cited as accuracy**.
 
@@ -202,7 +202,7 @@ What this does and does not show. It is evidence from a matcher we did not write
 - LocalStack may not resolve AWS-managed policy documents. `AdministratorAccess` is detected by ARN, so admin roles are still flagged, but a Deny inside an unresolved managed policy would be invisible. The B10 Deny case uses an inline policy and is unaffected.
 - Wildcards in ARNs: CrossGuard uses a plain glob in which `*` can match across `:`. AWS documents that each colon-delimited ARN segment is checked separately, so unusual patterns (a `*` in the middle of a segment) may match differently. The differential generator does not cover this. Not yet probed.
 - The differential test compares two implementations. The three points where they differ are resolved by reading the AWS documentation, not by running AWS.
-- Scalability: the timed function `find_all_cross_layer_paths` is unchanged, so the O(n^2.012) measurement is unaffected. The builder does more work per PassRole source; ingestion time was already excluded from that claim.
+- Scalability: the timed function `find_all_cross_layer_paths` is unchanged, so the n^2.01 measurement is unaffected. The builder does more work per PassRole source; ingestion time was already excluded from that claim.
 
 ## 7. Changes required in the paper text
 
@@ -334,7 +334,7 @@ cat evaluation/generated_benchmark/live/summary.json
 - The oracle re-implements AWS semantics independently of `policy_eval` but shares the same human's reading of the documentation; a shared misunderstanding would not be caught here (it is checked, for the policy-matching layer only, against PMapper in section 4.3).
 - `run_benchmark.py` does not exercise `ingestion.aws_ingestion` / `ingestion.k8s_ingestion` (LocalStack/Minikube parsing) -- only `graph.builder` and `pathfinder.search`. Section 10.5's 42-case live sample checks the ingestion path and passed 42/42, but it is still a sample, not full live coverage of all 8,000 cases (see the note on cost in the original 10.5 design rationale).
 - Noise roles are randomly shaped but drawn from a small pool of patterns (three kinds); they are a weaker adversarial check than a dedicated red-team benchmark would be.
-- Scale (~4.9M generated policy statements across both splits, per the case counts above) has not been used to re-measure the O(n^2.012) scalability claim; these graphs are small per case (a handful of nodes), not one large graph.
+- Scale (~4.9M generated policy statements across both splits, per the case counts above) has not been used to re-measure the n^2.01 scalability claim; these graphs are small per case (a handful of nodes), not one large graph.
 
 ### 10.7 Reproduction
 

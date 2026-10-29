@@ -21,7 +21,7 @@ change history.)*
 - **Real-world live-verified**: 44/44 correct, 0 FP, 0 FN, across 6
   independent mechanical extraction methods on real EKS repositories
   (full per-case table: `evaluation/real_world/RW_MANIFEST.md`)
-- **Scalability**: empirically O(n^2.012), R^2=0.9852, up to 25,000
+- **Scalability**: empirical exponent about 2.01 (R^2 > 0.98), up to 25,000
   nodes (`evaluation/scalability/`)
 - **Remediation**: 40/40 trials successful across 4 fix types, 0 side
   effects (`evaluation/remediation_trials/`)

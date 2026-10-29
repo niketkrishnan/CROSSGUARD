@@ -21,7 +21,7 @@ contaminated/stale runs):
 | B9 Case A, Case C | Conservative-Potential |
 | B11 wildcard-principal (no PassRole hop, but see caveat below) | Confirmed* |
 | B11 nested-conditions | Conservative-Potential |
-| B11 5-hop chain | Conservative-Potential |
+| B11 4-hop (5-node) chain | Conservative-Potential |
 
 *B11 wildcard: single-hop irsa_bridge only, no AWS-to-AWS hop at all --
 wildcard trust (`Principal: {"AWS": "*"}`) is never evaluated (confirmed

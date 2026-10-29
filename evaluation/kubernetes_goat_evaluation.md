@@ -27,7 +27,7 @@ are immediately available via the SA token.
 
 ## Our Tool Results
 
-Graph: 128 nodes, 44 edges.
+Graph: 156 nodes, 44 edges (evaluation/benchmarks_raw/kubernetes_goat_result.json).
 Cross-layer escalation paths found: 1.
 Path: superadmin --[irsa_bridge]--> goat-admin-role
 Risk score: 6.0 (highest possible -- 1 hop, irsa_bridge edge, cross-layer)

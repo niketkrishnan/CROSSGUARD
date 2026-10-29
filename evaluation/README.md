@@ -43,7 +43,7 @@ directory is the raw evidence those documents summarize and cite.
 
 - **Confusion matrix**: TP=9, FP=0, FN=0, TN=5 (synthetic benchmarks B1–B9)
 - **Real-world live-verified**: 44/44 correct, 0 FP, 0 FN, 6 independent extraction methods
-- **Scalability**: O(n^2.012), R²=0.9852 (current data, `scalability/`)
+- **Scalability**: empirical exponent about 2.01, R² > 0.98 (current data, `scalability/`)
 - **Remediation**: 40/40 trials successful across 4 fix types
 - **PassRole classification**: of 12 tested PassRole-relevant paths, 5 Confirmed (AssumeRole-backed), 7 Conservative-Potential (bare PassRole grant, no independently-modeled completing action)
 - **Known limitation**: policy Condition evaluation (explicit Deny, MFA) not modeled — 3 documented false positives in B10, root cause confirmed

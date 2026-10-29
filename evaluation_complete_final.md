@@ -240,7 +240,7 @@ Deliberately constructed to stress-test the detector with patterns a skeptical r
 |---|---|---|
 | Wildcard `Principal: {"AWS": "*"}` trust with no narrowing condition, `AdministratorAccess` attached | TP (genuinely severe — anyone can assume) | ✅ Detected |
 | Deeply nested/combined `Condition` block (`StringEquals` + `StringLike` + `Bool` combined) on the escalation-relevant `iam:PassRole` policy | TP, tests ingestion doesn't break on complex conditions | ✅ Detected, no ingestion failure |
-| Obfuscated 5-hop chain (IRSA → PassRole → AssumeRole → PassRole → admin) | TP, tests pathfinder depth robustness | ✅ Detected end-to-end |
+| Obfuscated 4-hop (5-node) chain (IRSA → PassRole → AssumeRole → PassRole → admin) | TP, tests pathfinder depth robustness | ✅ Detected end-to-end |
 | Circular trust pair (`role-a` ↔ `role-b`, neither admin) | TN, must not crash/hang | ✅ Correctly 0 paths; full scan (including the cycle) completed in 1.325s, no hang |
 
 **4/4 correct**, including confirmed robustness against graph cycles.

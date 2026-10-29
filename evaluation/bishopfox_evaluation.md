@@ -1,5 +1,12 @@
 # BishopFox IAM-Vulnerable Evaluation
 
+> **Note (superseded numbers).** The numbers in this file come from an earlier run
+> (2026-07-03, `evaluation/bishopfox_result.json`). The run used in the paper is
+> `evaluation/benchmarks_raw/bishopfox_result.json`: 243 nodes, 1,338 edges and 1
+> cross-layer path, produced in legacy mode with an author-added ServiceAccount bound
+> to the starting role of the 3-hop AssumeRole scenario. In strict mode that path
+> appears only if the starting role trusts an OIDC provider.
+
 ## Dataset
 BishopFox iam-vulnerable (github.com/BishopFox/iam-vulnerable)
 31 deliberate IAM privilege escalation scenarios deployed via Terraform.

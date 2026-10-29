@@ -192,7 +192,7 @@ Highlights:
 - Real-world: 44/44 correct, 0 FP, 0 FN, across 6 independent extraction
   methods on real EKS repositories (`evaluation/real_world/RW_MANIFEST.md`
   for the full per-case table)
-- Scalability: empirically O(n^2.012), R^2=0.9852, up to 25,000 nodes
+- Scalability: empirical exponent about 2.01 (R^2 > 0.98), up to 25,000 nodes
 - PMapper and Cloudsplaining baseline comparisons, plus documented,
   root-caused limitations (policy Condition evaluation, wildcard trust)
 
