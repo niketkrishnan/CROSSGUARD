@@ -32,3 +32,8 @@ The paper should not claim wildcard-trust detection based on this case.
 B10's two Condition-blindness false positives (explicit Deny, MFA-gated
 trust) are a SEPARATE, already-documented limitation -- not part of this
 PassRole classification.
+
+> Note: this classification was run in legacy mode (2026-08-20), where wildcard trust
+> is skipped. In strict mode (`cfg.wildcard_trust`), the same role is recorded as an
+> exposure finding and no escalation path is reported; see
+> `evaluation/policy_semantics/` for the B10/B11 results in all three modes.
