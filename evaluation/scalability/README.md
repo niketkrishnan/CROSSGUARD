@@ -11,7 +11,7 @@ non-monotonic artifact in an earlier run (10K nodes appearing slower than
 `scale_sweep_results_fresh.csv`: 11 sizes (48-25,000 nodes), 5 trials each
 (3 at 25,000 for runtime practicality). Columns: nodes,edges,trial,paths_found,seconds.
 
-Regression on this data: exponent ~= n^2.01, R^2 ~= 0.986 -- confirms the
+Regression on this data: exponent ~= n^2.01, R^2 ~= 0.985 -- confirms the
 quadratic-scaling finding (root cause: entry-point x admin-node pair
 checking is O(n^2), since both populations grow linearly with graph size).
 
