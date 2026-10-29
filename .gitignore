@@ -13,3 +13,4 @@ __pycache__/
 # files from ever being committed, and was only caught by an explicit
 # repo audit. If you need to ignore a specific scratch/local-only result
 # file, ignore it by its exact full path, not a wildcard.
+.venv/

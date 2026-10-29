@@ -232,3 +232,27 @@ Desktop for Mac, you would need `host.docker.internal` for the AWS side
 and a different strategy for reaching Minikube (e.g. running the
 container inside the Minikube VM's Docker daemon via
 `eval $(minikube docker-env)`), which hasn't been tested here.
+
+## Reproducing the paper's results
+
+Setup (Python 3.12):
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Offline experiments (no AWS account, LocalStack or Minikube needed):
+
+```bash
+python3 -m evaluation.generated_benchmark.run_benchmark --split dev
+python3 -m evaluation.generated_benchmark.run_benchmark --split heldout
+python3 -m evaluation.policy_semantics.differential.run_differential 20000 20260919
+```
+
+Expected: held-out strict gives TP 1475, FP 0, FN 0, TN 2105; dev strict gives
+TP 1473, FP 0, FN 0, TN 2106. The differential run reports 211 statement-level
+and 432 policy-level disagreements for seed 20260919.
+
+The live experiments (B1-B11 and the remediation trials) need LocalStack 4.14.0
+and Minikube v1.38.1; their recorded outputs are under the `live/` folders.

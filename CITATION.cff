@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+title: "CrossGuard: Cross-Layer Privilege Escalation Analysis"
+message: "If you use this software, please cite the CrossGuard paper."
+authors:
+  - family-names: Krishnan
+    given-names: Niket
+  - family-names: Ravi
+    given-names: Akshara
+  - family-names: Swapna
+    given-names: M. P.
+license: MIT
+repository-code: "https://github.com/niketkrishnan/CROSSGUARD"
