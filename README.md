@@ -256,3 +256,7 @@ and 432 policy-level disagreements for seed 20260919.
 
 The live experiments (B1-B11 and the remediation trials) need LocalStack 4.14.0
 and Minikube v1.38.1; their recorded outputs are under the `live/` folders.
+
+## Citing
+
+Archived on Zenodo (all versions): https://doi.org/10.5281/zenodo.23754688
