@@ -110,3 +110,16 @@ paired-action patterns (lambda:CreateFunction + iam:PassRole,
 ec2:RunInstances + iam:PassRole, etc.) before creating the edge. This
 is flagged as a concrete item for future work / a paper limitations
 section, rather than silently treated as correct.
+
+## Reproduction notes (added 2026-10-30)
+
+PMapper 1.1.5 (`pip install principalmapper==1.1.5`) was run against the LocalStack state of each
+benchmark: a graph was built with `pmapper graph create` (the `--account` flag is invalid for
+`graph create`; see `evaluation_complete_final.md` Section 3.1) and the privilege-escalation
+query was run on it. Two compatibility patches were applied to PMapper (see Setup above). The
+exact command lines were not archived.
+
+On B6-near: the wording "arguably a FALSE POSITIVE" above predates the confirmed / conservative-
+potential labels. The paper counts this path as found, labels it conservative-potential (a bare
+PassRole grant with no completing action), and states that PMapper's catalog requires a paired
+action.

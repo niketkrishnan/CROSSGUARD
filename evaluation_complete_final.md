@@ -100,6 +100,13 @@ Not measured as a timed exercise — an artificially small, pre-filtered sample 
 
 ## 4. Remediation Effectiveness
 
+> **Superseded (2026-10-30).** The table below records the first session, in which only some
+> raw per-trial files survived. The paper reports the live re-run in
+> `evaluation/remediation_trials/live_rerun/` (all 40 trials with raw data and a recorded harness,
+> `run_trials.py`): irsa_bridge 0.146 +- 0.014 s, sts:AssumeRole 0.989 +- 0.014 s, iam:PassRole
+> 1.474 +- 0.034 s, group_membership 0.492 +- 0.008 s; latency is the time to apply the fix,
+> including the lookups it needs; 40/40 succeeded.
+
 Each of the 4 remediation types tested with **10 independent trials** (fresh environment reset before each) for real confidence intervals, not just a point estimate.
 
 | Type | Benchmark | Trials | Success | Mean latency | Stdev | Notes |
