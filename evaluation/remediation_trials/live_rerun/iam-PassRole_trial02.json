@@ -1,0 +1,27 @@
+{
+  "fix_type": "iam:PassRole",
+  "trial": 2,
+  "fixture": "bench8",
+  "started": "2026-10-30T04:13:44",
+  "success": true,
+  "error": null,
+  "paths_before": 2,
+  "edges_before": 48,
+  "nodes_before": 198,
+  "compute_seconds": 0.0018,
+  "recommended": [
+    {
+      "edge_type": "iam:PassRole",
+      "source": "arn:aws:iam::000000000000:role/b8-role-shared",
+      "target": "arn:aws:iam::000000000000:role/b8-admin"
+    }
+  ],
+  "expected_edge_type_matched": true,
+  "fix_seconds": 1.4217,
+  "commands_run": [
+    "delete-role-policy b8-role-shared/allow-passrole-to-admin"
+  ],
+  "paths_after": 0,
+  "edges_after": 47,
+  "edges_removed_as_expected": true
+}

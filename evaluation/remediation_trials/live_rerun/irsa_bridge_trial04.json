@@ -1,0 +1,27 @@
+{
+  "fix_type": "irsa_bridge",
+  "trial": 4,
+  "fixture": "bench1",
+  "started": "2026-10-30T04:10:28",
+  "success": true,
+  "error": null,
+  "paths_before": 1,
+  "edges_before": 45,
+  "nodes_before": 197,
+  "compute_seconds": 0.0016,
+  "recommended": [
+    {
+      "edge_type": "irsa_bridge",
+      "source": "k8s:sa:default:vulnerable-sa",
+      "target": "arn:aws:iam::000000000000:role/admin-role"
+    }
+  ],
+  "expected_edge_type_matched": true,
+  "fix_seconds": 0.1346,
+  "commands_run": [
+    "kubectl annotate serviceaccount vulnerable-sa -n default eks.amazonaws.com/role-arn-"
+  ],
+  "paths_after": 0,
+  "edges_after": 44,
+  "edges_removed_as_expected": true
+}

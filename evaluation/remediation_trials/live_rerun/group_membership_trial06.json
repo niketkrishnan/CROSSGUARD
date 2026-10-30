@@ -1,0 +1,27 @@
+{
+  "fix_type": "group_membership",
+  "trial": 6,
+  "fixture": "bench4",
+  "started": "2026-10-30T04:16:18",
+  "success": true,
+  "error": null,
+  "paths_before": 1,
+  "edges_before": 45,
+  "nodes_before": 196,
+  "compute_seconds": 0.0016,
+  "recommended": [
+    {
+      "edge_type": "group_membership",
+      "source": "arn:aws:iam::000000000000:user/b4-low-priv-user",
+      "target": "arn:aws:iam::000000000000:group/b4-admin-group"
+    }
+  ],
+  "expected_edge_type_matched": true,
+  "fix_seconds": 0.5073,
+  "commands_run": [
+    "awslocal iam remove-user-from-group --user-name b4-low-priv-user --group-name b4-admin-group"
+  ],
+  "paths_after": 0,
+  "edges_after": 44,
+  "edges_removed_as_expected": true
+}

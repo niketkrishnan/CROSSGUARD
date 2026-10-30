@@ -1,0 +1,27 @@
+{
+  "fix_type": "sts:AssumeRole",
+  "trial": 10,
+  "fixture": "bench2",
+  "started": "2026-10-30T04:13:21",
+  "success": true,
+  "error": null,
+  "paths_before": 1,
+  "edges_before": 49,
+  "nodes_before": 198,
+  "compute_seconds": 0.002,
+  "recommended": [
+    {
+      "edge_type": "sts:AssumeRole",
+      "source": "arn:aws:iam::000000000000:role/b2-role-b",
+      "target": "arn:aws:iam::000000000000:role/b2-admin-role"
+    }
+  ],
+  "expected_edge_type_matched": true,
+  "fix_seconds": 1.0023,
+  "commands_run": [
+    "update-assume-role-policy --role-name b2-admin-role (removed arn:aws:iam::000000000000:role/b2-role-b)"
+  ],
+  "paths_after": 0,
+  "edges_after": 48,
+  "edges_removed_as_expected": true
+}
