@@ -27,8 +27,8 @@ is invisible to every one of them. This tool finds it.
 ## Installation
 
 ```bash
-git clone <your-repo-url>
-cd iam-k8s-privesc
+git clone https://github.com/niketkrishnan/CROSSGUARD
+cd CROSSGUARD
 python3 -m venv venv
 source venv/bin/activate
 pip install -e .
@@ -72,6 +72,18 @@ privesc-scan --help
 | Risk Scorer | `scoring/risk.py` | Rank found paths by severity |
 | Remediation | `remediation/engine.py` | Global minimum-cut remediation recommendations |
 
+## Code organization
+
+| Folder / file | Role |
+|---|---|
+| `ingestion/`, `graph/`, `pathfinder/`, `scoring/`, `remediation/` | Core engine (source code), one folder per pipeline stage |
+| `main.py` | CLI entry point (`privesc-scan`) that chains the stages |
+| `crossguard-live-api/`, `crossguard-live-frontend/` | Web app: FastAPI backend + single-file graph UI, wrapping the same engine |
+| `benchmarks/` | Data: benchmark environments with documented ground truth |
+| `evaluation/` | Experiments: scalability, real-world, baselines, remediation trials |
+| `tests/` | Unit tests (118) |
+| `paper/` | Research paper sources |
+
 ## Running the test suite
 
 ```bash
@@ -79,7 +91,7 @@ pip install -e ".[dev]"
 pytest tests/ -v
 ```
 
-55 tests, covering policy parsing, ingestion (against mocked AWS/K8s
+118 tests (plus 1 optional PMapper-comparison test, skipped unless principalmapper is installed), covering policy parsing, ingestion (against mocked AWS/K8s
 clients), graph construction, pathfinding, risk scoring, and
 remediation (including a global-minimum-cut correctness test that
 caught a real per-path-cut deduplication bug during development).
