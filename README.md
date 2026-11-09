@@ -64,6 +64,34 @@ privesc-scan --help
 
 ## Architecture
 
+```mermaid
+flowchart LR
+    subgraph IN["Inputs"]
+        AWS["AWS IAM<br/>roles, policies, trust"]
+        K8S["Kubernetes RBAC<br/>ServiceAccounts, bindings"]
+    end
+
+    subgraph ENGINE["Core engine"]
+        ING["Ingestion<br/>aws_ingestion.py, k8s_ingestion.py<br/>+ IRSA bridge detection"]
+        GB["Graph Builder<br/>graph/builder.py<br/>unified networkx DiGraph"]
+        PF["Pathfinder<br/>pathfinder/search.py<br/>BFS cross-layer paths"]
+        RS["Risk Scorer<br/>scoring/risk.py<br/>rank paths"]
+        RM["Remediation<br/>remediation/engine.py<br/>global minimum cut"]
+    end
+
+    subgraph OUT["Interfaces"]
+        CLI["CLI: main.py<br/>report + JSON"]
+        API["FastAPI backend<br/>core_adapter.py"]
+        UI["Web UI<br/>graph view, Apply fix"]
+    end
+
+    AWS --> ING
+    K8S --> ING
+    ING --> GB --> PF --> RS --> RM
+    RM --> CLI
+    RM --> API --> UI
+```
+
 | Module | File | Responsibility |
 |---|---|---|
 | Ingestion | `ingestion/aws_ingestion.py`, `ingestion/k8s_ingestion.py` | Pull AWS IAM + K8s RBAC data, detect IRSA bridge mappings |
