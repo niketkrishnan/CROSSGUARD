@@ -25,7 +25,12 @@ Expected: 2 paths found, Route 1 ranked higher (fewer hops = higher risk score).
 ## Actual result (validated live against LocalStack + Minikube)
 - 2 paths found
 - Route 1 (2 hops): risk score 5.5 -- ranked first, as expected
-- Route 2 (3 hops): risk score 5.0 -- ranked second, as expected
+- Route 2 (3 hops): risk score 4.67 under the default `--semantics strict`
+  (5.0 under `legacy`/`annotate`) -- ranked second, as expected
+- Strict mode drops the `b6-role-a -[PassRole]-> b6-role-b` edge because
+  b6-role-b is trusted only by an AWS principal, so no service can assume
+  it. Route 2 is still found through the real `sts:AssumeRole` trust
+  (graph: 130 nodes / 47 edges strict vs 52 edges legacy).
 - Remediation: a SINGLE recommendation (remove IRSA annotation from
   bench6-sa) correctly breaks BOTH paths at once -- validates the
   global minimum-cut implementation (Module 5) correctly identifies a

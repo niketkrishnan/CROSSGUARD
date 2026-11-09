@@ -17,7 +17,7 @@
     }
   ],
   "graph_nodes": 130,
-  "graph_edges": 52,
+  "graph_edges": 47,
   "paths": [
     {
       "start": "k8s:sa:default:bench6-sa",
@@ -29,6 +29,14 @@
       ],
       "hops": 2,
       "cross_layer": true,
+      "confidence": "potential",
+      "weakest_edge": [
+        "arn:aws:iam::000000000000:role/b6-role-a",
+        "arn:aws:iam::000000000000:role/b6-admin-near",
+        "iam:PassRole"
+      ],
+      "irsa_trust": "valid",
+      "sink_admin_status": "full",
       "risk_score": 5.5
     },
     {
@@ -42,14 +50,61 @@
       ],
       "hops": 3,
       "cross_layer": true,
-      "risk_score": 5.0
+      "confidence": "confirmed",
+      "weakest_edge": null,
+      "irsa_trust": "valid",
+      "sink_admin_status": "full",
+      "risk_score": 4.67
     }
   ],
   "remediations": [
     {
       "action": "Remove IRSA annotation from ServiceAccount default/bench6-sa",
       "edge_type": "irsa_bridge",
-      "command": "kubectl annotate serviceaccount bench6-sa -n default eks.amazonaws.com/role-arn-"
+      "command": "kubectl annotate serviceaccount bench6-sa -n default eks.amazonaws.com/role-arn-",
+      "source": "k8s:sa:default:bench6-sa",
+      "target": "arn:aws:iam::000000000000:role/b6-role-a",
+      "parallel_mechanisms": 1
     }
-  ]
+  ],
+  "semantics": "strict",
+  "suppressed_edges": [
+    {
+      "source": "arn:aws:iam::000000000000:role/b6-admin-far",
+      "target": "arn:aws:iam::000000000000:role/b6-role-b",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b6-admin-far",
+      "target": "arn:aws:iam::000000000000:role/b6-role-a",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b6-admin-near",
+      "target": "arn:aws:iam::000000000000:role/b6-admin-far",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b6-admin-near",
+      "target": "arn:aws:iam::000000000000:role/b6-role-b",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b6-admin-near",
+      "target": "arn:aws:iam::000000000000:role/b6-role-a",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    },
+    {
+      "source": "arn:aws:iam::000000000000:role/b6-role-a",
+      "target": "arn:aws:iam::000000000000:role/b6-role-b",
+      "type": "iam:PassRole",
+      "reason": "target role trust policy lists no service that can assume it under this grant's PassedToService condition"
+    }
+  ],
+  "wildcard_trust_roles": []
 }
