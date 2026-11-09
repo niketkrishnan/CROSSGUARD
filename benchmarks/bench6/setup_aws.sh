@@ -10,7 +10,7 @@ export AWS_SECRET_ACCESS_KEY=test
 
 # b6-role-a: the IRSA target. Not admin itself.
 awslocal iam create-role --role-name b6-role-a \
-  --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ec2.amazonaws.com"},"Action":"sts:AssumeRole"}]}'
+  --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"arn:aws:iam::000000000000:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/EXAMPLE"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"oidc.eks.us-east-1.amazonaws.com/id/EXAMPLE:sub":"system:serviceaccount:default:bench6-sa","oidc.eks.us-east-1.amazonaws.com/id/EXAMPLE:aud":"sts.amazonaws.com"}}}]}'
 
 # Route 1 (SHORT, 2 hops from SA): role-a --PassRole--> admin-near
 awslocal iam create-role --role-name b6-admin-near \
