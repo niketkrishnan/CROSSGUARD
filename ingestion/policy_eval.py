@@ -430,10 +430,10 @@ def trusted_services(trust_doc: dict | None) -> list[str]:
 
 # For a bare iam:PassRole to be exploitable, the caller must also hold an
 # action that hands the passed role to a service the caller can drive.
-# ASSEMBLED FROM PUBLISHED TECHNIQUE LISTS (Rhino Security Labs [21] and the
+# Assembled from published technique lists (Rhino Security Labs [21] and the
 # PMapper catalog). Each entry is an alternative set of actions; ALL actions
-# in one set are required. VERIFY EACH ENTRY AGAINST THE SOURCES BEFORE
-# CITING THIS TABLE AS COMPLETE -- it is a working catalog, not an oracle.
+# in one set are required. This is a working catalog, not an exhaustive one:
+# a service missing here yields a "potential" PassRole finding.
 PAIRED_ACTION_CATALOG: dict[str, list[list[str]]] = {
     "lambda.amazonaws.com": [
         ["lambda:CreateFunction", "lambda:InvokeFunction"],

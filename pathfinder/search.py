@@ -60,7 +60,10 @@ def find_escalation_paths(G: nx.DiGraph, start_node: str, admin_nodes: list[str]
     rather than a genuine escalation route -- see
     _passes_through_earlier_admin). Unreachable admin nodes are silently
     skipped -- that's normal, not an error (most entry points won't
-    reach most admin nodes)."""
+    reach most admin nodes). One shortest path is reported per (entry point,
+    admin node) pair; the admin-node filter is applied after that path is
+    chosen, so it discards the path rather than searching for an alternative
+    that avoids the other admin node (a known simplification)."""
     paths = []
     for admin in admin_nodes:
         if admin == start_node:

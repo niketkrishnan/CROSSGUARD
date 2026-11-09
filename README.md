@@ -233,8 +233,10 @@ Highlights:
   methods on real EKS repositories (`evaluation/real_world/RW_MANIFEST.md`
   for the full per-case table)
 - Scalability: empirical exponent about 2.01 (R^2 > 0.98), up to 25,000 nodes
-- PMapper and Cloudsplaining baseline comparisons, plus documented,
-  root-caused limitations (policy Condition evaluation, wildcard trust)
+- PMapper and Cloudsplaining baseline comparisons, plus documented
+  limitations (policy Condition evaluation and wildcard trust were
+  limitations of the earlier version; strict mode now evaluates them, with
+  unsupported cases reported as unresolved)
 
 ## Limitations
 
@@ -246,11 +248,17 @@ Highlights:
   `iam:GetPolicyVersion` permissions on the credentials used to run the
   scan; without them, those policies are silently skipped (logged as a
   warning) rather than failing the whole scan.
-- IRSA detection is annotation-based (reads `eks.amazonaws.com/role-arn`)
-  and does not verify the OIDC trust relationship is actually correctly
-  configured on the AWS side -- a path is reported if the annotation
-  exists and the referenced role exists in the ingested AWS data, even
-  if the OIDC federation itself would currently fail.
+- IRSA detection starts from the annotation (`eks.amazonaws.com/role-arn`).
+  In the default `strict` mode the role's trust policy is then checked for
+  whether it permits that ServiceAccount (subject and audience); an
+  invalid trust drops the edge and the drop is logged. The cluster's OIDC
+  provider itself is only verified when `--oidc-provider-arn` is given;
+  otherwise any OIDC federated principal is accepted. In `legacy` mode the
+  check is skipped and the annotation alone creates the edge.
+- Policy evaluation is a static abstraction: Conditions are evaluated for
+  a documented operator subset (others are reported as unresolved), and
+  SCPs, permission boundaries, session policies and non-trust resource
+  policies are not modelled.
 
 ## Running via Docker (no local Python setup required)
 

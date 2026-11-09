@@ -20,7 +20,8 @@ valid for real AWS.
 Route 1 (2 hops): bench6-sa -> b6-role-a -[PassRole]-> b6-admin-near
 Route 2 (3 hops): bench6-sa -> b6-role-a -[PassRole]-> b6-role-b -[AssumeRole]-> b6-admin-far
 
-Expected: 2 paths found, Route 1 ranked higher (fewer hops = higher risk score).
+Expected: 2 paths found, Route 1 ranked higher (the score is the average edge weight, so the
+shorter route with the heavier PassRole hop scores higher).
 
 ## Actual result (validated live against LocalStack + Minikube)
 - 2 paths found
