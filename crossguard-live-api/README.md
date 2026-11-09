@@ -144,5 +144,5 @@ All endpoints require the `X-API-Key` header.
 - `iam:PassRole` fixes on attached managed policies or wildcard
   `Resource: "*"` grants are not auto-applied — see the Status table
   above.
-- No automatic re-scan-to-verify after applying a fix; trigger a new
-  `POST /scans` against the same target to confirm a path closed.
+- The backend does not re-scan after applying a fix; the frontend triggers
+  a fresh scan automatically and shows "Fix verified" when paths drop.
