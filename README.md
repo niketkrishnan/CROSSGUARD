@@ -24,6 +24,25 @@ is invisible to every one of them. This tool finds it.
 3. **Cross-layer path discovery** -- BFS traversal finds escalation paths that start in Kubernetes and end at AWS admin.
 4. **Minimal remediation** -- a global minimum edge cut (via super-source/super-sink reduction) computes the smallest set of permission changes that breaks every found path simultaneously.
 
+## Requirements
+
+To run the tool itself:
+
+- Python 3.10 or newer (developed and tested on Python 3.12)
+- Python libraries, installed automatically by `pip install -e .`: boto3, kubernetes, networkx, matplotlib
+- Read access to the AWS account to scan (`iam:List*`, `iam:Get*`) and to the Kubernetes cluster
+  (ServiceAccounts, Roles, RoleBindings, ClusterRoles and ClusterRoleBindings in all namespaces)
+
+To reproduce the benchmarks locally (no AWS account needed):
+
+- Docker, which runs LocalStack 4.14.0 (a local fake AWS)
+- Minikube (tested with v1.38.1) and `kubectl`, for a local Kubernetes cluster
+- `awscli-local`, which provides the `awslocal` command used by the benchmark setup scripts
+  (install it in a separate virtual environment, see below, so it does not change this project's pinned boto3)
+
+To run the web interface (CrossGuard Live): FastAPI, uvicorn and pydantic, listed in
+`crossguard-live-api/requirements.txt` (use a separate virtual environment).
+
 ## Installation
 
 ```bash
@@ -36,7 +55,10 @@ pip install -e .
 
 This installs the `privesc-scan` command.
 
-## Usage
+## Quick start (default settings)
+
+With all defaults (strict policy evaluation, region `us-east-1`, kubeconfig from `~/.kube/config`,
+AWS credentials from the default credential chain):
 
 Against real AWS + a real/in-context Kubernetes cluster:
 
@@ -61,6 +83,53 @@ All options:
 ```bash
 privesc-scan --help
 ```
+
+## Advanced usage
+
+### Command-line options
+
+| Option | Default | What it does |
+|---|---|---|
+| `--aws-profile NAME` | default credential chain | Named AWS CLI profile to use |
+| `--endpoint-url URL` | real AWS | AWS endpoint; `http://localhost:4566` targets LocalStack |
+| `--region REGION` | `us-east-1` | AWS region |
+| `--kube-config PATH` | `~/.kube/config` | Kubeconfig file to read |
+| `--in-cluster` | off | Use the pod's own ServiceAccount instead of a kubeconfig (run inside Kubernetes) |
+| `--semantics {strict,annotate,legacy}` | `strict` | Policy evaluation mode (see below) |
+| `--oidc-provider-arn ARN` | not set | Only treat an IRSA trust as `valid` if the role trusts exactly this OIDC provider |
+| `--output-json PATH` | not set | Also write the full result as JSON |
+
+### Examples
+
+```bash
+# Scan a real account with a named profile, region and kubeconfig
+privesc-scan --aws-profile prod --region eu-west-1 --kube-config ~/.kube/prod-config
+
+# Run inside a cluster (uses the pod's ServiceAccount, no kubeconfig)
+privesc-scan --in-cluster
+
+# Only accept IRSA trust from your cluster's own OIDC provider
+privesc-scan --oidc-provider-arn arn:aws:iam::123456789012:oidc-provider/oidc.eks.eu-west-1.amazonaws.com/id/EXAMPLE
+
+# Save the full result (paths, confidence, suppressed edges, remediation) as JSON
+privesc-scan --endpoint-url http://localhost:4566 --output-json result.json
+
+# Compare policy evaluation modes
+privesc-scan --endpoint-url http://localhost:4566 --semantics legacy
+```
+
+### Policy evaluation modes (`--semantics`)
+
+| Mode | Behaviour |
+|---|---|
+| `strict` (default) | Evaluates Deny, Conditions, PassRole pairing and wildcard trust, and drops edges that are definitely unusable (for example an IRSA link whose trust policy does not allow the ServiceAccount). Every drop is logged with a reason (`suppressed_edges` in the JSON output). |
+| `annotate` | Same checks, but keeps every edge and only labels its confidence. |
+| `legacy` | Presence-only behaviour with no policy checks. Used to reproduce the early benchmark results. |
+
+### Reading the output
+
+Each finding shows the escalation path, a risk score, a confidence label (`confirmed`, `potential` or
+`unresolved`) and the minimal fix with a command.
 
 ## Architecture
 
@@ -130,6 +199,12 @@ Requires Docker (for LocalStack) and Minikube (for a local Kubernetes
 cluster).
 
 ```bash
+# 0. One-time: install awslocal (used by the benchmark setup scripts) in a separate
+#    environment so it does not change this project's pinned boto3
+python3 -m venv ~/awsvenv && ~/awsvenv/bin/pip install awscli awscli-local
+mkdir -p ~/bin && ln -sf ~/awsvenv/bin/awslocal ~/bin/awslocal && ln -sf ~/awsvenv/bin/aws ~/bin/aws
+export PATH=$PATH:$HOME/bin
+
 # 1. Start LocalStack (local fake AWS, no account/token needed)
 docker run -d --name localstack -p 4566:4566 localstack/localstack:4.14.0
 
@@ -157,6 +232,9 @@ Expected output: 1 cross-layer escalation path
 remediation recommendation to remove the IRSA annotation.
 
 See `benchmarks/bench1/README.md` for the documented ground truth.
+
+To run another benchmark, reset the environment first with `./benchmarks/reset_environment.sh`, then
+follow that benchmark's README or setup script.
 
 **Note:** LocalStack does not persist IAM resources across container
 restarts. If you stop/restart the container, rerun
