@@ -119,7 +119,7 @@ def run_scan(scan_id: str, req: ScanRequest) -> None:
             k8s_data = core_adapter.run_k8s_ingestion(tf.name)
 
         # --- Graph + pathfinding + risk scoring ---
-        graph = core_adapter.build_graph(aws_data, k8s_data)
+        graph = core_adapter.build_graph(aws_data, k8s_data, req.semantics)
         scored_paths = core_adapter.find_paths(graph)  # each has: start, end, path, hops, cross_layer, risk_score
 
         # --- Global remediation set (may close >1 path per fix, e.g. B6) ---

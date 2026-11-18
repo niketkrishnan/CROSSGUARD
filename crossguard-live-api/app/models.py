@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
@@ -50,6 +50,8 @@ class ScanRequest(BaseModel):
     name: str
     aws_target: AWSTarget
     k8s_target: K8sTarget
+    # Policy-evaluation mode, same meaning as the CLI's --semantics. Default stays strict.
+    semantics: Literal["strict", "annotate", "legacy"] = "strict"
 
 
 class ScanSummary(BaseModel):

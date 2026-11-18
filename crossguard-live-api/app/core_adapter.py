@@ -11,6 +11,7 @@ from kubernetes import client as k8s_client_lib
 from kubernetes import config as k8s_config_lib
 
 from graph.builder import build_unified_graph
+from ingestion import policy_eval
 from ingestion.aws_ingestion import ingest_aws
 from ingestion.k8s_ingestion import find_irsa_mappings, ingest_k8s
 from pathfinder.search import find_all_cross_layer_paths
@@ -40,9 +41,16 @@ def run_k8s_ingestion(kube_config_path: str) -> dict:
     return ingest_k8s(kube_config_path=kube_config_path)
 
 
-def build_graph(aws_data: dict, k8s_data: dict) -> nx.DiGraph:
+_SEMANTICS = {
+    "strict": policy_eval.STRICT,
+    "annotate": policy_eval.ANNOTATE,
+    "legacy": policy_eval.LEGACY,
+}
+
+
+def build_graph(aws_data: dict, k8s_data: dict, semantics: str = "strict") -> nx.DiGraph:
     irsa_mappings = find_irsa_mappings(k8s_data["service_accounts"])
-    return build_unified_graph(aws_data, k8s_data, irsa_mappings)
+    return build_unified_graph(aws_data, k8s_data, irsa_mappings, config=_SEMANTICS[semantics])
 
 
 def find_paths(graph: nx.DiGraph) -> list[dict]:

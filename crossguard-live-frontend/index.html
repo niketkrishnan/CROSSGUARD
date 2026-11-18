@@ -65,7 +65,7 @@
 
   label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; margin-top: 14px; }
   label:first-of-type { margin-top: 0; }
-  input, textarea {
+  input, textarea, select {
     width: 100%;
     background: #0A0D13;
     border: 1px solid var(--panel-border);
@@ -77,7 +77,7 @@
     resize: vertical;
   }
   textarea { min-height: 110px; line-height: 1.5; }
-  input:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--k8s); outline-offset: 1px; }
+  input:focus, textarea:focus, select:focus, button:focus-visible { outline: 2px solid var(--k8s); outline-offset: 1px; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
   button {
@@ -302,6 +302,13 @@
 
         <label>External ID <span style="color:var(--text-faint);">(only if your role's trust policy requires one)</span></label>
         <input id="external-id" placeholder="leave blank if not set" />
+
+        <label>Analysis mode <span style="color:var(--text-faint);">(strict is the default; annotate keeps every edge)</span></label>
+        <select id="semantics">
+          <option value="strict">strict (default)</option>
+          <option value="annotate">annotate (keeps all edges, labels them)</option>
+          <option value="legacy">legacy (presence-only, no policy checks)</option>
+        </select>
 
         <label>Kubeconfig</label>
         <div id="kubeconfig-drop" style="border:1px dashed var(--panel-border); border-radius:5px; padding:14px; text-align:center; margin-bottom:8px; cursor:pointer;">
@@ -633,6 +640,7 @@ $('run-scan').addEventListener('click', async () => {
       endpoint_url_override: $('endpoint-override').value.trim() || null,
     },
     k8s_target: { kubeconfig_yaml: kubeconfigYaml },
+    semantics: $('semantics').value || 'strict',
   };
 
   currentKubeconfig = kubeconfigYaml;
