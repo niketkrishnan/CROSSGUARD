@@ -31,3 +31,23 @@ Expected: 0 cross-layer escalation paths.
 0 paths (but for an entirely different reason -- PMapper cannot see
 Kubernetes or the IRSA annotation at all, so this "correct" result is
 coincidental, not evidence of correct analysis)
+
+## Run and check (copy and paste)
+
+Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+
+**Case:** Negative control: the IRSA link is real and valid, but the role only has S3 read access, so no route to admin exists.
+
+```bash
+source benchmarks/common.sh
+./benchmarks/reset_environment.sh && cleanx
+./benchmarks/bench5/setup_aws.sh 2>&1 | grep -E "complete|rror"
+kubectl create serviceaccount bench5-sa -n default
+kubectl annotate serviceaccount bench5-sa -n default eks.amazonaws.com/role-arn=arn:aws:iam::000000000000:role/b5-safe-role
+kubectl apply -f benchmarks/bench5/test-pod.yaml
+privesc-scan --endpoint-url http://localhost:4566 2>&1 | grep -v WARNING
+```
+
+**Expected:** 127 nodes, 43 edges, 0 paths. Nothing is reported because nothing is wrong.
+
+**Web page:** Role ARN `arn:aws:iam::000000000000:role/b5-safe-role`. No Apply fix button. Click "Show all" to see `bench5-sa` connected to `b5-safe-role`.

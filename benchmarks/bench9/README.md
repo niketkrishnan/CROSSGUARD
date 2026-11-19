@@ -27,3 +27,29 @@ Run with `--semantics legacy`: this benchmark predates the IRSA trust check.
 - Not flagged, correctly: `b9-efs-csi-controller-sa` (PassRole scoped to a non-admin role) and `b9-amp-ingest` (no route to admin)
 - Two remediations (the order can differ between runs): remove `iam:PassRole` for `b9-autoscaler-admin` from
   `b9-cluster-autoscaler-role` and from `b9-shared-jump-role`
+
+## Run and check (copy and paste)
+
+Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+
+**Case:** Realistic near-misses: four cases modelled on well-known controllers, 2 exploitable (a PassRole to an admin role, and an AssumeRole then PassRole chain) and 2 safe (a scoped PassRole, and no route to admin).
+
+This benchmark predates the IRSA trust check: its setup gives the roles no valid OIDC trust, so it is run with `--semantics legacy`. Under the default `strict` mode the tool correctly drops those IRSA edges and reports 0 paths.
+
+```bash
+source benchmarks/common.sh
+./benchmarks/reset_environment.sh && cleanx
+./benchmarks/bench9/setup_aws.sh 2>&1 | grep -E "complete|rror"
+while read ns sa role; do
+  kubectl create serviceaccount $sa -n $ns
+  kubectl annotate serviceaccount $sa -n $ns eks.amazonaws.com/role-arn=arn:aws:iam::000000000000:role/$role
+done <<'LIST'
+kube-system b9-aws-node b9-aws-node-role
+kube-system b9-cluster-autoscaler b9-cluster-autoscaler-role
+kube-system b9-efs-csi-controller-sa b9-efs-csi-controller-role
+default b9-amp-ingest b9-amp-ingest-role
+LIST
+privesc-scan --endpoint-url http://localhost:4566 --semantics legacy 2>&1 | grep -vE "WARNING|^\[|^$"
+```
+
+**Expected:** 137 nodes, 56 edges, 2 paths (5.5 and 5.0), two fixes (the order can differ between runs). The two safe cases are not flagged.

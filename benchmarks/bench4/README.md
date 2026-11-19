@@ -41,3 +41,36 @@ completeness check on Module 2.
 ## Expected PMapper output
 PMapper WOULD find this path (it's pure AWS IAM, no K8s involved) --
 this is one of the few cases where existing tools have parity with ours.
+
+## Run and check (copy and paste)
+
+Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+
+**Case:** Same-layer group escalation (AWS only): a low-privilege user is a member of an admin group. Not cross-layer, so the main scan reports no path.
+
+This benchmark predates the IRSA trust check: its setup gives the roles no valid OIDC trust, so it is run with `--semantics legacy`. Under the default `strict` mode the tool correctly drops those IRSA edges and reports 0 paths.
+
+```bash
+source benchmarks/common.sh
+./benchmarks/reset_environment.sh && cleanx
+./benchmarks/bench4/setup_aws.sh 2>&1 | grep -E "complete|rror"
+python3 - <<'EOF'
+from ingestion.aws_ingestion import ingest_aws
+from ingestion.k8s_ingestion import ingest_k8s, find_irsa_mappings
+from graph.builder import build_unified_graph
+from pathfinder import search as ps
+aws = ingest_aws(endpoint_url="http://localhost:4566")
+k8s = ingest_k8s()
+G = build_unified_graph(aws, k8s, find_irsa_mappings(k8s["service_accounts"]))
+user  = "arn:aws:iam::000000000000:user/b4-low-priv-user"
+group = "arn:aws:iam::000000000000:group/b4-admin-group"
+print("edge exists:", G.has_edge(user, group), "| type:", G.edges[user, group]["type"] if G.has_edge(user, group) else None)
+admins = ps.find_admin_nodes(G)
+print("group is an admin sink:", group in admins)
+for p in ps.find_escalation_paths(G, user, admins):
+    print(p["hops"], "hop(s) | cross_layer:", p["cross_layer"], "|", ps.describe_path(G, p))
+print("paths reported by the main scan (cross-layer only):", len(ps.find_all_cross_layer_paths(G)))
+EOF
+```
+
+**Expected:** `edge exists: True | type: group_membership`, `group is an admin sink: True`, `1 hop(s) | cross_layer: False`, and `0` paths from the main scan.

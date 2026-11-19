@@ -48,3 +48,33 @@ LocalStack instance. The code logged a warning and skipped the stale
 mapping rather than crashing, validating that defensive code path
 against a genuine (if accidental) real-world scenario: stale IRSA
 annotations left over after AWS-side roles are deleted/rotated.
+
+## Run and check (copy and paste)
+
+Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+
+**Case:** Cross-namespace RBAC (Kubernetes only): a RoleBinding in another namespace names a ServiceAccount from `default`. Tests that the ServiceAccount resolves to its own namespace. No escalation path.
+
+This benchmark predates the IRSA trust check: its setup gives the roles no valid OIDC trust, so it is run with `--semantics legacy`. Under the default `strict` mode the tool correctly drops those IRSA edges and reports 0 paths.
+
+```bash
+source benchmarks/common.sh
+./benchmarks/reset_environment.sh && cleanx
+kubectl create namespace bench7-ns
+kubectl create serviceaccount bench7-sa -n default
+kubectl apply -f benchmarks/bench7/cross-namespace-rbac.yaml
+python3 - <<'EOF'
+from ingestion.aws_ingestion import ingest_aws
+from ingestion.k8s_ingestion import ingest_k8s, find_irsa_mappings
+from graph.builder import build_unified_graph
+aws = ingest_aws(endpoint_url="http://localhost:4566")
+k8s = ingest_k8s()
+G = build_unified_graph(aws, k8s, find_irsa_mappings(k8s["service_accounts"]))
+sa, role = "k8s:sa:default:bench7-sa", "k8s:role:bench7-ns:bench7-role"
+print("SA node:", G.has_node(sa), "| role node:", G.has_node(role))
+print("edge:", G.has_edge(sa, role), "| type:", G.edges[sa, role]["type"] if G.has_edge(sa, role) else None)
+print("wrong-namespace node absent:", not G.has_node("k8s:sa:bench7-ns:bench7-sa"))
+EOF
+```
+
+**Expected:** `SA node: True | role node: True`, `edge: True | type: rbac_binding`, `wrong-namespace node absent: True`.

@@ -38,3 +38,23 @@ string -- applying it actually breaks the attack path.
 
 ## Expected PMapper output
 0 paths (PMapper has no Kubernetes awareness, cannot see this path at all)
+
+## Run and check (copy and paste)
+
+Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+
+**Case:** Multi-hop chain: ServiceAccount -> role-a, PassRole to role-b, AssumeRole into an admin role.
+
+This benchmark predates the IRSA trust check: its setup gives the roles no valid OIDC trust, so it is run with `--semantics legacy`. Under the default `strict` mode the tool correctly drops those IRSA edges and reports 0 paths.
+
+```bash
+source benchmarks/common.sh
+./benchmarks/reset_environment.sh && cleanx
+./benchmarks/bench2/setup_aws.sh 2>&1 | grep -E "complete|rror"
+kubectl create serviceaccount bench2-sa -n default
+kubectl annotate serviceaccount bench2-sa -n default eks.amazonaws.com/role-arn=arn:aws:iam::000000000000:role/b2-role-a
+kubectl apply -f benchmarks/bench2/test-pod.yaml
+privesc-scan --endpoint-url http://localhost:4566 --semantics legacy 2>&1 | grep -vE "WARNING|^\[|^$"
+```
+
+**Expected:** 129 nodes, 47 edges, 1 path, 3 hops, risk 5.0. The cheapest fix is on the AssumeRole trust policy, not the annotation.

@@ -34,3 +34,23 @@ path and must NOT appear in tool output.
 ## Expected PMapper output
 0 paths (no Kubernetes awareness at all -- cannot even see that 5
 ServiceAccounts or 5 pods exist, let alone distinguish the vulnerable one)
+
+## Run and check (copy and paste)
+
+Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+
+**Case:** False-positive check: five ServiceAccounts exist, only one has an IRSA annotation to an admin role.
+
+```bash
+source benchmarks/common.sh
+./benchmarks/reset_environment.sh && cleanx
+./benchmarks/bench3/setup_aws.sh 2>&1 | grep -E "complete|rror"
+for i in 0 1 2 3 4; do kubectl create serviceaccount bench3-sa-$i -n default; done
+kubectl annotate serviceaccount bench3-sa-2 -n default eks.amazonaws.com/role-arn=arn:aws:iam::000000000000:role/b3-admin-role
+kubectl apply -f benchmarks/bench3/pods.yaml
+privesc-scan --endpoint-url http://localhost:4566 2>&1 | grep -v WARNING
+```
+
+**Expected:** 131 nodes, 43 edges, 1 path from `bench3-sa-2` only, risk 6.0. The other four ServiceAccounts are not flagged.
+
+**Web page:** Role ARN `arn:aws:iam::000000000000:role/b3-admin-role`. After Apply fix: 42 edges, 0 paths.
