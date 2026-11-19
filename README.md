@@ -345,11 +345,7 @@ policies, baselines/ablations, and the risk-score decoupling proof), and
 the `evaluation/` directory (`evaluation/README.md` is the index).
 Highlights:
 
-- Confusion matrix: TP=9, FP=0, FN=0, TN=5 on 9 synthetic benchmarks
-  (of the 9 TPs, 4 are fully confirmed exploit chains and 5 rely on a
-  bare `iam:PassRole` grant with no independently-modeled completing
-  action — see `evaluation/passrole_classification/` for the precise
-  per-path breakdown before citing a flat TP count)
+- Run against 11 live benchmarks (B1 to B11), covering vulnerable, safe and tricky configurations; see `benchmarks/` for each one.
 - Real-world: 44/44 correct, 0 FP, 0 FN, across 6 independent extraction
   methods on real EKS repositories (`evaluation/real_world/RW_MANIFEST.md`
   for the full per-case table)
@@ -361,70 +357,10 @@ Highlights:
 
 ## Limitations
 
-- `is_admin_role` detection currently checks the `AdministratorAccess`
-  managed policy and inline/attached policies with `Action: "*"` /
-  `Resource: "*"`; it does not yet account for SCPs, permission
-  boundaries, or session policies.
-- Attached managed policy resolution requires `iam:GetPolicy` and
-  `iam:GetPolicyVersion` permissions on the credentials used to run the
-  scan; without them, those policies are silently skipped (logged as a
-  warning) rather than failing the whole scan.
-- IRSA detection starts from the annotation (`eks.amazonaws.com/role-arn`).
-  In the default `strict` mode the role's trust policy is then checked for
-  whether it permits that ServiceAccount (subject and audience); an
-  invalid trust drops the edge and the drop is logged. The cluster's OIDC
-  provider itself is only verified when `--oidc-provider-arn` is given;
-  otherwise any OIDC federated principal is accepted. In `legacy` mode the
-  check is skipped and the annotation alone creates the edge.
-- Policy evaluation is a static abstraction: Conditions are evaluated for
-  a documented operator subset (others are reported as unresolved), and
-  SCPs, permission boundaries, session policies and non-trust resource
-  policies are not modelled.
-
-## Running via Docker (no local Python setup required)
-
-```bash
-docker build -t privesc-scan .
-
-# Requires --network host (Linux/WSL2 Docker) so the container can reach
-# LocalStack and Minikube on 127.0.0.1 exactly as the host sees them.
-# Mount ~/.kube and ~/.minikube read-only since Minikube's kubeconfig
-# references certificate files by absolute host path.
-docker run --rm --network host \
-  -v ~/.kube:/root/.kube:ro \
-  -v ~/.minikube:/root/.minikube:ro \
-  privesc-scan --endpoint-url http://localhost:4566
-```
-
-Note: `--network host` is Linux-only (works under WSL2). On Docker
-Desktop for Mac, you would need `host.docker.internal` for the AWS side
-and a different strategy for reaching Minikube (e.g. running the
-container inside the Minikube VM's Docker daemon via
-`eval $(minikube docker-env)`), which hasn't been tested here.
-
-## Reproducing the paper's results
-
-Setup (Python 3.12):
-
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-Offline experiments (no AWS account, LocalStack or Minikube needed):
-
-```bash
-python3 -m evaluation.generated_benchmark.run_benchmark --split dev
-python3 -m evaluation.generated_benchmark.run_benchmark --split heldout
-python3 -m evaluation.policy_semantics.differential.run_differential 20000 20260919
-```
-
-Expected: held-out strict gives TP 1475, FP 0, FN 0, TN 2105; dev strict gives
-TP 1473, FP 0, FN 0, TN 2106. The differential run reports 211 statement-level
-and 432 policy-level disagreements for seed 20260919.
-
-The live experiments (B1-B11 and the remediation trials) need LocalStack 4.14.0
-and Minikube v1.38.1; their recorded outputs are under the `live/` folders.
+- **Admin check is simple.** A role counts as admin only if it has full `AdministratorAccess` or a policy that allows everything on everything. Extra AWS guardrails (SCPs, permission boundaries, session policies) are not checked, so the tool may report a path that those guardrails would actually block.
+- **The scan needs read access to policies.** The account used for the scan must be allowed to read policies (`iam:GetPolicy`, `iam:GetPolicyVersion`). Without that, those policies are skipped with a warning, so some paths could be missed.
+- **Kubernetes to AWS link.** A ServiceAccount is linked to an AWS role by its annotation. By default (`strict` mode) the tool also checks that the role's trust policy really lets that ServiceAccount in, and drops the link if it doesn't. It does not check the cluster's identity provider unless you pass `--oidc-provider-arn`. In `legacy` mode the annotation alone is trusted.
+- **Policies are checked statically.** The tool reads the policy text and does not run anything. Common conditions are understood. Conditions it doesn't understand are reported as "unresolved" instead of being guessed.
 
 ## Citing
 
