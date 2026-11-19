@@ -7,6 +7,11 @@
 4. kubectl annotate serviceaccount bench2-sa -n default eks.amazonaws.com/role-arn=arn:aws:iam::000000000000:role/b2-role-a
 5. kubectl apply -f benchmarks/bench2/test-pod.yaml
 
+## Analysis mode
+This benchmark predates the IRSA trust check. Run the scan with `--semantics legacy`:
+`privesc-scan --endpoint-url http://localhost:4566 --semantics legacy`.
+Under the default `strict` mode the tool drops the IRSA edge (the setup gives `b2-role-a` an EC2 trust) and reports no path.
+
 ## Ground truth attack path
 
 bench2-pod (Pod)

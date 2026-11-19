@@ -1,4 +1,4 @@
-# Unified Cross-Layer Privilege Escalation Analysis and Remediation Framework
+# CrossGuard: Unified Cross-Layer Privilege Escalation Analysis and Remediation Framework
 
 A research tool that unifies AWS IAM and Kubernetes RBAC into a single
 directed graph, discovers privilege-escalation paths that cross from
@@ -146,6 +146,7 @@ flowchart LR
         PF["Pathfinder<br/>pathfinder/search.py<br/>BFS cross-layer paths"]
         RS["Risk Scorer<br/>scoring/risk.py<br/>rank paths"]
         RM["Remediation<br/>remediation/engine.py<br/>global minimum cut"]
+        PE["Policy Evaluator<br/>ingestion/policy_eval.py<br/>Allow / Deny / Condition checks"]
     end
 
     subgraph OUT["Interfaces"]
@@ -157,6 +158,7 @@ flowchart LR
     AWS --> ING
     K8S --> ING
     ING --> GB --> PF --> RS --> RM
+    PE -.-> GB
     RM --> CLI
     RM --> API --> UI
 ```
@@ -164,6 +166,7 @@ flowchart LR
 | Module | File | Responsibility |
 |---|---|---|
 | Ingestion | `ingestion/aws_ingestion.py`, `ingestion/k8s_ingestion.py` | Pull AWS IAM + K8s RBAC data, detect IRSA bridge mappings |
+| Policy evaluation | `ingestion/policy_eval.py`, `ingestion/policy_utils.py` | Policy parsing helpers and a three-valued (true / false / unknown) evaluator: Deny, Conditions, IRSA trust, PassRole pairing, wildcard trust |
 | Graph Builder | `graph/builder.py` | Build the unified cross-layer `DiGraph` |
 | Pathfinder | `pathfinder/search.py` | BFS search for cross-layer escalation paths |
 | Risk Scorer | `scoring/risk.py` | Rank found paths by severity |
@@ -236,6 +239,11 @@ See `benchmarks/bench1/README.md` for the documented ground truth.
 To run another benchmark, reset the environment first with `./benchmarks/reset_environment.sh`, then
 follow that benchmark's README or setup script.
 
+Benchmarks 2 and 8 to 11 were written before the IRSA trust check existed: their setups give the IRSA roles
+an EC2 (or no OIDC) trust, so run them with `privesc-scan --endpoint-url http://localhost:4566 --semantics legacy`.
+Under the default `strict` mode the tool correctly drops those IRSA edges and reports no path.
+Benchmarks 1, 3, 5 and 6 use a realistic OIDC trust and work in every mode.
+
 **Note:** LocalStack does not persist IAM resources across container
 restarts. If you stop/restart the container, rerun
 `./benchmarks/bench1/setup_aws.sh` before scanning again.
@@ -269,7 +277,10 @@ uvicorn app.main:app --reload
 ```
 
 Then open `crossguard-live-frontend/index.html` in a browser, enter the
-API URL + key, and run a scan. See `crossguard-live-api/README.md` for
+API URL + key, and run a scan. Use a separate virtual environment for the web
+app, because its pinned dependencies differ from the CLI's. The scan form has an
+**Analysis mode** dropdown (strict by default, annotate, legacy) that matches
+the CLI's `--semantics`. See `crossguard-live-api/README.md` for
 full setup (including the IAM trust policy needed to let it assume a
 role) and deployment instructions.
 
