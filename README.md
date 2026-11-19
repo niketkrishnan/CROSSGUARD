@@ -172,6 +172,38 @@ flowchart LR
 | Risk Scorer | `scoring/risk.py` | Rank found paths by severity |
 | Remediation | `remediation/engine.py` | Global minimum-cut remediation recommendations |
 
+## How it all fits together
+
+Data flows top to bottom. Rounded boxes are code, folded-corner boxes are the data passed between them, and the
+dashed line is the one write-back: **Apply fix** in the web UI changes the live environment after a confirm step.
+
+[![Overview of CrossGuard](docs/crossguard-overview.png)](docs/crossguard-overview.png)
+
+### Description of files
+
+Core pipeline:
+
+| File | Input | Output |
+|---|---|---|
+| `ingestion/aws_ingestion.py` | AWS credentials or role | IAM roles, policies, trust relationships |
+| `ingestion/k8s_ingestion.py` | kubeconfig or in-cluster identity | ServiceAccounts, RBAC bindings, IRSA annotations |
+| `ingestion/policy_eval.py`, `ingestion/policy_utils.py` | A policy and a request | Allow / Deny / unknown (Conditions, IRSA trust, PassRole pairing) |
+| `graph/builder.py` | AWS data, K8s data | One unified `networkx.DiGraph` with IRSA bridge edges |
+| `pathfinder/search.py` | The graph | Cross-layer escalation paths |
+| `scoring/risk.py` | Paths | Risk score per path, ranked |
+| `remediation/engine.py` | Paths | Minimal set of edges to remove (global minimum cut) |
+
+Interfaces and supporting folders:
+
+| Path | Purpose |
+|---|---|
+| `main.py` | CLI entry point (`privesc-scan`): report and optional `--output-json` |
+| `crossguard-live-api/` | FastAPI backend; `app/core_adapter.py` calls the same engine as the CLI |
+| `crossguard-live-frontend/` | Single-file web UI: graph view and Apply fix |
+| `benchmarks/` | Setup scripts and expected results for B1 to B11 |
+| `evaluation/` | Evidence trail and experiment scripts |
+| `tests/` | pytest suite |
+
 ## Code organization
 
 | Folder / file | Role |

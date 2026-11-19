@@ -1,0 +1,50 @@
+digraph CrossGuard {
+  rankdir=TB; splines=spline; nodesep=0.45; ranksep=0.5; compound=true;
+  fontname="Helvetica"; bgcolor="white";
+  node [fontname="Helvetica", fontsize=11, margin="0.12,0.08"];
+  edge [fontname="Helvetica", fontsize=9, color="#444444"];
+
+  // External sources
+  subgraph cluster_src { label="Live environment"; style="rounded,dashed"; color="#888888"; fontsize=12;
+    aws [label="AWS IAM\n(real AWS or LocalStack)", shape=cylinder, style=filled, fillcolor="#FFE9C7"];
+    k8s [label="Kubernetes cluster\n(RBAC, ServiceAccounts)\nreal or Minikube", shape=cylinder, style=filled, fillcolor="#D6E8FF"];
+  }
+
+  // Ingestion
+  subgraph cluster_ing { label="ingestion/"; style="rounded"; color="#2E7D32"; fontsize=12;
+    ai [label="aws_ingestion.py\nroles, policies, trust", shape=box, style="filled,rounded", fillcolor="#E8F5E9"];
+    ki [label="k8s_ingestion.py\nSAs, bindings,\nIRSA annotations", shape=box, style="filled,rounded", fillcolor="#E8F5E9"];
+    pe [label="policy_eval.py\npolicy_utils.py\nAllow / Deny / Condition\n(true / false / unknown)", shape=box, style="filled,rounded", fillcolor="#C8E6C9"];
+  }
+  awsd [label="AWS data\n(dict)", shape=note, style=filled, fillcolor="#FFFDE7"];
+  k8sd [label="K8s data +\nIRSA mappings\n(dict)", shape=note, style=filled, fillcolor="#FFFDE7"];
+
+  // Core
+  gb [label="graph/builder.py\nbuild_unified_graph", shape=box, style="filled,rounded", fillcolor="#E8F5E9"];
+  g  [label="Unified graph\nnetworkx DiGraph\nK8s + AWS + IRSA edges", shape=note, style=filled, fillcolor="#FFFDE7"];
+  pf [label="pathfinder/search.py\nBFS: K8s SA to AWS admin", shape=box, style="filled,rounded", fillcolor="#E8F5E9"];
+  p1 [label="Escalation paths", shape=note, style=filled, fillcolor="#FFFDE7"];
+  rs [label="scoring/risk.py\nrisk score per path", shape=box, style="filled,rounded", fillcolor="#E8F5E9"];
+  p2 [label="Ranked paths", shape=note, style=filled, fillcolor="#FFFDE7"];
+  rm [label="remediation/engine.py\nglobal minimum cut", shape=box, style="filled,rounded", fillcolor="#E8F5E9"];
+  fx [label="Minimal fix\n(edges to remove)", shape=note, style=filled, fillcolor="#FFFDE7"];
+
+  // Interfaces
+  subgraph cluster_out { label="Interfaces"; style="rounded"; color="#6A1B9A"; fontsize=12;
+    cli [label="main.py (CLI)\nprivesc-scan", shape=box, style="filled,rounded", fillcolor="#F3E5F5"];
+    api [label="crossguard-live-api\ncore_adapter.py (FastAPI)", shape=box, style="filled,rounded", fillcolor="#F3E5F5"];
+    ui  [label="crossguard-live-frontend\nweb UI: graph + Apply fix", shape=box, style="filled,rounded", fillcolor="#F3E5F5"];
+  }
+  rep [label="Console report", shape=note, style=filled, fillcolor="#FFFDE7"];
+  js  [label="result.json", shape=note, style=filled, fillcolor="#FFFDE7"];
+
+  aws -> ai; k8s -> ki;
+  ai -> awsd; ki -> k8sd;
+  pe -> gb [style=dashed, label="policy checks"];
+  awsd -> gb; k8sd -> gb;
+  gb -> g -> pf -> p1 -> rs -> p2 -> rm -> fx;
+  fx -> cli; fx -> api;
+  cli -> rep; cli -> js;
+  api -> ui;
+  ui -> k8s [style=dashed, constraint=false, label="Apply fix\n(confirm, then apply)"];
+}
