@@ -1,7 +1,5 @@
-# Shared helper for the benchmark run blocks. Source it from the repository root:
-#   source benchmarks/common.sh
-# It sets the dummy AWS variables LocalStack needs, adds ~/bin (where awslocal is linked)
-# to PATH, defines `cleanx`, and warns if a required tool is missing.
+# Environment for the benchmark scripts.
+# Usage (from the repository root): source benchmarks/common.sh
 
 export PATH="$PATH:$HOME/bin"
 export AWS_DEFAULT_REGION=us-east-1 AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test

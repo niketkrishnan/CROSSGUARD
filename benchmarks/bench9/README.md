@@ -28,11 +28,11 @@ Run with `--semantics legacy`: this benchmark predates the IRSA trust check.
 - Two remediations (the order can differ between runs): remove `iam:PassRole` for `b9-autoscaler-admin` from
   `b9-cluster-autoscaler-role` and from `b9-shared-jump-role`
 
-## Run and check (copy and paste)
+## Running the benchmark
 
-Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+From the repository root, with the project's virtual environment active and Docker and Minikube running.
 
-**Case:** Realistic near-misses: four cases modelled on well-known controllers, 2 exploitable (a PassRole to an admin role, and an AssumeRole then PassRole chain) and 2 safe (a scoped PassRole, and no route to admin).
+**Scenario:** Realistic near-misses: four cases modelled on well-known controllers, 2 exploitable (a PassRole to an admin role, and an AssumeRole then PassRole chain) and 2 safe (a scoped PassRole, and no route to admin).
 
 This benchmark predates the IRSA trust check: its setup gives the roles no valid OIDC trust, so it is run with `--semantics legacy`. Under the default `strict` mode the tool correctly drops those IRSA edges and reports 0 paths.
 
@@ -52,4 +52,4 @@ LIST
 privesc-scan --endpoint-url http://localhost:4566 --semantics legacy 2>&1 | grep -vE "WARNING|^\[|^$"
 ```
 
-**Expected:** 137 nodes, 56 edges, 2 paths (5.5 and 5.0), two fixes (the order can differ between runs). The two safe cases are not flagged.
+**Expected result:** 137 nodes, 56 edges, 2 paths (5.5 and 5.0), two fixes (the order can differ between runs). The two safe cases are not flagged.

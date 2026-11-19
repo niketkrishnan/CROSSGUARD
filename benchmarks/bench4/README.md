@@ -42,11 +42,11 @@ completeness check on Module 2.
 PMapper WOULD find this path (it's pure AWS IAM, no K8s involved) --
 this is one of the few cases where existing tools have parity with ours.
 
-## Run and check (copy and paste)
+## Running the benchmark
 
-Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+From the repository root, with the project's virtual environment active and Docker and Minikube running.
 
-**Case:** Same-layer group escalation (AWS only): a low-privilege user is a member of an admin group. Not cross-layer, so the main scan reports no path.
+**Scenario:** Same-layer group escalation (AWS only): a low-privilege user is a member of an admin group. Not cross-layer, so the main scan reports no path.
 
 This benchmark predates the IRSA trust check: its setup gives the roles no valid OIDC trust, so it is run with `--semantics legacy`. Under the default `strict` mode the tool correctly drops those IRSA edges and reports 0 paths.
 
@@ -73,4 +73,4 @@ print("paths reported by the main scan (cross-layer only):", len(ps.find_all_cro
 EOF
 ```
 
-**Expected:** `edge exists: True | type: group_membership`, `group is an admin sink: True`, `1 hop(s) | cross_layer: False`, and `0` paths from the main scan.
+**Expected result:** `edge exists: True | type: group_membership`, `group is an admin sink: True`, `1 hop(s) | cross_layer: False`, and `0` paths from the main scan.

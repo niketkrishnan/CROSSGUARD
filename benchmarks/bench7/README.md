@@ -49,11 +49,11 @@ mapping rather than crashing, validating that defensive code path
 against a genuine (if accidental) real-world scenario: stale IRSA
 annotations left over after AWS-side roles are deleted/rotated.
 
-## Run and check (copy and paste)
+## Running the benchmark
 
-Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+From the repository root, with the project's virtual environment active and Docker and Minikube running.
 
-**Case:** Cross-namespace RBAC (Kubernetes only): a RoleBinding in another namespace names a ServiceAccount from `default`. Tests that the ServiceAccount resolves to its own namespace. No escalation path.
+**Scenario:** Cross-namespace RBAC (Kubernetes only): a RoleBinding in another namespace names a ServiceAccount from `default`. Tests that the ServiceAccount resolves to its own namespace. No escalation path.
 
 This benchmark predates the IRSA trust check: its setup gives the roles no valid OIDC trust, so it is run with `--semantics legacy`. Under the default `strict` mode the tool correctly drops those IRSA edges and reports 0 paths.
 
@@ -77,4 +77,4 @@ print("wrong-namespace node absent:", not G.has_node("k8s:sa:bench7-ns:bench7-sa
 EOF
 ```
 
-**Expected:** `SA node: True | role node: True`, `edge: True | type: rbac_binding`, `wrong-namespace node absent: True`.
+**Expected result:** `SA node: True | role node: True`, `edge: True | type: rbac_binding`, `wrong-namespace node absent: True`.

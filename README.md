@@ -268,8 +268,9 @@ remediation recommendation to remove the IRSA annotation.
 
 See `benchmarks/bench1/README.md` for the documented ground truth.
 
-To run another benchmark, reset the environment first with `./benchmarks/reset_environment.sh`, then
-follow that benchmark's README or setup script.
+To run another benchmark, reset the environment with `./benchmarks/reset_environment.sh` and follow the
+"Running the benchmark" section of that benchmark's README. Benchmarks 8 to 11 create ServiceAccounts that the
+reset does not remove, so run `cleanx` (defined in `benchmarks/common.sh`) after the reset.
 
 Benchmarks 2 and 8 to 11 were written before the IRSA trust check existed: their setups give the IRSA roles
 an EC2 (or no OIDC) trust, so run them with `privesc-scan --endpoint-url http://localhost:4566 --semantics legacy`.
@@ -300,21 +301,38 @@ is a thin bridge that imports and calls the exact same functions used by
 
 **Quick start:**
 
+Use a separate virtual environment for the web app, because its pinned dependencies differ from the CLI's.
+
 ```bash
+# Terminal 1: API
 cd crossguard-live-api
 pip install -r requirements.txt
 export PYTHONPATH=..:$PYTHONPATH
+export AWS_DEFAULT_REGION=us-east-1 AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test   # dummy values for LocalStack
 export CROSSGUARD_API_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
-uvicorn app.main:app --reload
+echo "API key: $CROSSGUARD_API_KEY"
+uvicorn app.main:app
+
+# Terminal 2: frontend
+cd crossguard-live-frontend
+python3 -m http.server 8080
 ```
 
-Then open `crossguard-live-frontend/index.html` in a browser, enter the
-API URL + key, and run a scan. Use a separate virtual environment for the web
-app, because its pinned dependencies differ from the CLI's. The scan form has an
-**Analysis mode** dropdown (strict by default, annotate, legacy) that matches
-the CLI's `--semantics`. See `crossguard-live-api/README.md` for
-full setup (including the IAM trust policy needed to let it assume a
-role) and deployment instructions.
+Open `http://localhost:8080` and fill in the scan form:
+
+| Field | Value |
+|---|---|
+| API base URL | `http://127.0.0.1:8000` |
+| X-API-Key | the key printed by the API (click Save) |
+| Scan name | any label, for example `b1` |
+| AWS role ARN | the role to assume, for example `arn:aws:iam::000000000000:role/admin-role` for Benchmark 1 |
+| Region | `us-east-1` |
+| LocalStack endpoint | `http://localhost:4566` (leave empty for real AWS) |
+| External ID | optional |
+| Analysis mode | strict (default), annotate or legacy, matching the CLI's `--semantics` |
+| Kubeconfig | the output of `kubectl config view --flatten --minify` |
+
+After a scan the page shows the graph, the escalation paths and the recommended fix. Apply fix previews the change, applies it after confirmation and re-scans to verify. See `crossguard-live-api/README.md` for full setup (including the IAM trust policy needed to let it assume a role) and deployment instructions.
 
 **Security model:** no raw AWS credentials or kubeconfigs are ever
 stored -- only `sts:AssumeRole` against a role you configure, held in
@@ -359,7 +377,6 @@ Highlights:
 
 - **Admin check is simple.** A role counts as admin only if it has full `AdministratorAccess` or a policy that allows everything on everything. Extra AWS guardrails (SCPs, permission boundaries, session policies) are not checked, so the tool may report a path that those guardrails would actually block.
 - **The scan needs read access to policies.** The account used for the scan must be allowed to read policies (`iam:GetPolicy`, `iam:GetPolicyVersion`). Without that, those policies are skipped with a warning, so some paths could be missed.
-- **Kubernetes to AWS link.** A ServiceAccount is linked to an AWS role by its annotation. By default (`strict` mode) the tool also checks that the role's trust policy really lets that ServiceAccount in, and drops the link if it doesn't. It does not check the cluster's identity provider unless you pass `--oidc-provider-arn`. In `legacy` mode the annotation alone is trusted.
 - **Policies are checked statically.** The tool reads the policy text and does not run anything. Common conditions are understood. Conditions it doesn't understand are reported as "unresolved" instead of being guessed.
 
 ## Citing

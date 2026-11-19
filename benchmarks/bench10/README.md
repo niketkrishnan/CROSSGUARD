@@ -27,11 +27,11 @@ Use `legacy` against `annotate` to see the policy-semantics effect.
   the explicit-Deny case is gone
 - `strict`: 0 paths
 
-## Run and check (copy and paste)
+## Running the benchmark
 
-Run from the repository root, in the project's virtual environment (`source venv/bin/activate`), with Docker and Minikube running. The first line loads `benchmarks/common.sh`, which sets the dummy AWS variables for LocalStack, defines the `cleanx` helper and checks the tools.
+From the repository root, with the project's virtual environment active and Docker and Minikube running.
 
-**Case:** False-positive stress test: safe configurations that look risky (explicit Deny, MFA gate, conditioned PassRole and others). Anything reported in legacy mode is a false positive.
+**Scenario:** False-positive stress test: safe configurations that look risky (explicit Deny, MFA gate, conditioned PassRole and others). Anything reported in legacy mode is a false positive.
 
 This benchmark predates the IRSA trust check: its setup gives the roles no valid OIDC trust, so it is run with `--semantics legacy`. Under the default `strict` mode the tool correctly drops those IRSA edges and reports 0 paths.
 
@@ -46,4 +46,4 @@ done
 for m in legacy annotate strict; do echo "=== $m ==="; privesc-scan --endpoint-url http://localhost:4566 --semantics $m 2>&1 | grep -E "Found|No cross|^Path|-->" | grep -v WARNING; done
 ```
 
-**Expected:** `legacy`: 4 paths. `annotate`: 2 paths, confidence unresolved (the explicit-Deny case is gone). `strict`: 0 paths.
+**Expected result:** `legacy`: 4 paths. `annotate`: 2 paths, confidence unresolved (the explicit-Deny case is gone). `strict`: 0 paths.
