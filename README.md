@@ -241,7 +241,7 @@ mkdir -p ~/bin && ln -sf ~/awsvenv/bin/awslocal ~/bin/awslocal && ln -sf ~/awsve
 export PATH=$PATH:$HOME/bin
 
 # 1. Start LocalStack (local fake AWS, no account/token needed)
-docker run -d --name localstack -p 4566:4566 localstack/localstack:4.14.0
+docker start localstack 2>/dev/null || docker run -d --name localstack -p 4566:4566 localstack/localstack:4.14.0
 
 # 2. Start Minikube (local real Kubernetes cluster)
 minikube start --driver=docker
@@ -303,18 +303,25 @@ is a thin bridge that imports and calls the exact same functions used by
 
 Use a separate virtual environment for the web app, because its pinned dependencies differ from the CLI's.
 
+Run each part in its own terminal, starting from the folder that contains the cloned repository.
+
+API server (keeps running):
+
 ```bash
-# Terminal 1: API
-cd crossguard-live-api
+cd CROSSGUARD/crossguard-live-api
+python3 -m venv ~/apivenv && source ~/apivenv/bin/activate
 pip install -r requirements.txt
 export PYTHONPATH=..:$PYTHONPATH
 export AWS_DEFAULT_REGION=us-east-1 AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test   # dummy values for LocalStack
 export CROSSGUARD_API_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
 echo "API key: $CROSSGUARD_API_KEY"
 uvicorn app.main:app
+```
 
-# Terminal 2: frontend
-cd crossguard-live-frontend
+Frontend:
+
+```bash
+cd CROSSGUARD/crossguard-live-frontend
 python3 -m http.server 8080
 ```
 
